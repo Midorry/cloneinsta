@@ -4,15 +4,26 @@ const OrderSchema = new mongoose.Schema(
     {
         cartId: {
             type: String,
-        },
-        userId: {
-            type: String,
+            required: true,
         },
         payments: {
-            type: Object,
+            type: String,
         },
-        products: {
-            type: Array,
+        address: {
+            type: String,
+        },
+        dateOrder: {
+            type: Date,
+        },
+        invoiceNumber: {
+            type: Boolean,
+            default: null,
+        },
+        invoiceDate: {
+            type: Date,
+        },
+        total: {
+            type: Number,
         },
     },
     { timestamps: true }

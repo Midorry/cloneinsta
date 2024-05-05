@@ -25,13 +25,17 @@ const UserSchema = new mongoose.Schema(
             // required: true,
             min: 5,
         },
+        address: {
+            type: String,
+            // required: true,
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
         picturePath: {
             type: String,
             default: "",
-        },
-        friends: {
-            type: Array,
-            default: [],
         },
     },
     { timestamps: true }

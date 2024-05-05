@@ -52,7 +52,7 @@ const SignUpForm = () => {
     );
 
     useEffect(() => {
-        if (isSuccess) navigate("/sign-in");
+        if (isSuccess) navigate("/");
     }, [isSuccess]);
 
     const initialRegister = {
@@ -60,6 +60,7 @@ const SignUpForm = () => {
         lastName: "",
         email: "",
         password: "",
+        address: "",
         picture: "",
     };
 
@@ -68,17 +69,19 @@ const SignUpForm = () => {
         lastName: yup.string().required("required"),
         email: yup.string().email("invalid email").required("required"),
         password: yup.string().required("required"),
+        address: yup.string().required("required"),
         picture: yup.string().required("required"),
     });
     return (
         <Formik
             initialValues={initialRegister}
             validationSchema={validationRegister}
-            onSubmit={async (values) => {
+            onSubmit={async (values, onSubmitProps) => {
                 const firstName = values.firstName;
                 const lastName = values.lastName;
                 const email = values.email;
                 const password = values.password;
+                const address = values.address;
                 const picturePath = values.picture.name;
                 await axios
                     .post(
@@ -88,6 +91,7 @@ const SignUpForm = () => {
                             lastName,
                             email,
                             password,
+                            address,
                             picturePath,
                         },
                         {
@@ -99,11 +103,16 @@ const SignUpForm = () => {
                     )
                     .then(function (response) {
                         console.log(response);
+                        setIsSuccess(true);
                     })
                     .catch(function (error) {
+                        onSubmitProps.setErrors({
+                            email: "Email already exists",
+                        });
                         console.log(error.response.data);
+                        console.log(error.response);
+                        console.log(error);
                     });
-                setIsSuccess(true);
             }}
         >
             {({
@@ -222,6 +231,20 @@ const SignUpForm = () => {
                         <div className="text-red-500">{errors.password}</div>
                     ) : null}
 
+                    <label htmlFor="address">Address</label>
+                    <input
+                        id="address"
+                        name="address"
+                        type="address"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.address}
+                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                    />
+                    {errors.address ? (
+                        <div className="text-red-500">{errors.address}</div>
+                    ) : null}
+
                     <div>
                         <button
                             type="submit"
@@ -232,7 +255,7 @@ const SignUpForm = () => {
 
                         <p className="pt-2">
                             Do you have an account? Sign up
-                            <a className="text-blue-500" href="/sign-in">
+                            <a className="text-blue-500" href="/">
                                 Here!
                             </a>
                         </p>

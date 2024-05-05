@@ -3,17 +3,30 @@ import SignInForm from "./auth/SignInForm";
 import SignUpForm from "./auth/SignUpForm";
 import AuthLayout from "./auth/AuthLayout";
 import Home from "./root/pages/Home";
+// import { useEffect } from "react";
 
 const App = () => {
+    // useEffect(() => {
+    //     const script = document.createElement("script");
+
+    //     script.src = "../public/assets/js/main.js";
+    //     script.async = true;
+
+    //     document.body.appendChild(script);
+
+    //     return () => {
+    //         document.body.removeChild(script);
+    //     };
+    // }, []);
     return (
         <main>
             <Routes>
                 {/* public routes */}
                 <Route element={<AuthLayout />}>
-                    <Route path="/sign-in" element={<SignInForm />} />
+                    <Route path="/" element={<SignInForm />} />
                     <Route path="/sign-up" element={<SignUpForm />} />
                 </Route>
-                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
 
                 {/* private routes */}
                 {/* <Route element={<RootLayout />}>

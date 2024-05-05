@@ -56,7 +56,7 @@ app.use("/api/user", authRouter);
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
 mongoose
-    .connect("mongodb://127.0.0.1/social_app")
+    .connect("mongodb://127.0.0.1/seafood_web")
     .then(() => {
         app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 

@@ -4,8 +4,15 @@ import User from "../models/User.js";
 
 export const register = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, picturePath, friends } =
-            req.body;
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            address,
+            picturePath,
+            isAdmin,
+        } = req.body;
 
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
@@ -15,8 +22,9 @@ export const register = async (req, res) => {
             lastName,
             email,
             password: passwordHash,
+            address,
             picturePath,
-            friends,
+            isAdmin,
         });
         const savedUser = await newUser.save();
         res.status(201).json(savedUser);

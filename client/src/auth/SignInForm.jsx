@@ -3,8 +3,12 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const SignInForm = () => {
+    // const dispatch = useDispatch();
+
+    const { login } = useAuth();
     const [success, setSuccess] = useState(false);
     useEffect(() => {
         if (success) navigate("/");
@@ -33,11 +37,43 @@ const SignInForm = () => {
         <Formik
             initialValues={initialLogin}
             validationSchema={validationLogin}
-            onSubmit={async (values) => {
+            onSubmit={async (values, onSubmitProps) => {
                 const email = values.email;
                 const password = values.password;
                 console.log(email, password);
-                const response = await axios
+
+                // try {
+                //     const loggedInResponse = await fetch(
+                //         "http://localhost:3002/api/user/login",
+                //         {
+                //             method: "POST",
+                //             headers: { "Content-Type": "application/json" },
+                //             body: JSON.stringify(values),
+                //         }
+                //     );
+                //     const loggedIn = await loggedInResponse.json();
+                //     console.log(loggedIn);
+                //     onSubmitProps.resetForm();
+                //     // make sure you have a token
+                //     if (loggedIn.msg !== "Invalid credentials") {
+                //         // dispatch(
+                //         //     setLogin({
+                //         //         user: loggedIn.user,
+                //         //         token: loggedIn.token,
+                //         //     })
+                //         // );
+
+                //         navigate("/home");
+                //     }
+                // } catch (error) {
+                //     if (error.response.status === 400) {
+                //         onSubmitProps.setErrors({
+                //             email: "Invalid email or password",
+                //         });
+                //     }
+                // }
+
+                await axios
                     .post(
                         "http://localhost:3002/api/user/login",
                         { email, password },
@@ -49,13 +85,28 @@ const SignInForm = () => {
                     )
                     .then(function (response) {
                         console.log(response);
+                        login(response.data.token, response.data.user);
+                        navigate("/home");
                     })
                     .catch(function (error) {
+                        onSubmitProps.setErrors({
+                            email: "Invalid email or password",
+                        });
                         console.log(error.response.data);
                         console.log(error.response);
                         console.log(error);
                     });
                 // const accessToken = response?.data?.token;
+                // const loggedIn = await response.json();
+                // if (loggedIn) {
+                //     dispatch(
+                //         setLogin({
+                //             user: loggedIn.user,
+                //             token: loggedIn.token,
+                //         })
+                //     );
+                //     navigate("/home");
+                // }
                 setSuccess(true);
             }}
         >
