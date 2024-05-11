@@ -1798,7 +1798,10 @@ ol {
     text-align: center;
 }
 
-.pro-qty .qtybtn {
+.pro-qty .qtybtn,
+.pro-qty .qtybtn1,
+.pro-qty .qtybtn2,
+.pro-qty .qtybtn3 {
     width: 35px;
     font-size: 16px;
     color: #6f6f6f;

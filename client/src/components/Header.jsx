@@ -1,4 +1,17 @@
+import $ from "jquery";
+import { useLocation } from "react-router-dom";
 const Header = () => {
+    const location = useLocation();
+    let classHero = "";
+    if (location.pathname === "/home") {
+        classHero = "hero";
+    } else {
+        // eslint-disable-next-line no-unused-vars
+        classHero = "hero hero-normal";
+    }
+    const handleOnClick = () => {
+        $(".hero__categories ul").slideToggle(400);
+    };
     return (
         <div>
             <header className="header">
@@ -70,21 +83,21 @@ const Header = () => {
                             <nav className="header__menu">
                                 <ul>
                                     <li className="active">
-                                        <a href="./index.html">Home</a>
+                                        <a href="./home">Home</a>
                                     </li>
                                     <li>
-                                        <a href="./shop-grid.html">Shop</a>
+                                        <a href="./shop">Shop</a>
                                     </li>
                                     <li>
                                         <a href="#">Pages</a>
                                         <ul className="header__menu__dropdown">
                                             <li>
-                                                <a href="./shop-details.html">
+                                                <a href="./shop-details">
                                                     Shop Details
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="./shoping-cart.html">
+                                                <a href="./shopping-cart">
                                                     Shoping Cart
                                                 </a>
                                             </li>
@@ -137,12 +150,15 @@ const Header = () => {
                 </div>
             </header>
 
-            <section className="hero">
+            <section className={`${classHero}`}>
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-3">
                             <div className="hero__categories">
-                                <div className="hero__categories__all">
+                                <div
+                                    className="hero__categories__all"
+                                    onClick={handleOnClick}
+                                >
                                     <i className="fa fa-bars"></i>
                                     <span>All departments</span>
                                 </div>
@@ -213,7 +229,40 @@ const Header = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div
+                            {location.pathname === "/home" ? (
+                                <div
+                                    className="hero__item set-bg"
+                                    style={{
+                                        backgroundImage: `url(../../../public/assets/img/hero/banner.jpg")`,
+                                    }}
+                                    data-setbg="../../../public/assets/img/hero/banner.jpg"
+                                >
+                                    <img
+                                        style={{
+                                            position: "absolute",
+                                            content: "",
+                                            right: 0,
+                                        }}
+                                        src="../../../public/assets/img/hero/banner.jpg"
+                                    ></img>
+                                    <div className="hero__text">
+                                        <span>FRUIT FRESH</span>
+                                        <h2>
+                                            Vegetable <br />
+                                            100% Organic
+                                        </h2>
+                                        <p>
+                                            Free Pickup and Delivery Available
+                                        </p>
+                                        <a href="#" className="primary-btn">
+                                            SHOP NOW
+                                        </a>
+                                    </div>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+                            {/* <div
                                 className="hero__item set-bg"
                                 style={{
                                     backgroundImage: `url(../../../public/assets/img/hero/banner.jpg")`,
@@ -239,7 +288,7 @@ const Header = () => {
                                         SHOP NOW
                                     </a>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

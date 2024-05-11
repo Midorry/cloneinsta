@@ -1,6 +1,4 @@
 import OwlCarousel from "react-owl-carousel";
-import Header from "../../components/Header";
-import { Footer } from "/src/components/Footer";
 
 const Home = () => {
     const option = {
@@ -31,16 +29,13 @@ const Home = () => {
     };
 
     const option2 = {
-        items: 1,
         loop: true,
-        autoplay: true,
-        autoplayTimeout: 4000,
-        animateOut: "slideOutUp",
-        // animateIn: true,
-        // animateOut: true,
-        nav: true,
-        dots: false,
         margin: 0,
+        items: 3,
+        dots: true,
+        smartSpeed: 1200,
+        autoHeight: false,
+        autoplay: true,
         responsive: {
             1100: {
                 items: 1,
@@ -60,8 +55,6 @@ const Home = () => {
     };
     return (
         <div>
-            <Header />
-
             <section className="categories">
                 <div className="container">
                     <div className="row">
@@ -866,8 +859,6 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-
-            <Footer />
         </div>
     );
 };
