@@ -1,11 +1,11 @@
 import { Outlet, Navigate } from "react-router-dom";
 
 const AuthLayout = () => {
-    const isAuthenticated = false;
+    // const isAuthenticated = false;
     return (
         <>
-            {isAuthenticated ? (
-                <Navigate to="/" />
+            {window.localStorage.getItem("isLogged") ? (
+                <Navigate to="/home" />
             ) : (
                 <div className="flex">
                     <div className="w-1/2">

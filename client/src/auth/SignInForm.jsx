@@ -7,7 +7,6 @@ import { useAuth } from "../context/AuthContext";
 
 const SignInForm = () => {
     // const dispatch = useDispatch();
-
     const { login } = useAuth();
     const [success, setSuccess] = useState(false);
     useEffect(() => {
@@ -84,6 +83,7 @@ const SignInForm = () => {
                         }
                     )
                     .then(function (response) {
+                        window.localStorage.setItem("isLogged", true);
                         console.log(response);
                         login(response.data.token, response.data.user);
                         navigate("/home");

@@ -10,6 +10,8 @@ import { fileURLToPath } from "url";
 import mongoose, { mongo } from "mongoose";
 import { register } from "./controller/AuthController.js";
 import authRouter from "./routes/auth.js";
+import categoriesRouter from "./routes/categories.js";
+import productsRouter from "./routes/products.js";
 // import userRoutes from "./routes/users.js";
 // import postRoutes from "./routes/posts.js";
 // import { register } from "./controllers/auth.js";
@@ -50,6 +52,8 @@ app.post("/api/user/register", upload.single("picture"), register);
 
 /* ROUTES */
 app.use("/api/user", authRouter);
+app.use("/api/product", productsRouter);
+app.use("/api/category", categoriesRouter);
 // app.use("/users", userRoutes);
 // app.use("/posts", postRoutes);
 
