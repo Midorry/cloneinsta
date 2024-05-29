@@ -11,6 +11,9 @@ import "jquery-ui/dist/jquery-ui";
 import mixitup from "mixitup";
 import { ShoppingCart } from "./root/pages/ShoppingCart";
 import { Shop } from "./root/pages/Shop";
+import HomeAdmin from "./root/admin/HomeAdmin";
+import AdminLayout from "./components/AdminLayout";
+import User from "./root/admin/User";
 
 const App = () => {
     $(window).on("load", function () {
@@ -59,6 +62,11 @@ const App = () => {
                         path="/update-profile/:id"
                         element={<UpdateProfile />}
                     /> */}
+                </Route>
+
+                <Route element={<AdminLayout />}>
+                    <Route path="/admin" index element={<HomeAdmin />} />
+                    <Route path="/admin/user" element={<User />} />
                 </Route>
             </Routes>
         </main>

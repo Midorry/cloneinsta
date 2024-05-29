@@ -33,7 +33,7 @@
 html,
 body {
     height: 100%;
-    font-family: "Cairo", sans-serif;
+    font-family: "Heebo", sans-serif;
     -webkit-font-smoothing: antialiased;
     font-smoothing: antialiased;
 }
@@ -47,7 +47,7 @@ h6 {
     margin: 0;
     color: #111111;
     font-weight: 400;
-    font-family: "Cairo", sans-serif;
+    font-family: "Heebo", sans-serif;
 }
 
 h1 {
@@ -459,7 +459,7 @@ ol {
     padding: 5px 15px;
 }
 
-.header__menu ul li.active a {
+.header__menu ul li a.active {
     color: #7fad39;
 }
 

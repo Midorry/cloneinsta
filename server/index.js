@@ -12,6 +12,7 @@ import { register } from "./controller/AuthController.js";
 import authRouter from "./routes/auth.js";
 import categoriesRouter from "./routes/categories.js";
 import productsRouter from "./routes/products.js";
+import { addProduct } from "./controller/ProductsController.js";
 // import userRoutes from "./routes/users.js";
 // import postRoutes from "./routes/posts.js";
 // import { register } from "./controllers/auth.js";
@@ -37,17 +38,21 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 /* FILE STORAGE */
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "public/assets");
-    },
+    destination: "public/assets",
     filename: function (req, file, cb) {
+        console.log(file);
         cb(null, file.originalname);
     },
 });
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 /* ROUTES WITH FILES */
 app.post("/api/user/register", upload.single("picture"), register);
+app.post("/api/product/add", upload.single("image"), addProduct);
+app.post("/upload", upload.single("image"), (req, res) => {
+    console.log(req.file);
+});
+
 // app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 /* ROUTES */

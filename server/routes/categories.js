@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.post("/category", addCategory);
+router.post("/add", addCategory);
 
 router.get("/", getAllCategories);
 

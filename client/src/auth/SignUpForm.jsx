@@ -77,23 +77,29 @@ const SignUpForm = () => {
             initialValues={initialRegister}
             validationSchema={validationRegister}
             onSubmit={async (values, onSubmitProps) => {
-                const firstName = values.firstName;
-                const lastName = values.lastName;
-                const email = values.email;
-                const password = values.password;
-                const address = values.address;
-                const picturePath = values.picture.name;
+                const formData = new FormData();
+                for (let value in values) {
+                    formData.append(value, values[value]);
+                }
+                formData.append("picturePath", values.picture.name);
+                // const firstName = values.firstName;
+                // const lastName = values.lastName;
+                // const email = values.email;
+                // const password = values.password;
+                // const address = values.address;
+                // const picturePath = values.picture.name;
                 await axios
                     .post(
                         "http://localhost:3002/api/user/register",
-                        {
-                            firstName,
-                            lastName,
-                            email,
-                            password,
-                            address,
-                            picturePath,
-                        },
+                        formData,
+                        // {
+                        //     firstName,
+                        //     lastName,
+                        //     email,
+                        //     password,
+                        //     address,
+                        //     picturePath,
+                        // },
                         {
                             headers: {
                                 "Content-Type": "multipart/form-data",

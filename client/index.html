@@ -3,6 +3,14 @@
     <head>
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+            rel="stylesheet"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -18,6 +26,10 @@
         <title>Vite + React</title>
         <script>
             $(function () {
+                $(".sidebar1-toggler").click(function () {
+                    $(".sidebar1, .content").toggleClass("open");
+                    return false;
+                });
                 var rangeSlider = $(".price-range"),
                     minamount = $("#minamount"),
                     maxamount = $("#maxamount"),

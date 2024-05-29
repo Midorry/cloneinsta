@@ -1,5 +1,5 @@
 import $ from "jquery";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 const Header = () => {
     const location = useLocation();
     let classHero = "";
@@ -82,42 +82,44 @@ const Header = () => {
                         <div className="col-lg-6">
                             <nav className="header__menu">
                                 <ul>
-                                    <li className="active">
-                                        <a href="./home">Home</a>
+                                    <li>
+                                        <NavLink to="./home">Home</NavLink>
                                     </li>
                                     <li>
-                                        <a href="./shop">Shop</a>
+                                        <NavLink to="./shop">Shop</NavLink>
                                     </li>
                                     <li>
-                                        <a href="#">Pages</a>
+                                        <NavLink to="/">Pages</NavLink>
                                         <ul className="header__menu__dropdown">
                                             <li>
-                                                <a href="./shop-details">
+                                                <NavLink to="./shop-details">
                                                     Shop Details
-                                                </a>
+                                                </NavLink>
                                             </li>
                                             <li>
-                                                <a href="./shopping-cart">
+                                                <NavLink to="./shopping-cart">
                                                     Shoping Cart
-                                                </a>
+                                                </NavLink>
                                             </li>
                                             <li>
-                                                <a href="./checkout.html">
+                                                <NavLink to="./checkout.html">
                                                     Check Out
-                                                </a>
+                                                </NavLink>
                                             </li>
                                             <li>
-                                                <a href="./blog-details.html">
+                                                <NavLink to="./blog-details.html">
                                                     Blog Details
-                                                </a>
+                                                </NavLink>
                                             </li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="./blog.html">Blog</a>
+                                        <NavLink to="./blog.html">Blog</NavLink>
                                     </li>
                                     <li>
-                                        <a href="./contact.html">Contact</a>
+                                        <NavLink to="./contact.html">
+                                            Contact
+                                        </NavLink>
                                     </li>
                                 </ul>
                             </nav>
