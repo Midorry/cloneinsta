@@ -12,6 +12,7 @@ const ProductsSchema = new mongoose.Schema(
         },
         quantity: {
             type: Number,
+            default: 0,
         },
         desc: {
             type: String,
@@ -26,6 +27,7 @@ const ProductsSchema = new mongoose.Schema(
         },
         promotion: {
             type: Number,
+            default: 0,
         },
     },
     { timestamps: true }

@@ -11,9 +11,12 @@ import "jquery-ui/dist/jquery-ui";
 import mixitup from "mixitup";
 import { ShoppingCart } from "./root/pages/ShoppingCart";
 import { Shop } from "./root/pages/Shop";
-import HomeAdmin from "./root/admin/HomeAdmin";
 import AdminLayout from "./components/AdminLayout";
 import User from "./root/admin/User";
+import Dashboard from "./root/admin/Dashboard";
+import ListProduct from "./root/admin/ListProduct";
+import AddProduct from "./root/admin/AddProduct";
+import UpdateProduct from "./root/admin/UpdateProduct";
 
 const App = () => {
     $(window).on("load", function () {
@@ -48,7 +51,7 @@ const App = () => {
                 {/* private routes */}
                 <Route element={<RootLayout />}>
                     <Route path="/home" index element={<Home />} />
-                    <Route path="/shop-details" element={<ShopDetails />} />
+                    <Route path="/shop-details/:id" element={<ShopDetails />} />
                     <Route path="/shopping-cart" element={<ShoppingCart />} />
                     <Route path="/shop" element={<Shop />} />
                     {/* <Route path="/explore" element={<Explore />} />
@@ -65,7 +68,13 @@ const App = () => {
                 </Route>
 
                 <Route element={<AdminLayout />}>
-                    <Route path="/admin" index element={<HomeAdmin />} />
+                    <Route path="/admin" index element={<Dashboard />} />
+                    <Route path="/list-product" element={<ListProduct />} />
+                    <Route
+                        path="/update-product/:id"
+                        element={<UpdateProduct />}
+                    />
+                    <Route path="/add-product" element={<AddProduct />} />
                     <Route path="/admin/user" element={<User />} />
                 </Route>
             </Routes>

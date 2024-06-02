@@ -1,5 +1,9 @@
+import axios from "axios";
 import $ from "jquery";
+import { useEffect, useState } from "react";
 import OwlCarousel from "react-owl-carousel";
+import { useParams } from "react-router-dom";
+import { useAuth } from "/src/context/AuthContext";
 
 export const ShopDetails = () => {
     const option = {
@@ -52,6 +56,68 @@ export const ShopDetails = () => {
         }
         button.val(newVal);
     };
+
+    const { userData } = useAuth();
+    console.log(userData);
+
+    const id = useParams();
+
+    const [product, setProduct] = useState([]);
+
+    const getProduct = async () => {
+        await axios
+            .get(`http://localhost:3002/api/product/${id.id}`, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response);
+                setProduct(response.data);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
+    useEffect(() => {
+        getProduct();
+    }, []);
+
+    const handleAddToCart = async () => {
+        const button = $(".value");
+        const value = button.val();
+        await axios
+            .post(
+                "http://localhost:3002/api/cart/",
+                {
+                    userId: userData._id,
+                    products: [
+                        { productId: product._id },
+                        { promotion: product.promotion },
+                        { price: product.price },
+                        { quantity: value },
+                    ],
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
     return (
         <div>
             <section className="product-details spad">
@@ -62,7 +128,7 @@ export const ShopDetails = () => {
                                 <div className="product__details__pic__item">
                                     <img
                                         className="product__details__pic__item--large"
-                                        src="../../../public/assets/img/product/details/product-details-1.jpg"
+                                        src={`http://localhost:3002/assets/${product.image}`}
                                         alt=""
                                     ></img>
                                 </div>
@@ -95,26 +161,22 @@ export const ShopDetails = () => {
                         </div>
                         <div className="col-lg-6 col-md-6">
                             <div className="product__details__text">
-                                <h3>Vetgetable’s Package</h3>
+                                <h3>{product.name}</h3>
                                 <div className="product__details__rating">
                                     <i className="fa fa-star"></i>
                                     <i className="fa fa-star"></i>
                                     <i className="fa fa-star"></i>
                                     <i className="fa fa-star"></i>
                                     <i className="fa fa-star-half-o"></i>
-                                    <span>(18 reviews)</span>
+                                    {/* <span>(18 reviews)</span> */}
                                 </div>
                                 <div className="product__details__price">
-                                    $50.00
+                                    {new Intl.NumberFormat("de-DE").format(
+                                        product.price
+                                    )}
+                                    đ
                                 </div>
-                                <p>
-                                    Mauris blandit aliquet elit, eget tincidunt
-                                    nibh pulvinar a. Vestibulum ac diam sit amet
-                                    quam vehicula elementum sed sit amet dui.
-                                    Sed porttitor lectus nibh. Vestibulum ac
-                                    diam sit amet quam vehicula elementum sed
-                                    sit amet dui. Proin eget tortor risus.
-                                </p>
+                                <p>{product.desc}</p>
                                 <div className="product__details__quantity">
                                     <div className="quantity">
                                         <div className="pro-qty">
@@ -138,18 +200,25 @@ export const ShopDetails = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#" className="primary-btn">
+                                <button
+                                    onClick={handleAddToCart}
+                                    className="primary-btn"
+                                >
                                     ADD TO CARD
-                                </a>
+                                </button>
                                 <a href="#" className="heart-icon">
                                     <span className="icon_heart_alt"></span>
                                 </a>
                                 <ul>
                                     <li>
                                         <b>Availability</b>{" "}
-                                        <span>In Stock</span>
+                                        {product.quantity > 0 ? (
+                                            <span>In Stock</span>
+                                        ) : (
+                                            <span>Out Stock</span>
+                                        )}
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <b>Shipping</b>{" "}
                                         <span>
                                             01 day shipping.{" "}
@@ -158,7 +227,7 @@ export const ShopDetails = () => {
                                     </li>
                                     <li>
                                         <b>Weight</b> <span>0.5 kg</span>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <b>Share on</b>
                                         <div className="share">

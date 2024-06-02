@@ -12,6 +12,7 @@ import { register } from "./controller/AuthController.js";
 import authRouter from "./routes/auth.js";
 import categoriesRouter from "./routes/categories.js";
 import productsRouter from "./routes/products.js";
+import cartRouter from "./routes/cart.js";
 import { addProduct } from "./controller/ProductsController.js";
 // import userRoutes from "./routes/users.js";
 // import postRoutes from "./routes/posts.js";
@@ -59,6 +60,7 @@ app.post("/upload", upload.single("image"), (req, res) => {
 app.use("/api/user", authRouter);
 app.use("/api/product", productsRouter);
 app.use("/api/category", categoriesRouter);
+app.use("/api/cart", cartRouter);
 // app.use("/users", userRoutes);
 // app.use("/posts", postRoutes);
 

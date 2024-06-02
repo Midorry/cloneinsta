@@ -30,9 +30,40 @@ const SideBar = () => {
                             <i className="fa fa-tachometer me-2"></i>
                             Dashboard
                         </NavLink>
-                        <NavLink to="/element" className="nav-link">
-                            <i className="fa fa-laptop me-2"></i>Elements
-                        </NavLink>
+                        <div className="dropdown">
+                            <button
+                                className="btn  dropdown-toggle text-left nav-link"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <i className="fa fa-th me-2"></i> Product
+                            </button>
+                            <div
+                                className="dropdown-menu"
+                                aria-labelledby="dropdownMenuButton"
+                            >
+                                <NavLink
+                                    to="/list-product"
+                                    className="nav-link"
+                                >
+                                    <i className="fa fa-laptop me-2"></i>List
+                                    Product
+                                </NavLink>
+                                <NavLink to="/add-product" className="nav-link">
+                                    <i className="fa fa-laptop me-2"></i>Add
+                                    Product
+                                </NavLink>
+                                <NavLink
+                                    to="/update-product"
+                                    className="nav-link"
+                                >
+                                    <i className="fa fa-laptop me-2"></i>Update
+                                </NavLink>
+                            </div>
+                        </div>
                         <NavLink to="widget.html" className="nav-item nav-link">
                             <i className="fa fa-th me-2"></i>Widgets
                         </NavLink>
@@ -45,11 +76,7 @@ const SideBar = () => {
                         <NavLink to="chart.html" className="nav-item nav-link">
                             <i className="fa fa-chart-bar me-2"></i>Charts
                         </NavLink>
-                        <NavLink
-                            to="/"
-                            className="nav-link"
-                            data-bs-toggle="dropdown"
-                        >
+                        <NavLink to="/" className="nav-link">
                             <i className="far fa-file-alt me-2"></i>Pages
                         </NavLink>
                     </div>

@@ -41,37 +41,6 @@ const SignInForm = () => {
                 const password = values.password;
                 console.log(email, password);
 
-                // try {
-                //     const loggedInResponse = await fetch(
-                //         "http://localhost:3002/api/user/login",
-                //         {
-                //             method: "POST",
-                //             headers: { "Content-Type": "application/json" },
-                //             body: JSON.stringify(values),
-                //         }
-                //     );
-                //     const loggedIn = await loggedInResponse.json();
-                //     console.log(loggedIn);
-                //     onSubmitProps.resetForm();
-                //     // make sure you have a token
-                //     if (loggedIn.msg !== "Invalid credentials") {
-                //         // dispatch(
-                //         //     setLogin({
-                //         //         user: loggedIn.user,
-                //         //         token: loggedIn.token,
-                //         //     })
-                //         // );
-
-                //         navigate("/home");
-                //     }
-                // } catch (error) {
-                //     if (error.response.status === 400) {
-                //         onSubmitProps.setErrors({
-                //             email: "Invalid email or password",
-                //         });
-                //     }
-                // }
-
                 await axios
                     .post(
                         "http://localhost:3002/api/user/login",
