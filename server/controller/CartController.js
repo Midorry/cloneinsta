@@ -4,7 +4,7 @@ import Cart from "../models/Cart.js";
 
 export const createCart = async (req, res) => {
     const { userId, products } = req.body;
-    const newCart = new Cart({ userId, products });
+    const newCart = new Cart(req.body);
 
     try {
         const savedCart = await newCart.save();
@@ -41,14 +41,14 @@ export const deleteCart = async (req, res) => {
 };
 
 //GET USER CART
-// router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res) => {
-//   try {
-//     const cart = await Cart.findOne({ userId: req.params.userId });
-//     res.status(200).json(cart);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
+export const getUserCart = async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ id: req.params.id });
+        res.status(200).json(cart);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
 
 // //GET ALL
 

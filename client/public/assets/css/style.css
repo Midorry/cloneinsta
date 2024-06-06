@@ -1931,6 +1931,8 @@ ol {
 .shoping__cart__table table tbody tr td.shoping__cart__item img {
     display: inline-block;
     margin-right: 25px;
+    width: 100px;
+    height: 100px;
 }
 
 .shoping__cart__table table tbody tr td.shoping__cart__item h5 {
@@ -1939,6 +1941,13 @@ ol {
 }
 
 .shoping__cart__table table tbody tr td.shoping__cart__price {
+    font-size: 18px;
+    color: #1c1c1c;
+    font-weight: 700;
+    width: 100px;
+}
+
+.shoping__cart__table table tbody tr td.shoping__cart__quantity {
     font-size: 18px;
     color: #1c1c1c;
     font-weight: 700;

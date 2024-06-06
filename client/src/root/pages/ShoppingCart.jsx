@@ -1,80 +1,401 @@
+import axios from "axios";
 import $ from "jquery";
+import { useEffect, useReducer, useState } from "react";
+import { useCart } from "/src/context/CartContext";
+import { NavLink } from "react-router-dom";
 
 export const ShoppingCart = () => {
-    const handleOnClickInc1 = () => {
-        const button1 = $(".value1");
-        const check1 = $(".qtybtn1");
-        const oldValue1 = button1.val();
-        let newVal1 = parseFloat(oldValue1);
-        if (check1.hasClass("inc")) {
-            newVal1 = newVal1 + 1;
-            button1.val(newVal1);
-        }
+    const [cartItems, setCartItems] = useState();
+    const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+    let total = 0;
+
+    let classHero = "";
+    if (location.pathname === "/home") {
+        classHero = "hero";
+    } else {
+        // eslint-disable-next-line no-unused-vars
+        classHero = "hero hero-normal";
+    }
+    const handleOnClick = () => {
+        $(".hero__categories ul").slideToggle(400);
     };
-    const handleOnClickDec1 = () => {
-        const button = $(".value");
-        const check = $(".qtybtn");
-        const oldValue = button.val();
-        let newVal = parseFloat(oldValue);
-        if (check.hasClass("dec")) {
-            if (oldValue > 0) {
-                newVal = newVal - 1;
-            } else {
-                newVal = 0;
+
+    const { cart, cartId, setCart, setHaveCart } = useCart();
+    const removeCart = async (cartProductId) => {
+        let listProduct = [...cart.products];
+
+        console.log(listProduct);
+        console.log([...cart.products]);
+        console.log(cartProductId);
+        listProduct.map((product, index) => {
+            if (product._id === cartProductId) {
+                console.log(index);
+
+                console.log(listProduct);
+                listProduct.splice(index, 1);
+                console.log(listProduct);
             }
-        }
-        button.val(newVal);
+        });
+        await axios
+            .put(
+                `http://localhost:3002/api/cart/${cartId}`,
+                {
+                    userId: cart.userId,
+                    products: [
+                        ...listProduct,
+                        // {
+                        //     productId: product._id,
+                        //     promotion: product.promotion,
+                        //     price: product.price,
+                        //     quantity: value,
+                        // },
+                    ],
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then(function (response) {
+                const userId = response.data.userId;
+                const products = response.data.products;
+                localStorage.setItem(
+                    "user_cart",
+                    JSON.stringify({
+                        userId: userId,
+                        products: products,
+                        cartId: cartId,
+                    })
+                );
+                console.log(response);
+                setCart((prev) => ({ ...prev, products }));
+                setHaveCart(true);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+        forceUpdate();
     };
-    const handleOnClickInc2 = () => {
-        const button2 = $(".value2");
-        const check2 = $(".qtybtn2");
-        const oldValue2 = button2.val();
-        let newVal2 = parseFloat(oldValue2);
-        if (check2.hasClass("inc")) {
-            newVal2 = newVal2 + 1;
-            button2.val(newVal2);
-        }
+
+    const getCart = async () => {
+        await axios
+            .get("http://localhost:3002/api/cart/", {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response.data[0]);
+                setCartItems(response.data[0].products);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
     };
-    const handleOnClickDec2 = () => {
-        const button = $(".value");
-        const check = $(".qtybtn");
-        const oldValue = button.val();
-        let newVal = parseFloat(oldValue);
-        if (check.hasClass("dec")) {
-            if (oldValue > 0) {
-                newVal = newVal - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        button.val(newVal);
-    };
-    const handleOnClickInc3 = () => {
-        const button3 = $(".value3");
-        const check3 = $(".qtybtn3");
-        const oldValue3 = button3.val();
-        let newVal3 = parseFloat(oldValue3);
-        if (check3.hasClass("inc")) {
-            newVal3 = newVal3 + 1;
-            button3.val(newVal3);
-        }
-    };
-    const handleOnClickDec3 = () => {
-        const button = $(".value");
-        const check = $(".qtybtn");
-        const oldValue = button.val();
-        let newVal = parseFloat(oldValue);
-        if (check.hasClass("dec")) {
-            if (oldValue > 0) {
-                newVal = newVal - 1;
-            } else {
-                newVal = 0;
-            }
-        }
-        button.val(newVal);
-    };
+
+    cartItems?.map((product) => {
+        total = total + product.quantity * product.price;
+    });
+    useEffect(() => {
+        getCart();
+    }, [ignored]);
+
     return (
         <div>
+            <header className="header">
+                <div className="header__top">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-6 col-md-6">
+                                <div className="header__top__left">
+                                    <ul>
+                                        <li>
+                                            <i className="fa fa-envelope"></i>{" "}
+                                            hello@colorlib.com
+                                        </li>
+                                        <li>
+                                            Free Shipping for all Order of $99
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="col-lg-6 col-md-6">
+                                <div className="header__top__right">
+                                    <div className="header__top__right__social">
+                                        <a href="#">
+                                            <i className="fa fa-facebook"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i className="fa fa-twitter"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i className="fa fa-linkedin"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i className="fa fa-pinterest-p"></i>
+                                        </a>
+                                    </div>
+                                    <div className="header__top__right__language">
+                                        <img src="img/language.png" alt="" />
+                                        <div>English</div>
+                                        <span className="arrow_carrot-down"></span>
+                                        <ul>
+                                            <li>
+                                                <a href="#">Spanis</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">English</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div className="header__top__right__auth">
+                                        <a href="#">
+                                            <i className="fa fa-user"></i> Login
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-3">
+                            <div className="header__logo">
+                                <a href="./index.html">
+                                    <img src="img/logo.png" alt="" />
+                                </a>
+                            </div>
+                        </div>
+                        <div className="col-lg-6">
+                            <nav className="header__menu">
+                                <ul>
+                                    <li>
+                                        <NavLink to="/home">Home</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to="/shop">Shop</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to="/">Pages</NavLink>
+                                        <ul className="header__menu__dropdown">
+                                            <li>
+                                                <NavLink to="./shop-details">
+                                                    Shop Details
+                                                </NavLink>
+                                            </li>
+                                            <li>
+                                                <NavLink to="./shopping-cart">
+                                                    Shoping Cart
+                                                </NavLink>
+                                            </li>
+                                            <li>
+                                                <NavLink to="./checkout.html">
+                                                    Check Out
+                                                </NavLink>
+                                            </li>
+                                            <li>
+                                                <NavLink to="./blog-details.html">
+                                                    Blog Details
+                                                </NavLink>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <NavLink to="./blog.html">Blog</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to="./contact.html">
+                                            Contact
+                                        </NavLink>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div className="col-lg-3">
+                            <div className="header__cart">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <i className="fa fa-heart"></i>{" "}
+                                            <span>1</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i className="fa fa-shopping-bag"></i>{" "}
+                                            <span>{cartItems?.length}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div className="header__cart__price">
+                                    item:{" "}
+                                    <span>
+                                        {new Intl.NumberFormat("de-DE").format(
+                                            total
+                                        )}
+                                        đ
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="humberger__open">
+                        <i className="fa fa-bars"></i>
+                    </div>
+                </div>
+            </header>
+
+            <section className={`${classHero}`}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-3">
+                            <div className="hero__categories">
+                                <div
+                                    className="hero__categories__all"
+                                    onClick={handleOnClick}
+                                >
+                                    <i className="fa fa-bars"></i>
+                                    <span>All departments</span>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <a href="#">Fresh Meat</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Vegetables</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Fruit & Nut Gifts</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Fresh Berries</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Ocean Foods</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Butter & Eggs</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Fastfood</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Fresh Onion</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Papayaya & Crisps</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Oatmeal</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Fresh Bananas</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="col-lg-9">
+                            <div className="hero__search">
+                                <div className="hero__search__form">
+                                    <form action="#">
+                                        <div className="hero__search__categories">
+                                            All Categories
+                                            <span className="arrow_carrot-down"></span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            placeholder="What do yo u need?"
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="site-btn"
+                                        >
+                                            SEARCH
+                                        </button>
+                                    </form>
+                                </div>
+                                <div className="hero__search__phone">
+                                    <div className="hero__search__phone__icon">
+                                        <i className="fa fa-phone"></i>
+                                    </div>
+                                    <div className="hero__search__phone__text">
+                                        <h5>+65 11.188.888</h5>
+                                        <span>support 24/7 time</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {location.pathname === "/home" ? (
+                                <div
+                                    className="hero__item set-bg"
+                                    style={{
+                                        backgroundImage: `url(../../../public/assets/img/hero/banner.jpg")`,
+                                    }}
+                                    data-setbg="../../../public/assets/img/hero/banner.jpg"
+                                >
+                                    <img
+                                        style={{
+                                            position: "absolute",
+                                            content: "",
+                                            right: 0,
+                                        }}
+                                        src="../../../public/assets/img/hero/banner.jpg"
+                                    ></img>
+                                    <div className="hero__text">
+                                        <span>FRUIT FRESH</span>
+                                        <h2>
+                                            Vegetable <br />
+                                            100% Organic
+                                        </h2>
+                                        <p>
+                                            Free Pickup and Delivery Available
+                                        </p>
+                                        <a href="#" className="primary-btn">
+                                            SHOP NOW
+                                        </a>
+                                    </div>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+                            {/* <div
+                                className="hero__item set-bg"
+                                style={{
+                                    backgroundImage: `url(../../../public/assets/img/hero/banner.jpg")`,
+                                }}
+                                data-setbg="../../../public/assets/img/hero/banner.jpg"
+                            >
+                                <img
+                                    style={{
+                                        position: "absolute",
+                                        content: "",
+                                        right: 0,
+                                    }}
+                                    src="../../../public/assets/img/hero/banner.jpg"
+                                ></img>
+                                <div className="hero__text">
+                                    <span>FRUIT FRESH</span>
+                                    <h2>
+                                        Vegetable <br />
+                                        100% Organic
+                                    </h2>
+                                    <p>Free Pickup and Delivery Available</p>
+                                    <a href="#" className="primary-btn">
+                                        SHOP NOW
+                                    </a>
+                                </div>
+                            </div> */}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section className="shoping-cart spad">
                 <div className="container">
                     <div className="row">
@@ -93,141 +414,84 @@ export const ShoppingCart = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td className="shoping__cart__item">
-                                                <img
-                                                    src="img/cart/cart-1.jpg"
-                                                    alt=""
-                                                />
-                                                <h5>Vegetable’s Package</h5>
-                                            </td>
-                                            <td className="shoping__cart__price">
-                                                $55.00
-                                            </td>
-                                            <td className="shoping__cart__quantity">
-                                                <div className="quantity">
-                                                    <div className="pro-qty">
-                                                        <span
-                                                            className="dec qtybtn1"
-                                                            onClick={
-                                                                handleOnClickDec1
-                                                            }
-                                                        >
-                                                            -
-                                                        </span>
-                                                        <input
-                                                            className="value1"
-                                                            type="input"
-                                                            value="1"
-                                                        />
-                                                        <span
-                                                            className="inc qtybtn1"
-                                                            onClick={
-                                                                handleOnClickInc1
-                                                            }
-                                                        >
-                                                            +
-                                                        </span>
+                                        {cartItems?.map((product, index) => (
+                                            <tr key={index}>
+                                                {
+                                                    (total =
+                                                        total +
+                                                        product.quantity *
+                                                            product.price)
+                                                }
+                                                <td className="shoping__cart__item">
+                                                    <img
+                                                        src={`http://localhost:3002/assets/${product.productImage}`}
+                                                        alt=""
+                                                    />
+                                                    <h5>
+                                                        {product.productName}
+                                                    </h5>
+                                                </td>
+                                                <td className="shoping__cart__price">
+                                                    {new Intl.NumberFormat(
+                                                        "de-DE"
+                                                    ).format(product.price)}
+                                                    đ
+                                                </td>
+                                                <td className="shoping__cart__quantity">
+                                                    <div className="quantity">
+                                                        {product.quantity}
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td className="shoping__cart__total">
-                                                $110.00
-                                            </td>
-                                            <td className="shoping__cart__item__close">
-                                                <span className="icon_close"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="shoping__cart__item">
-                                                <img
-                                                    src="img/cart/cart-2.jpg"
-                                                    alt=""
-                                                />
-                                                <h5>Fresh Garden Vegetable</h5>
-                                            </td>
-                                            <td className="shoping__cart__price">
-                                                $39.00
-                                            </td>
-                                            <td className="shoping__cart__quantity">
-                                                <div className="quantity">
-                                                    <div className="pro-qty">
-                                                        <span
-                                                            className="dec qtybtn2"
-                                                            onClick={
-                                                                handleOnClickDec2
-                                                            }
-                                                        >
-                                                            -
-                                                        </span>
-                                                        <input
-                                                            className="value2"
-                                                            type="input"
-                                                            value="1"
-                                                        />
-                                                        <span
-                                                            className="inc qtybtn2"
-                                                            onClick={
-                                                                handleOnClickInc2
-                                                            }
-                                                        >
-                                                            +
-                                                        </span>
+                                                </td>
+                                                {/* <td className="shoping__cart__quantity">
+                                                    <div className="quantity">
+                                                        <div className="pro-qty">
+                                                            <span
+                                                                className="dec qtybtn1"
+                                                                onClick={() => {
+                                                                    product.quantity -= 1;
+                                                                }}
+                                                            >
+                                                                -
+                                                            </span>
+                                                            <input
+                                                                className="value1"
+                                                                type="input"
+                                                                value={
+                                                                    product.quantity
+                                                                }
+                                                            />
+                                                            <span
+                                                                className="inc qtybtn1"
+                                                                onClick={() => {
+                                                                    product.quantity += 1;
+                                                                }}
+                                                            >
+                                                                +
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td className="shoping__cart__total">
-                                                $39.99
-                                            </td>
-                                            <td className="shoping__cart__item__close">
-                                                <span className="icon_close"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="shoping__cart__item">
-                                                <img
-                                                    src="img/cart/cart-3.jpg"
-                                                    alt=""
-                                                />
-                                                <h5>Organic Bananas</h5>
-                                            </td>
-                                            <td className="shoping__cart__price">
-                                                $69.00
-                                            </td>
-                                            <td className="shoping__cart__quantity">
-                                                <div className="quantity">
-                                                    <div className="pro-qty">
-                                                        <span
-                                                            className="dec qtybtn3"
-                                                            onClick={
-                                                                handleOnClickDec3
-                                                            }
-                                                        >
-                                                            -
-                                                        </span>
-                                                        <input
-                                                            className="value3"
-                                                            type="input"
-                                                            value="1"
-                                                        />
-                                                        <span
-                                                            className="inc qtybtn3"
-                                                            onClick={
-                                                                handleOnClickInc3
-                                                            }
-                                                        >
-                                                            +
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="shoping__cart__total">
-                                                $69.99
-                                            </td>
-                                            <td className="shoping__cart__item__close">
-                                                <span className="icon_close"></span>
-                                            </td>
-                                        </tr>
+                                                </td> */}
+                                                <td className="shoping__cart__total">
+                                                    {new Intl.NumberFormat(
+                                                        "de-DE"
+                                                    ).format(
+                                                        product.quantity *
+                                                            product.price
+                                                    )}
+                                                    đ
+                                                </td>
+                                                <td className="shoping__cart__item__close">
+                                                    <button
+                                                        onClick={() => {
+                                                            removeCart(
+                                                                product._id
+                                                            );
+                                                        }}
+                                                        className="icon_close"
+                                                    ></button>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
@@ -249,33 +513,17 @@ export const ShoppingCart = () => {
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <div className="shoping__continue">
-                                <div className="shoping__discount">
-                                    <h5>Discount Codes</h5>
-                                    <form action="#">
-                                        <input
-                                            type="text"
-                                            placeholder="Enter your coupon code"
-                                        />
-                                        <button
-                                            type="submit"
-                                            className="site-btn"
-                                        >
-                                            APPLY COUPON
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
                             <div className="shoping__checkout">
                                 <h5>Cart Total</h5>
                                 <ul>
                                     <li>
-                                        Subtotal <span>$454.98</span>
-                                    </li>
-                                    <li>
-                                        Total <span>$454.98</span>
+                                        Total{" "}
+                                        <span>
+                                            {new Intl.NumberFormat(
+                                                "de-DE"
+                                            ).format(total)}
+                                            đ
+                                        </span>
                                     </li>
                                 </ul>
                                 <a href="#" className="primary-btn">

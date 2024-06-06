@@ -1,10 +1,12 @@
 import { Outlet, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const AuthLayout = () => {
     // const isAuthenticated = false;
+    const { isAuthenticated } = useAuth();
     return (
         <>
-            {window.localStorage.getItem("isLogged") ? (
+            {isAuthenticated ? (
                 <Navigate to="/home" />
             ) : (
                 <div className="flex">

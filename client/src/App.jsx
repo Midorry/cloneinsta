@@ -49,10 +49,10 @@ const App = () => {
                 </Route>
 
                 {/* private routes */}
+                <Route path="/shop-details/:id" element={<ShopDetails />} />
+                <Route path="/shopping-cart" element={<ShoppingCart />} />
                 <Route element={<RootLayout />}>
                     <Route path="/home" index element={<Home />} />
-                    <Route path="/shop-details/:id" element={<ShopDetails />} />
-                    <Route path="/shopping-cart" element={<ShoppingCart />} />
                     <Route path="/shop" element={<Shop />} />
                     {/* <Route path="/explore" element={<Explore />} />
                     <Route path="/saved" element={<Saved />} />

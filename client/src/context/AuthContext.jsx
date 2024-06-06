@@ -3,10 +3,6 @@ import { createContext } from "react";
 
 const AuthContext = createContext();
 
-// export function useAuth() {
-//     return useContext(AuthContext);
-// }
-
 // eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);

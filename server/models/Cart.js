@@ -9,6 +9,8 @@ const CartSchema = new mongoose.Schema(
         products: [
             {
                 productId: { type: String },
+                productName: { type: String },
+                productImage: { type: String, default: "" },
                 promotion: { type: Number, default: 0 },
                 price: { type: Number, default: 0 },
                 quantity: { type: Number, default: 1 },

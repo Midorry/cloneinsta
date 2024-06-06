@@ -1,6 +1,11 @@
+import axios from "axios";
 import $ from "jquery";
+import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 const Header = () => {
+    const [cartItems, setCartItems] = useState();
+    // const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+    let total = 0;
     const location = useLocation();
     let classHero = "";
     if (location.pathname === "/home") {
@@ -12,6 +17,34 @@ const Header = () => {
     const handleOnClick = () => {
         $(".hero__categories ul").slideToggle(400);
     };
+
+    const getCart = async () => {
+        await axios
+            .get("http://localhost:3002/api/cart/", {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response.data[0]);
+                setCartItems(response.data[0].products);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+        // forceUpdate();
+    };
+
+    cartItems?.map((product) => {
+        total = total + product.quantity * product.price;
+    });
+
+    useEffect(() => {
+        getCart();
+    }, []);
     return (
         <div>
             <header className="header">
@@ -136,12 +169,18 @@ const Header = () => {
                                     <li>
                                         <a href="#">
                                             <i className="fa fa-shopping-bag"></i>{" "}
-                                            <span>3</span>
+                                            <span>{cartItems?.length}</span>
                                         </a>
                                     </li>
                                 </ul>
                                 <div className="header__cart__price">
-                                    item: <span>$150.00</span>
+                                    item:{" "}
+                                    <span>
+                                        {new Intl.NumberFormat("de-DE").format(
+                                            total
+                                        )}
+                                        đ
+                                    </span>
                                 </div>
                             </div>
                         </div>

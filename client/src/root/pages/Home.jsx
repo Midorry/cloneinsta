@@ -210,7 +210,12 @@ const Home = () => {
                                                 {product.name}
                                             </NavLink>
                                         </h6>
-                                        <h5>{product.price}</h5>
+                                        <h5>
+                                            {new Intl.NumberFormat(
+                                                "de-DE"
+                                            ).format(product.price)}
+                                            đ
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
