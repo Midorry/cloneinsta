@@ -19,6 +19,11 @@ import AddProduct from "./root/admin/AddProduct";
 import UpdateProduct from "./root/admin/UpdateProduct";
 
 const App = () => {
+    if ($(".featured__filter").length > 0) {
+        var containerEl = document.querySelector(".featured__filter");
+        // eslint-disable-next-line no-unused-vars
+        var mixer = mixitup(containerEl);
+    }
     $(window).on("load", function () {
         $(".loader").fadeOut();
         $("#preloder").delay(100).fadeOut("slow");
@@ -49,9 +54,9 @@ const App = () => {
                 </Route>
 
                 {/* private routes */}
-                <Route path="/shop-details/:id" element={<ShopDetails />} />
-                <Route path="/shopping-cart" element={<ShoppingCart />} />
                 <Route element={<RootLayout />}>
+                    <Route path="/shop-details/:id" element={<ShopDetails />} />
+                    <Route path="/shopping-cart" element={<ShoppingCart />} />
                     <Route path="/home" index element={<Home />} />
                     <Route path="/shop" element={<Shop />} />
                     {/* <Route path="/explore" element={<Explore />} />

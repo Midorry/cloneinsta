@@ -14,17 +14,22 @@ import "../public/assets/css/owl.carousel.min.css";
 import "../public/assets/css/slicknav.min.css";
 import "../public/assets/css/style.css";
 import "./assets/css/style.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import CartProvider from "./context/CartContext.jsx";
+import SearchProvider from "./context/SearchContext.jsx";
 // import "../public/assets/sass/style.scss";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <AuthProvider>
-            <CartProvider>
-                <BrowserRouter>
-                    <App />
-                </BrowserRouter>
-            </CartProvider>
+            <SearchProvider>
+                <CartProvider>
+                    <BrowserRouter>
+                        <App />
+                    </BrowserRouter>
+                </CartProvider>
+            </SearchProvider>
         </AuthProvider>
     </React.StrictMode>
 );

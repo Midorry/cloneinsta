@@ -22,9 +22,69 @@ export const addProduct = async (req, res, next) => {
 };
 
 export const getAllProducts = async (req, res) => {
+    // const category = req.query.category;
     try {
-        const post = await Products.find();
-        res.status(200).json(post);
+        const products = await Products.find();
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
+// Logic Filter Products
+
+export const filterProduct = async (req, res) => {
+    const filters = req.query;
+    const filteredUsers = data.filter((user) => {
+        let isValid = true;
+        for (key in filters) {
+            console.log(key, user[key], filters[key]);
+            isValid = isValid && user[key] == filters[key];
+        }
+        return isValid;
+    });
+};
+
+export const search = async (req, res) => {
+    const name = req.query.name;
+    const category = req.query.category;
+    const sortDate = req.query.new;
+    const sortQuantity = req.query.quantity;
+    const sortPrice = req.query.price;
+    try {
+        if (name) {
+            const products = await Products.find({
+                name: {
+                    $regex: name,
+                    $options: "i",
+                },
+            });
+            res.status(200).json(products);
+        } else if (sortDate && sortQuantity) {
+            const products = await Products.find()
+                .sort({ createdAt: -1 })
+                .limit(3);
+            res.status(200).json(products);
+        } else if (sortDate) {
+            const products = await Products.find().sort({ createdAt: -1 });
+            res.status(200).json(products);
+        } else if (sortPrice === "inc") {
+            const products = await Products.find().sort({ price: 1 });
+            // .limit(6);
+            res.status(200).json(products);
+        } else if (sortPrice === "dec") {
+            const products = await Products.find().sort({ price: -1 });
+            // .limit(6);
+            res.status(200).json(products);
+        } else {
+            const products = await Products.find({
+                categoryId: {
+                    $regex: category,
+                    $options: "i",
+                },
+            });
+            res.status(200).json(products);
+        }
     } catch (err) {
         res.status(404).json({ message: err.message });
     }

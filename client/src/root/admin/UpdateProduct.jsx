@@ -1,7 +1,7 @@
 import { Field, Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import Dropzone from "react-dropzone";
+// import Dropzone from "react-dropzone";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -61,7 +61,7 @@ const UpdateProduct = () => {
     // console.log(categories);
     // const [isSuccess, setIsSuccess] = useState(false);
     // const navigate = useNavigate();
-    let isImage = false;
+    // let isImage = false;
     const [files, setFiles] = useState([]);
     const [file, setFile] = useState();
 
@@ -72,7 +72,7 @@ const UpdateProduct = () => {
     };
 
     const thumbs = files.map((file) => {
-        isImage = true;
+        // isImage = true;
         return (
             <div key={file.name}>
                 <div>

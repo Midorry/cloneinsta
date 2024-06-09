@@ -1,62 +1,112 @@
-import OwlCarousel from "react-owl-carousel";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useSearch } from "/src/context/SearchContext";
+import Slider from "react-slick";
+import { NavLink } from "react-router-dom";
 
 export const Shop = () => {
-    const option = {
-        items: 1,
-        loop: true,
+    const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [productLatest, setProductLatest] = useState([]);
+
+    const { valueSearch, searchCategory, sortPrice, getAllProducts, sortDate } =
+        useSearch();
+
+    const settings = {
+        // dots: true,
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: 1,
         autoplay: true,
-        autoplayTimeout: 4000,
-        animateOut: "slideOutUp",
-        nav: false,
-        dots: true,
-        margin: 0,
-        responsive: {
-            1100: {
-                items: 3,
-            },
-            724: {
-                items: 1,
-            },
-            500: {
-                items: 1,
-            },
-            370: {
-                items: 1,
-                innerWidth: "100%",
-                outerWidth: "100%",
-            },
-        },
+        speed: 1000,
+        autoplaySpeed: 2000,
+        cssEase: "linear",
     };
-    const option2 = {
-        loop: true,
-        margin: 0,
-        items: 1,
-        dots: false,
-        nav: true,
-        navText: [
-            "<span class='fa fa-angle-left'><span/>",
-            "<span class='fa fa-angle-right'><span/>",
-        ],
-        smartSpeed: 1200,
-        autoHeight: false,
+
+    const settingsTwoRow = {
+        infinite: true,
+        slidesToShow: 1,
+        rows: 1,
+        slidesPerRow: 1,
         autoplay: true,
-        responsive: {
-            1100: {
-                items: 1,
-            },
-            724: {
-                items: 1,
-            },
-            500: {
-                items: 1,
-            },
-            370: {
-                items: 1,
-                innerWidth: "100%",
-                outerWidth: "100%",
-            },
-        },
+        speed: 1000,
+        autoplaySpeed: 2000,
+        cssEase: "linear",
     };
+
+    const handleCategory = (value) => {
+        searchCategory(value);
+    };
+
+    const getProduct = async () => {
+        await axios
+            .get("http://localhost:3002/api/product", {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response);
+                setProducts(response.data);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
+    const getCategory = async () => {
+        await axios
+            .get("http://localhost:3002/api/category", {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response.data);
+                setCategories(response.data);
+                console.log(categories);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
+    const sortDateQuantity = async () => {
+        await axios
+            .get(
+                `http://localhost:3002/api/product/search?new=true&quantity=true`,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    accept: "application/json",
+                }
+            )
+            .then(function (response) {
+                console.log(response.data);
+                const data = response.data;
+                setProductLatest(data);
+                console.log(productLatest);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
+    useEffect(() => {
+        getCategory();
+        getProduct();
+        sortDateQuantity();
+    }, []);
+
     return (
         <section className="product spad">
             <div className="container">
@@ -64,38 +114,21 @@ export const Shop = () => {
                     <div className="col-lg-3 col-md-5">
                         <div className="sidebar">
                             <div className="sidebar__item">
-                                <h4>Department</h4>
+                                <h4>Danh Mục</h4>
                                 <ul>
-                                    <li>
-                                        <a href="#">Fresh Meat</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Vegetables</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fruit & Nut Gifts</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Berries</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Ocean Foods</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Butter & Eggs</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fastfood</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Onion</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Papayaya & Crisps</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Oatmeal</a>
-                                    </li>
+                                    {categories?.map((category, index) => (
+                                        <li key={index}>
+                                            <button
+                                                onClick={() => {
+                                                    handleCategory(
+                                                        category.name
+                                                    );
+                                                }}
+                                            >
+                                                {category.name}
+                                            </button>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                             <div className="sidebar__item">
@@ -132,174 +165,76 @@ export const Shop = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="sidebar__item sidebar__item__color--option">
-                                <h4>Colors</h4>
-                                <div className="sidebar__item__color sidebar__item__color--white">
-                                    <label htmlFor="white">
-                                        White
-                                        <input type="radio" id="white" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__color sidebar__item__color--gray">
-                                    <label htmlFor="gray">
-                                        Gray
-                                        <input type="radio" id="gray" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__color sidebar__item__color--red">
-                                    <label htmlFor="red">
-                                        Red
-                                        <input type="radio" id="red" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__color sidebar__item__color--black">
-                                    <label htmlFor="black">
-                                        Black
-                                        <input type="radio" id="black" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__color sidebar__item__color--blue">
-                                    <label htmlFor="blue">
-                                        Blue
-                                        <input type="radio" id="blue" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__color sidebar__item__color--green">
-                                    <label htmlFor="green">
-                                        Green
-                                        <input type="radio" id="green" />
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="sidebar__item">
-                                <h4>Popular Size</h4>
-                                <div className="sidebar__item__size">
-                                    <label htmlFor="large">
-                                        Large
-                                        <input type="radio" id="large" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__size">
-                                    <label htmlFor="medium">
-                                        Medium
-                                        <input type="radio" id="medium" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__size">
-                                    <label htmlFor="small">
-                                        Small
-                                        <input type="radio" id="small" />
-                                    </label>
-                                </div>
-                                <div className="sidebar__item__size">
-                                    <label htmlFor="tiny">
-                                        Tiny
-                                        <input type="radio" id="tiny" />
-                                    </label>
-                                </div>
-                            </div>
                             <div className="sidebar__item">
                                 <div className="latest-product__text">
-                                    <h4>Latest Products</h4>
-                                    <OwlCarousel
+                                    <h4>Sản Phẩm Mới</h4>
+                                    <Slider
                                         className="latest-product__slider owl-carousel"
-                                        {...option2}
+                                        {...settingsTwoRow}
                                     >
                                         <div className="latest-prdouct__slider__item">
-                                            <a
-                                                href="#"
-                                                className="latest-product__item"
-                                            >
-                                                <div className="latest-product__item__pic">
-                                                    <img
-                                                        src="../../../public/assets/img/latest-product/lp-1.jpg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="latest-product__item__text">
-                                                    <h6>Crab Pool Security</h6>
-                                                    <span>$30.00</span>
-                                                </div>
-                                            </a>
-                                            <a
-                                                href="#"
-                                                className="latest-product__item"
-                                            >
-                                                <div className="latest-product__item__pic">
-                                                    <img
-                                                        src="../../../public/assets/img/latest-product/lp-2.jpg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="latest-product__item__text">
-                                                    <h6>Crab Pool Security</h6>
-                                                    <span>$30.00</span>
-                                                </div>
-                                            </a>
-                                            <a
-                                                href="#"
-                                                className="latest-product__item"
-                                            >
-                                                <div className="latest-product__item__pic">
-                                                    <img
-                                                        src="../../../public/assets/img/latest-product/lp-3.jpg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="latest-product__item__text">
-                                                    <h6>Crab Pool Security</h6>
-                                                    <span>$30.00</span>
-                                                </div>
-                                            </a>
+                                            {productLatest?.map(
+                                                (product, index) => (
+                                                    <a
+                                                        key={index}
+                                                        href="#"
+                                                        className="latest-product__item"
+                                                    >
+                                                        <div className="latest-product__item__pic">
+                                                            <img
+                                                                src={`http://localhost:3002/assets/${product.image}`}
+                                                                alt=""
+                                                            />
+                                                        </div>
+                                                        <div className="latest-product__item__text">
+                                                            <h6>
+                                                                {product.name}
+                                                            </h6>
+                                                            <span>
+                                                                {new Intl.NumberFormat(
+                                                                    "de-DE"
+                                                                ).format(
+                                                                    product.price
+                                                                )}
+                                                                đ
+                                                            </span>
+                                                        </div>
+                                                    </a>
+                                                )
+                                            )}
                                         </div>
                                         <div className="latest-prdouct__slider__item">
-                                            <a
-                                                href="#"
-                                                className="latest-product__item"
-                                            >
-                                                <div className="latest-product__item__pic">
-                                                    <img
-                                                        src="../../../public/assets/img/latest-product/lp-1.jpg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="latest-product__item__text">
-                                                    <h6>Crab Pool Security</h6>
-                                                    <span>$30.00</span>
-                                                </div>
-                                            </a>
-                                            <a
-                                                href="#"
-                                                className="latest-product__item"
-                                            >
-                                                <div className="latest-product__item__pic">
-                                                    <img
-                                                        src="../../../public/assets/img/latest-product/lp-2.jpg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="latest-product__item__text">
-                                                    <h6>Crab Pool Security</h6>
-                                                    <span>$30.00</span>
-                                                </div>
-                                            </a>
-                                            <a
-                                                href="#"
-                                                className="latest-product__item"
-                                            >
-                                                <div className="latest-product__item__pic">
-                                                    <img
-                                                        src="../../../public/assets/img/latest-product/lp-3.jpg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div className="latest-product__item__text">
-                                                    <h6>Crab Pool Security</h6>
-                                                    <span>$30.00</span>
-                                                </div>
-                                            </a>
+                                            {productLatest?.map(
+                                                (product, index) => (
+                                                    <a
+                                                        key={index}
+                                                        href="#"
+                                                        className="latest-product__item"
+                                                    >
+                                                        <div className="latest-product__item__pic">
+                                                            <img
+                                                                src={`http://localhost:3002/assets/${product.image}`}
+                                                                alt=""
+                                                            />
+                                                        </div>
+                                                        <div className="latest-product__item__text">
+                                                            <h6>
+                                                                {product.name}
+                                                            </h6>
+                                                            <span>
+                                                                {new Intl.NumberFormat(
+                                                                    "de-DE"
+                                                                ).format(
+                                                                    product.price
+                                                                )}
+                                                                đ
+                                                            </span>
+                                                        </div>
+                                                    </a>
+                                                )
+                                            )}
                                         </div>
-                                    </OwlCarousel>
+                                    </Slider>
                                 </div>
                             </div>
                         </div>
@@ -310,700 +245,226 @@ export const Shop = () => {
                                 <h2>Sale Off</h2>
                             </div>
                             <div className="row">
-                                <OwlCarousel
+                                <Slider
                                     className="product__discount__slider owl-carousel"
-                                    {...option}
+                                    {...settings}
                                 >
-                                    <div className="col-lg-4">
-                                        <div className="product__discount__item">
-                                            <div
-                                                className="product__discount__item__pic set-bg"
-                                                data-setbg="img/product/discount/pd-1.jpg"
-                                            >
-                                                <img
-                                                    src="../../../public/assets/img/product/discount/pd-1.jpg"
-                                                    className="product__discount__item__pic set-bg"
-                                                />
-                                                <div className="product__discount__percent">
-                                                    -20%
+                                    {products?.map((product, index) => {
+                                        if (product.promotion !== 0) {
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="col-lg-4"
+                                                >
+                                                    <div className="product__discount__item">
+                                                        <div className="product__discount__item__pic set-bg">
+                                                            <img
+                                                                src={`http://localhost:3002/assets/${product.image}`}
+                                                                className="product__discount__item__pic set-bg"
+                                                            />
+                                                            <div className="product__discount__percent">
+                                                                -
+                                                                {
+                                                                    product.promotion
+                                                                }
+                                                                %
+                                                            </div>
+                                                            <ul className="product__item__pic__hover">
+                                                                <li>
+                                                                    <a href="#">
+                                                                        <i className="fa fa-shopping-cart"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="product__discount__item__text">
+                                                            <span>
+                                                                {
+                                                                    product.categoryId
+                                                                }
+                                                            </span>
+                                                            <h5>
+                                                                <NavLink
+                                                                    to={`/shop-details/${product._id}`}
+                                                                >
+                                                                    {
+                                                                        product.name
+                                                                    }
+                                                                </NavLink>
+                                                            </h5>
+                                                            <div className="product__item__price">
+                                                                {new Intl.NumberFormat(
+                                                                    "de-DE"
+                                                                ).format(
+                                                                    product.price -
+                                                                        (product.price /
+                                                                            100) *
+                                                                            product.promotion
+                                                                )}
+                                                                đ{" "}
+                                                                <span>
+                                                                    {new Intl.NumberFormat(
+                                                                        "de-DE"
+                                                                    ).format(
+                                                                        product.price
+                                                                    )}
+                                                                    đ
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <ul className="product__item__pic__hover">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-heart"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-retweet"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="product__discount__item__text">
-                                                <span>Dried Fruit</span>
-                                                <h5>
-                                                    <a href="#">
-                                                        Raisin’n’nuts
-                                                    </a>
-                                                </h5>
-                                                <div className="product__item__price">
-                                                    $30.00 <span>$36.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div className="product__discount__item">
-                                            <div
-                                                className="product__discount__item__pic set-bg"
-                                                data-setbg="img/product/discount/pd-2.jpg"
-                                            >
-                                                <img
-                                                    src="../../../public/assets/img/product/discount/pd-1.jpg"
-                                                    className="product__discount__item__pic set-bg"
-                                                />
-                                                <div className="product__discount__percent">
-                                                    -20%
-                                                </div>
-                                                <ul className="product__item__pic__hover">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-heart"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-retweet"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="product__discount__item__text">
-                                                <span>Vegetables</span>
-                                                <h5>
-                                                    <a href="#">
-                                                        Vegetables’package
-                                                    </a>
-                                                </h5>
-                                                <div className="product__item__price">
-                                                    $30.00 <span>$36.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div className="product__discount__item">
-                                            <div
-                                                className="product__discount__item__pic set-bg"
-                                                data-setbg="img/product/discount/pd-3.jpg"
-                                            >
-                                                <img
-                                                    src="../../../public/assets/img/product/discount/pd-1.jpg"
-                                                    className="product__discount__item__pic set-bg"
-                                                />
-                                                <div className="product__discount__percent">
-                                                    -20%
-                                                </div>
-                                                <ul className="product__item__pic__hover">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-heart"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-retweet"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="product__discount__item__text">
-                                                <span>Dried Fruit</span>
-                                                <h5>
-                                                    <a href="#">
-                                                        Mixed Fruitss
-                                                    </a>
-                                                </h5>
-                                                <div className="product__item__price">
-                                                    $30.00 <span>$36.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div className="product__discount__item">
-                                            <div
-                                                className="product__discount__item__pic set-bg"
-                                                data-setbg="img/product/discount/pd-4.jpg"
-                                            >
-                                                <img
-                                                    src="../../../public/assets/img/product/discount/pd-1.jpg"
-                                                    className="product__discount__item__pic set-bg"
-                                                />
-                                                <div className="product__discount__percent">
-                                                    -20%
-                                                </div>
-                                                <ul className="product__item__pic__hover">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-heart"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-retweet"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="product__discount__item__text">
-                                                <span>Dried Fruit</span>
-                                                <h5>
-                                                    <a href="#">
-                                                        Raisin’n’nuts
-                                                    </a>
-                                                </h5>
-                                                <div className="product__item__price">
-                                                    $30.00 <span>$36.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div className="product__discount__item">
-                                            <div
-                                                className="product__discount__item__pic set-bg"
-                                                data-setbg="img/product/discount/pd-5.jpg"
-                                            >
-                                                <img
-                                                    src="../../../public/assets/img/product/discount/pd-1.jpg"
-                                                    className="product__discount__item__pic set-bg"
-                                                />
-                                                <div className="product__discount__percent">
-                                                    -20%
-                                                </div>
-                                                <ul className="product__item__pic__hover">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-heart"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-retweet"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="product__discount__item__text">
-                                                <span>Dried Fruit</span>
-                                                <h5>
-                                                    <a href="#">
-                                                        Raisin’n’nuts
-                                                    </a>
-                                                </h5>
-                                                <div className="product__item__price">
-                                                    $30.00 <span>$36.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <div className="product__discount__item">
-                                            <div
-                                                className="product__discount__item__pic set-bg"
-                                                data-setbg="img/product/discount/pd-6.jpg"
-                                            >
-                                                <img
-                                                    src="../../../public/assets/img/product/discount/pd-1.jpg"
-                                                    className="product__discount__item__pic set-bg"
-                                                />
-                                                <div className="product__discount__percent">
-                                                    -20%
-                                                </div>
-                                                <ul className="product__item__pic__hover">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-heart"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-retweet"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="product__discount__item__text">
-                                                <span>Dried Fruit</span>
-                                                <h5>
-                                                    <a href="#">
-                                                        Raisin’n’nuts
-                                                    </a>
-                                                </h5>
-                                                <div className="product__item__price">
-                                                    $30.00 <span>$36.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </OwlCarousel>
+                                            );
+                                        }
+                                    })}
+                                </Slider>
                             </div>
                         </div>
                         <div className="filter__item">
                             <div className="row">
                                 <div className="col-lg-4 col-md-5">
                                     <div className="filter__sort">
-                                        <span>Sort By</span>
-                                        <select>
-                                            <option value="0">Default</option>
-                                            <option value="0">Default</option>
+                                        <span>Giá</span>
+                                        <select
+                                            onClick={(e) => {
+                                                const value = e.target.value;
+                                                if (value === "default") {
+                                                    getAllProducts();
+                                                } else {
+                                                    sortPrice(value);
+                                                }
+                                            }}
+                                        >
+                                            <option value="default">
+                                                Default
+                                            </option>
+                                            <option value="inc">
+                                                Tăng Dần
+                                            </option>
+                                            <option value="dec">
+                                                Giảm dần
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-lg-4 col-md-4">
                                     <div className="filter__found">
                                         <h6>
-                                            <span>16</span> Products found
+                                            <span>{valueSearch?.length}</span>{" "}
+                                            Products found
                                         </h6>
                                     </div>
                                 </div>
-                                <div className="col-lg-4 col-md-3">
-                                    <div className="filter__option">
-                                        <span className="icon_grid-2x2"></span>
-                                        <span className="icon_ul"></span>
+                                <div className="col-lg-4 col-md-4">
+                                    <div className="filter__sort">
+                                        <button
+                                            onClick={() => {
+                                                sortDate();
+                                            }}
+                                        >
+                                            Mới Nhất
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-1.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-2.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-3.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-4.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-5.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-6.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-7.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-8.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-9.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-10.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-11.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div
-                                        className="product__item__pic set-bg"
-                                        data-setbg="img/product/product-12.jpg"
-                                    >
-                                        <img src="../../../public/assets/img/product/product-1.jpg" />
-                                        <ul className="product__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <h6>
-                                            <a href="#">Crab Pool Security</a>
-                                        </h6>
-                                        <h5>$30.00</h5>
-                                    </div>
-                                </div>
-                            </div>
+                            {valueSearch?.map((product, index) => {
+                                if (product.promotion !== 0) {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="col-lg-4 col-md-6 col-sm-6"
+                                        >
+                                            <div className="product__discount__item">
+                                                <div className="product__discount__item__pic set-bg">
+                                                    <img
+                                                        src={`http://localhost:3002/assets/${product.image}`}
+                                                        className="product__discount__item__pic set-bg"
+                                                    />
+                                                    <div className="product__discount__percent">
+                                                        -{product.promotion}%
+                                                    </div>
+                                                    <ul className="product__item__pic__hover">
+                                                        <li>
+                                                            <a href="#">
+                                                                <i className="fa fa-shopping-cart"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div className="product__discount__item__text">
+                                                    <h5>
+                                                        <NavLink
+                                                            to={`/shop-details/${product._id}`}
+                                                        >
+                                                            {product.name}
+                                                        </NavLink>
+                                                    </h5>
+                                                    <div className="product__item__price">
+                                                        {new Intl.NumberFormat(
+                                                            "de-DE"
+                                                        ).format(
+                                                            product.price -
+                                                                (product.price /
+                                                                    100) *
+                                                                    product.promotion
+                                                        )}
+                                                        đ{" "}
+                                                        <span>
+                                                            {new Intl.NumberFormat(
+                                                                "de-DE"
+                                                            ).format(
+                                                                product.price
+                                                            )}
+                                                            đ
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                } else {
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="col-lg-4 col-md-6 col-sm-6"
+                                        >
+                                            <div className="product__item">
+                                                <div
+                                                    className="product__item__pic set-bg"
+                                                    data-setbg="img/product/product-1.jpg"
+                                                >
+                                                    <img
+                                                        src={`http://localhost:3002/assets/${product.image}`}
+                                                    />
+                                                    <ul className="product__item__pic__hover">
+                                                        <li>
+                                                            <a href="#">
+                                                                <i className="fa fa-shopping-cart"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div className="product__item__text">
+                                                    <h6>
+                                                        <NavLink
+                                                            to={`/shop-details/${product._id}`}
+                                                        >
+                                                            {product.name}
+                                                        </NavLink>
+                                                    </h6>
+                                                    <h5>
+                                                        {new Intl.NumberFormat(
+                                                            "de-DE"
+                                                        ).format(product.price)}
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                }
+                            })}
                         </div>
                         <div className="product__pagination">
                             <a href="#">1</a>

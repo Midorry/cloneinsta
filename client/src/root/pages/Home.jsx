@@ -2,9 +2,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import OwlCarousel from "react-owl-carousel";
 import { NavLink } from "react-router-dom";
+import Slider from "react-slick";
 
 const Home = () => {
     const [listProducts, setListProducts] = useState([]);
+    const settings = {
+        // dots: true,
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        autoplay: true,
+        speed: 1000,
+        autoplaySpeed: 2000,
+        cssEase: "linear",
+    };
 
     const getListProducts = async () => {
         await axios
@@ -16,7 +27,8 @@ const Home = () => {
             })
             .then(function (response) {
                 console.log(response);
-                setListProducts(response.data);
+                const data = response.data;
+                setListProducts(data);
             })
             .catch(function (error) {
                 console.log(error.response.data);
@@ -25,35 +37,11 @@ const Home = () => {
             });
     };
 
+    console.log(listProducts);
+
     useEffect(() => {
         getListProducts();
     }, []);
-    const option = {
-        items: 1,
-        loop: true,
-        autoplay: true,
-        autoplayTimeout: 4000,
-        animateOut: "slideOutUp",
-        nav: false,
-        dots: false,
-        margin: 0,
-        responsive: {
-            1100: {
-                items: 4,
-            },
-            724: {
-                items: 1,
-            },
-            500: {
-                items: 1,
-            },
-            370: {
-                items: 1,
-                innerWidth: "100%",
-                outerWidth: "100%",
-            },
-        },
-    };
 
     const option2 = {
         loop: true,
@@ -85,66 +73,23 @@ const Home = () => {
             <section className="categories">
                 <div className="container">
                     <div className="row">
-                        <OwlCarousel
+                        <Slider
                             className="categories__slider owl-carousel owl-theme"
-                            {...option}
+                            {...settings}
                         >
-                            <div className="col-lg-3">
-                                <div
-                                    className="categories__item set-bg item"
-                                    data-setbg="../../public/assets/side-bg.jpeg"
-                                >
-                                    <img src="../../../public/assets/img/categories/cat-1.jpg"></img>
-                                    <h5>
-                                        <a href="#">Fresh Fruit</a>
-                                    </h5>
+                            {listProducts?.map((product, index) => (
+                                <div key={index} className="col-lg-3">
+                                    <div className="categories__item set-bg item">
+                                        <img
+                                            src={`http://localhost:3002/assets/${product.image}`}
+                                        ></img>
+                                        <h5>
+                                            <a href="#">{product.categoryId}</a>
+                                        </h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-3">
-                                <div
-                                    className="categories__item set-bg"
-                                    data-setbg="./img/categories/cat-2.jpg"
-                                >
-                                    <img src="../../../public/assets/img/categories/cat-1.jpg"></img>
-                                    <h5>
-                                        <a href="#">Dried Fruit</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <div className="col-lg-3">
-                                <div
-                                    className="categories__item set-bg"
-                                    data-setbg="./img/categories/cat-3.jpg"
-                                >
-                                    <img src="../../../public/assets/img/categories/cat-1.jpg"></img>
-                                    <h5>
-                                        <a href="#">Vegetables</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <div className="col-lg-3">
-                                <div
-                                    className="categories__item set-bg"
-                                    data-setbg="./img/categories/cat-4.jpg"
-                                >
-                                    <img src="../../../public/assets/img/categories/cat-1.jpg"></img>
-                                    <h5>
-                                        <a href="#">drink fruits</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <div className="col-lg-3">
-                                <div
-                                    className="categories__item set-bg"
-                                    data-setbg="./img/categories/cat-5.jpg"
-                                >
-                                    <img src="../../../public/assets/img/categories/cat-1.jpg"></img>
-                                    <h5>
-                                        <a href="#">drink fruits</a>
-                                    </h5>
-                                </div>
-                            </div>
-                        </OwlCarousel>
+                            ))}
+                        </Slider>
                     </div>
                 </div>
             </section>
@@ -161,289 +106,100 @@ const Home = () => {
                                     <li className="active" data-filter="*">
                                         All
                                     </li>
-                                    <li data-filter=".oranges">Oranges</li>
-                                    <li data-filter=".fresh-meat">
-                                        Fresh Meat
-                                    </li>
-                                    <li data-filter=".vegetables">
-                                        Vegetables
-                                    </li>
-                                    <li data-filter=".fastfood">Fastfood</li>
+                                    <li data-filter=".Cá">Cá</li>
+                                    <li data-filter=".Tôm">Tôm</li>
+                                    <li data-filter=".Mực">Mực</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div className="row featured__filter">
-                        {listProducts.map((product, index) => (
-                            <div
-                                key={index}
-                                className="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat"
-                            >
-                                <div className="featured__item">
-                                    <div className="featured__item__pic set-bg">
-                                        <img
-                                            src={`http://localhost:3002/assets/${product.image}`}
-                                        />
-                                        <ul className="featured__item__pic__hover">
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-heart"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-retweet"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i className="fa fa-shopping-cart"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
+                        {listProducts?.map((product, index) => {
+                            if (product.promotion !== 0) {
+                                return (
+                                    <div
+                                        key={index}
+                                        className={`col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat ${product.categoryId}`}
+                                    >
+                                        <div className="featured__item">
+                                            <div className="featured__item__pic set-bg">
+                                                <img
+                                                    src={`http://localhost:3002/assets/${product.image}`}
+                                                />
+                                                <div className="featured__item__discount__percent">
+                                                    -{product.promotion}%
+                                                </div>
+                                                <ul className="featured__item__pic__hover">
+                                                    <li>
+                                                        <a href="#">
+                                                            <i className="fa fa-shopping-cart"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="featured__item__text">
+                                                <h6>
+                                                    <NavLink
+                                                        to={`/shop-details/${product._id}`}
+                                                    >
+                                                        {product.name}
+                                                    </NavLink>
+                                                </h6>
+                                                <div className="featured__item__price">
+                                                    {new Intl.NumberFormat(
+                                                        "de-DE"
+                                                    ).format(product.price)}
+                                                    đ
+                                                    <span>
+                                                        {new Intl.NumberFormat(
+                                                            "de-DE"
+                                                        ).format(product.price)}
+                                                        đ
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="featured__item__text">
-                                        <h6>
-                                            <NavLink
-                                                to={`/shop-details/${product._id}`}
-                                            >
-                                                {product.name}
-                                            </NavLink>
-                                        </h6>
-                                        <h5>
-                                            {new Intl.NumberFormat(
-                                                "de-DE"
-                                            ).format(product.price)}
-                                            đ
-                                        </h5>
+                                );
+                            } else {
+                                return (
+                                    <div
+                                        key={index}
+                                        className={`col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat ${product.categoryId}`}
+                                    >
+                                        <div className="featured__item">
+                                            <div className="featured__item__pic set-bg">
+                                                <img
+                                                    src={`http://localhost:3002/assets/${product.image}`}
+                                                />
+                                                <ul className="featured__item__pic__hover">
+                                                    <li>
+                                                        <a href="#">
+                                                            <i className="fa fa-shopping-cart"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div className="featured__item__text">
+                                                <h6>
+                                                    <NavLink
+                                                        to={`/shop-details/${product._id}`}
+                                                    >
+                                                        {product.name}
+                                                    </NavLink>
+                                                </h6>
+                                                <h5>
+                                                    {new Intl.NumberFormat(
+                                                        "de-DE"
+                                                    ).format(product.price)}
+                                                    đ
+                                                </h5>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        ))}
-                        <div className="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
-                            <div className="featured__item">
-                                <div
-                                    className="featured__item__pic set-bg"
-                                    data-setbg="img/featured/feature-2.jpg"
-                                >
-                                    <ul className="featured__item__pic__hover">
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-heart"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-retweet"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="featured__item__text">
-                                    <h6>
-                                        <a href="#">Crab Pool Security</a>
-                                    </h6>
-                                    <h5>$30.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-sm-6 mix vegetables fresh-meat">
-                            <div className="featured__item">
-                                <div
-                                    className="featured__item__pic set-bg"
-                                    data-setbg="img/featured/feature-3.jpg"
-                                >
-                                    <ul className="featured__item__pic__hover">
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-heart"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-retweet"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="featured__item__text">
-                                    <h6>
-                                        <a href="#">Crab Pool Security</a>
-                                    </h6>
-                                    <h5>$30.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-sm-6 mix fastfood oranges">
-                            <div className="featured__item">
-                                <div
-                                    className="featured__item__pic set-bg"
-                                    data-setbg="img/featured/feature-4.jpg"
-                                >
-                                    <ul className="featured__item__pic__hover">
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-heart"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-retweet"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="featured__item__text">
-                                    <h6>
-                                        <a href="#">Crab Pool Security</a>
-                                    </h6>
-                                    <h5>$30.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
-                            <div className="featured__item">
-                                <div
-                                    className="featured__item__pic set-bg"
-                                    data-setbg="img/featured/feature-5.jpg"
-                                >
-                                    <ul className="featured__item__pic__hover">
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-heart"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-retweet"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="featured__item__text">
-                                    <h6>
-                                        <a href="#">Crab Pool Security</a>
-                                    </h6>
-                                    <h5>$30.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-sm-6 mix oranges fastfood">
-                            <div className="featured__item">
-                                <div
-                                    className="featured__item__pic set-bg"
-                                    data-setbg="img/featured/feature-6.jpg"
-                                >
-                                    <ul className="featured__item__pic__hover">
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-heart"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-retweet"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="featured__item__text">
-                                    <h6>
-                                        <a href="#">Crab Pool Security</a>
-                                    </h6>
-                                    <h5>$30.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
-                            <div className="featured__item">
-                                <div
-                                    className="featured__item__pic set-bg"
-                                    data-setbg="img/featured/feature-7.jpg"
-                                >
-                                    <ul className="featured__item__pic__hover">
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-heart"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-retweet"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="featured__item__text">
-                                    <h6>
-                                        <a href="#">Crab Pool Security</a>
-                                    </h6>
-                                    <h5>$30.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-sm-6 mix fastfood vegetables">
-                            <div className="featured__item">
-                                <div
-                                    className="featured__item__pic set-bg"
-                                    data-setbg="img/featured/feature-8.jpg"
-                                >
-                                    <ul className="featured__item__pic__hover">
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-heart"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-retweet"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i className="fa fa-shopping-cart"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div className="featured__item__text">
-                                    <h6>
-                                        <a href="#">Crab Pool Security</a>
-                                    </h6>
-                                    <h5>$30.00</h5>
-                                </div>
-                            </div>
-                        </div>
+                                );
+                            }
+                        })}
                     </div>
                 </div>
             </section>

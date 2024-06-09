@@ -2,10 +2,24 @@ import axios from "axios";
 import $ from "jquery";
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
+import { useSearch } from "../context/SearchContext";
+import ProfileMenu from "./ProfileMenu";
 const Header = () => {
     const [cartItems, setCartItems] = useState();
+    const [categories, setCategories] = useState([]);
+    const [inputs, setInputs] = useState("");
+    const [view, setView] = useState(false);
     // const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
     let total = 0;
+
+    const { isAuthenticated, userData } = useAuth();
+    const { cart } = useCart();
+    const { searchInput } = useSearch();
+
+    console.log(userData);
+
     const location = useLocation();
     let classHero = "";
     if (location.pathname === "/home") {
@@ -16,6 +30,35 @@ const Header = () => {
     }
     const handleOnClick = () => {
         $(".hero__categories ul").slideToggle(400);
+    };
+
+    const handleOnChange = (value) => {
+        setInputs(value);
+        // searchInput(value);
+    };
+
+    const handleSearch = (value) => {
+        searchInput(value);
+    };
+
+    const getCategory = async () => {
+        await axios
+            .get("http://localhost:3002/api/category", {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response.data);
+                setCategories(response.data);
+                console.log(categories);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
     };
 
     const getCart = async () => {
@@ -44,6 +87,7 @@ const Header = () => {
 
     useEffect(() => {
         getCart();
+        getCategory();
     }, []);
     return (
         <div>
@@ -80,24 +124,20 @@ const Header = () => {
                                             <i className="fa fa-pinterest-p"></i>
                                         </a>
                                     </div>
-                                    <div className="header__top__right__language">
-                                        <img src="img/language.png" alt="" />
-                                        <div>English</div>
-                                        <span className="arrow_carrot-down"></span>
-                                        <ul>
-                                            <li>
-                                                <a href="#">Spanis</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">English</a>
-                                            </li>
-                                        </ul>
+                                    <div
+                                        onClick={() => setView(!view)}
+                                        className="header__top__right__auth"
+                                    >
+                                        {isAuthenticated ? (
+                                            <img
+                                                src={`http://localhost:3002/assets/${userData?.picturePath}`}
+                                                className="header__top__right__avatar"
+                                            ></img>
+                                        ) : (
+                                            <i className="fa fa-user"></i>
+                                        )}
                                     </div>
-                                    <div className="header__top__right__auth">
-                                        <a href="#">
-                                            <i className="fa fa-user"></i> Login
-                                        </a>
-                                    </div>
+                                    {view ? <ProfileMenu></ProfileMenu> : <></>}
                                 </div>
                             </div>
                         </div>
@@ -116,10 +156,10 @@ const Header = () => {
                             <nav className="header__menu">
                                 <ul>
                                     <li>
-                                        <NavLink to="./home">Home</NavLink>
+                                        <NavLink to="/home">Home</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="./shop">Shop</NavLink>
+                                        <NavLink to="/shop">Shop</NavLink>
                                     </li>
                                     <li>
                                         <NavLink to="/">Pages</NavLink>
@@ -130,17 +170,17 @@ const Header = () => {
                                                 </NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="./shopping-cart">
+                                                <NavLink to="/shopping-cart">
                                                     Shoping Cart
                                                 </NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="./checkout.html">
+                                                <NavLink to="/checkout.html">
                                                     Check Out
                                                 </NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="./blog-details.html">
+                                                <NavLink to="/blog-details.html">
                                                     Blog Details
                                                 </NavLink>
                                             </li>
@@ -167,10 +207,16 @@ const Header = () => {
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <NavLink
+                                            to={
+                                                isAuthenticated
+                                                    ? "/shopping-cart"
+                                                    : "/"
+                                            }
+                                        >
                                             <i className="fa fa-shopping-bag"></i>{" "}
-                                            <span>{cartItems?.length}</span>
-                                        </a>
+                                            <span>{cart.products?.length}</span>
+                                        </NavLink>
                                     </li>
                                 </ul>
                                 <div className="header__cart__price">
@@ -204,61 +250,31 @@ const Header = () => {
                                     <span>All departments</span>
                                 </div>
                                 <ul>
-                                    <li>
-                                        <a href="#">Fresh Meat</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Vegetables</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fruit & Nut Gifts</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Berries</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Ocean Foods</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Butter & Eggs</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fastfood</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Onion</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Papayaya & Crisps</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Oatmeal</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Bananas</a>
-                                    </li>
+                                    {categories?.map((category, index) => (
+                                        <li key={index}>
+                                            <a href="#">{category.name}</a>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
                         <div className="col-lg-9">
                             <div className="hero__search">
                                 <div className="hero__search__form">
-                                    <form action="#">
-                                        <div className="hero__search__categories">
-                                            All Categories
-                                            <span className="arrow_carrot-down"></span>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            placeholder="What do yo u need?"
-                                        />
-                                        <button
-                                            type="submit"
-                                            className="site-btn"
-                                        >
-                                            SEARCH
-                                        </button>
-                                    </form>
+                                    <input
+                                        type="text"
+                                        placeholder="What do yo u need?"
+                                        value={inputs}
+                                        onChange={(e) =>
+                                            handleOnChange(e.target.value)
+                                        }
+                                    />
+                                    <button
+                                        onClick={() => handleSearch(inputs)}
+                                        className="site-btn"
+                                    >
+                                        SEARCH
+                                    </button>
                                 </div>
                                 <div className="hero__search__phone">
                                     <div className="hero__search__phone__icon">

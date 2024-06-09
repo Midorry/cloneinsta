@@ -22,6 +22,43 @@ export const CartProvider = ({ children }) => {
     console.log(cart);
     console.log(cart[0]?.productId);
 
+    const getCart = async (userId) => {
+        await axios
+            .get(`http://localhost:3002/api/cart/get?userId=${userId}`)
+            .then(function (response) {
+                const getUserId = response.data[0].userId;
+                const products = response.data[0].products;
+                const cartId = response.data[0]._id;
+                console.log(userId);
+                console.log(getUserId);
+                if (getUserId === userId) {
+                    localStorage.setItem("haveCart", true);
+                    setHaveCart(true);
+                    // console.log();
+                } else {
+                    localStorage.setItem("haveCart", false);
+                    setHaveCart(false);
+                }
+                localStorage.setItem(
+                    "user_cart",
+                    JSON.stringify({
+                        userId: getUserId,
+                        products: products,
+                        cartId: cartId,
+                    })
+                );
+                console.log(response);
+                setCart((prev) => ({ ...prev, products }));
+                setCartId(response.data._id);
+                setHaveCart(false);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
     const createCart = async (userData, product, value) => {
         await axios
             .post(
@@ -77,7 +114,7 @@ export const CartProvider = ({ children }) => {
     const addCart = async (userData, product, value) => {
         console.log(cart);
         let sameProduct = false;
-        for (let i = 0; i < cart?.products.length; i++) {
+        for (let i = 0; i < cart?.products?.length; i++) {
             console.log(product._id);
             if (product._id == cart.products[i].productId) {
                 console.log(cart.products[i].quantity);
@@ -244,12 +281,16 @@ export const CartProvider = ({ children }) => {
 
     const clearCart = () => {
         setCart([]);
+        setCartId("");
+        localStorage.removeItem("user_cart");
+        localStorage.removeItem("haveCart");
     };
 
     const value = {
         haveCart,
         cart,
         createCart,
+        getCart,
         addCart,
         removeCart,
         clearCart,

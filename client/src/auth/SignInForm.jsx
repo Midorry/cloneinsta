@@ -4,10 +4,12 @@ import * as yup from "yup";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 const SignInForm = () => {
     // const dispatch = useDispatch();
     const { login } = useAuth();
+    const { getCart } = useCart();
     const [success, setSuccess] = useState(false);
     useEffect(() => {
         if (success) navigate("/");
@@ -55,6 +57,7 @@ const SignInForm = () => {
                         window.localStorage.setItem("isLogged", true);
                         console.log(response);
                         login(response.data.token, response.data.user);
+                        getCart(response.data.user._id);
                         navigate("/home");
                     })
                     .catch(function (error) {

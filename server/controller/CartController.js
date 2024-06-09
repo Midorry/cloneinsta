@@ -14,6 +14,23 @@ export const createCart = async (req, res) => {
     }
 };
 
+export const getCart = async (req, res) => {
+    const userId = req.query.userId;
+    try {
+        if (userId) {
+            const products = await Cart.find({
+                userId: {
+                    $regex: userId,
+                    $options: "i",
+                },
+            });
+            res.status(200).json(products);
+        }
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
 //UPDATE
 export const updateCart = async (req, res) => {
     try {
