@@ -25,6 +25,32 @@ export const SearchProvider = ({ children }) => {
             });
     };
 
+    const filterPrice = async (min, max) => {
+        await axios
+            .get(
+                `http://localhost:3002/api/product/price?min=${min}&max=${max}`,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    accept: "application/json",
+                }
+            )
+            .then(function (response) {
+                console.log(response);
+                if (response.data.length == 0) {
+                    setValueSearch(valueSearch);
+                } else {
+                    console.log(response.data);
+                }
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
     const searchCategory = async (value) => {
         await axios
             .get(`http://localhost:3002/api/product/search?category=${value}`, {
@@ -111,6 +137,8 @@ export const SearchProvider = ({ children }) => {
         sortPrice,
         sortDate,
         getAllProducts,
+        filterPrice,
+        setValueSearch,
         valueSearch,
     };
 

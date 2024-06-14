@@ -116,6 +116,9 @@ const UpdateProduct = () => {
     });
 
     const handleUpload = async () => {
+        if (file == undefined) {
+            setFile(product.image);
+        }
         const data = new FormData();
         console.log(file);
         data.append("image", file);
@@ -137,6 +140,10 @@ const UpdateProduct = () => {
         // for (var key of formData.entries()) {
         //     console.log(key[0] + ", " + key[1]);
         // }
+        if (file == undefined) {
+            setFile(product.image);
+        }
+
         await axios
             .put(`http://localhost:3002/api/product/update/${product._id}`, {
                 categoryId: values.categoryId,

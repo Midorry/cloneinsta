@@ -1,7 +1,7 @@
 import axios from "axios";
 import $ from "jquery";
 import { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useSearch } from "../context/SearchContext";
@@ -14,13 +14,15 @@ const Header = () => {
     // const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
     let total = 0;
 
+    const navigate = useNavigate();
+
     const { isAuthenticated, userData } = useAuth();
-    const { cart } = useCart();
+    const { cart, cartId } = useCart();
     const { searchInput } = useSearch();
 
     console.log(userData);
 
-    const location = useLocation();
+    let location = useLocation();
     let classHero = "";
     if (location.pathname === "/home") {
         classHero = "hero";
@@ -39,9 +41,12 @@ const Header = () => {
 
     const handleSearch = (value) => {
         searchInput(value);
+        if (location.pathname !== "/shop") {
+            navigate("/shop");
+        }
     };
 
-    const getCategory = async () => {
+    const getCategories = async () => {
         await axios
             .get("http://localhost:3002/api/category", {
                 headers: {
@@ -63,15 +68,15 @@ const Header = () => {
 
     const getCart = async () => {
         await axios
-            .get("http://localhost:3002/api/cart/", {
+            .get(`http://localhost:3002/api/cart/find/${cartId}`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
                 accept: "application/json",
             })
             .then(function (response) {
-                console.log(response.data[0]);
-                setCartItems(response.data[0].products);
+                console.log(response.data);
+                setCartItems(response.data.products);
             })
             .catch(function (error) {
                 console.log(error.response.data);
@@ -87,7 +92,7 @@ const Header = () => {
 
     useEffect(() => {
         getCart();
-        getCategory();
+        getCategories();
     }, []);
     return (
         <div>
@@ -175,7 +180,7 @@ const Header = () => {
                                                 </NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="/checkout.html">
+                                                <NavLink to="/checkout">
                                                     Check Out
                                                 </NavLink>
                                             </li>
@@ -187,7 +192,7 @@ const Header = () => {
                                         </ul>
                                     </li>
                                     <li>
-                                        <NavLink to="./blog.html">Blog</NavLink>
+                                        <NavLink to="/news">Blog</NavLink>
                                     </li>
                                     <li>
                                         <NavLink to="./contact.html">
@@ -200,12 +205,6 @@ const Header = () => {
                         <div className="col-lg-3">
                             <div className="header__cart">
                                 <ul>
-                                    <li>
-                                        <a href="#">
-                                            <i className="fa fa-heart"></i>{" "}
-                                            <span>1</span>
-                                        </a>
-                                    </li>
                                     <li>
                                         <NavLink
                                             to={
@@ -247,7 +246,7 @@ const Header = () => {
                                     onClick={handleOnClick}
                                 >
                                     <i className="fa fa-bars"></i>
-                                    <span>All departments</span>
+                                    <span>Danh Mục</span>
                                 </div>
                                 <ul>
                                     {categories?.map((category, index) => (
@@ -287,30 +286,14 @@ const Header = () => {
                                 </div>
                             </div>
                             {location.pathname === "/home" ? (
-                                <div
-                                    className="hero__item set-bg"
-                                    style={{
-                                        backgroundImage: `url(../../../public/assets/img/hero/banner.jpg")`,
-                                    }}
-                                    data-setbg="../../../public/assets/img/hero/banner.jpg"
-                                >
-                                    <img
-                                        style={{
-                                            position: "absolute",
-                                            content: "",
-                                            right: 0,
-                                        }}
-                                        src="../../../public/assets/img/hero/banner.jpg"
-                                    ></img>
+                                <div className="hero__item set-bg">
+                                    <img src="../../../public/assets/img/28143798.jpg"></img>
                                     <div className="hero__text">
-                                        <span>FRUIT FRESH</span>
+                                        <span>FRESH & TASTY</span>
                                         <h2>
-                                            Vegetable <br />
-                                            100% Organic
+                                            Sea Food <br />
+                                            100% Fresh
                                         </h2>
-                                        <p>
-                                            Free Pickup and Delivery Available
-                                        </p>
                                         <a href="#" className="primary-btn">
                                             SHOP NOW
                                         </a>

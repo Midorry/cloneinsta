@@ -53,3 +53,50 @@ export const login = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+export const allUser = async (req, res) => {
+    try {
+        const carts = await User.find();
+        res.status(200).json(carts);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+export const getUser = async (req, res) => {
+    const user = req.params.id;
+    if (user) {
+        try {
+            const prod = await User.findById(user);
+            res.status(200).json(prod);
+        } catch (err) {
+            res.status(404).json({ message: err.message });
+        }
+    }
+};
+
+export const deleteUser = async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        await user.deleteOne();
+        res.json({ message: "User removed" });
+    } else {
+        res.status(404);
+        throw new Error("User not found");
+    }
+};
+
+export const updateUser = async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: req.body,
+            },
+            { new: true }
+        );
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};

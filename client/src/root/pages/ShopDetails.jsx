@@ -102,7 +102,6 @@ export const ShopDetails = () => {
                 : createCart(userData, product, value);
             notify();
         }
-        notify();
     };
 
     useEffect(() => {
@@ -112,6 +111,17 @@ export const ShopDetails = () => {
 
     return (
         <div>
+            <section className="breadcrumb-section set-bg">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <div className="breadcrumb__text">
+                                <h2>Shop Detail</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section className="product-details spad">
                 <div className="container">
                     <div className="row">

@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
+var date = new Date();
+
 const OrderSchema = new mongoose.Schema(
     {
         cartId: {
             type: String,
-            required: true,
+            // required: true,
         },
         payments: {
             type: String,
@@ -14,13 +16,15 @@ const OrderSchema = new mongoose.Schema(
         },
         dateOrder: {
             type: Date,
+            default: date,
         },
-        invoiceNumber: {
+        isInvoice: {
             type: Boolean,
-            default: null,
+            default: true,
         },
         invoiceDate: {
             type: Date,
+            default: date,
         },
         total: {
             type: Number,

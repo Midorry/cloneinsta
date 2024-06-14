@@ -3,6 +3,7 @@ import { useEffect, useReducer, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCart } from "/src/context/CartContext";
+import { NavLink } from "react-router-dom";
 
 export const ShoppingCart = () => {
     const [cartItems, setCartItems] = useState();
@@ -122,6 +123,17 @@ export const ShoppingCart = () => {
 
     return (
         <div>
+            <section className="breadcrumb-section set-bg">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <div className="breadcrumb__text">
+                                <h2>Shop Cart</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section className="shoping-cart spad">
                 <div className="container">
                     <div className="row">
@@ -221,16 +233,12 @@ export const ShoppingCart = () => {
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="shoping__cart__btns">
-                                <a href="#" className="primary-btn cart-btn">
-                                    CONTINUE SHOPPING
-                                </a>
-                                <a
-                                    href="#"
-                                    className="primary-btn cart-btn cart-btn-right"
+                                <NavLink
+                                    to="/shop"
+                                    className="primary-btn cart-btn"
                                 >
-                                    <span className="icon_loading"></span>
-                                    Upadate Cart
-                                </a>
+                                    CONTINUE SHOPPING
+                                </NavLink>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -247,9 +255,9 @@ export const ShoppingCart = () => {
                                         </span>
                                     </li>
                                 </ul>
-                                <a href="#" className="primary-btn">
+                                <NavLink to="/checkout" className="primary-btn">
                                     PROCEED TO CHECKOUT
-                                </a>
+                                </NavLink>
                             </div>
                         </div>
                     </div>

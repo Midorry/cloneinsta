@@ -61,6 +61,7 @@ const SignUpForm = () => {
         email: "",
         password: "",
         address: "",
+        phoneNumber: "",
         picture: "",
     };
 
@@ -70,6 +71,7 @@ const SignUpForm = () => {
         email: yup.string().email("invalid email").required("required"),
         password: yup.string().required("required"),
         address: yup.string().required("required"),
+        phoneNumber: yup.string().required("required"),
         picture: yup.string().required("required"),
     });
     return (
@@ -249,6 +251,20 @@ const SignUpForm = () => {
                     />
                     {errors.address ? (
                         <div className="text-red-500">{errors.address}</div>
+                    ) : null}
+
+                    <label htmlFor="address">Phone Number</label>
+                    <input
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        type="text"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.phoneNumber}
+                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                    />
+                    {errors.phoneNumber ? (
+                        <div className="text-red-500">{errors.phoneNumber}</div>
                     ) : null}
 
                     <div>

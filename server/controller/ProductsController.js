@@ -35,14 +35,30 @@ export const getAllProducts = async (req, res) => {
 
 export const filterProduct = async (req, res) => {
     const filters = req.query;
-    const filteredUsers = data.filter((user) => {
+    const products = await Products.find();
+    const filteredProducts = products.filter((product) => {
         let isValid = true;
-        for (key in filters) {
-            console.log(key, user[key], filters[key]);
-            isValid = isValid && user[key] == filters[key];
+        for (let key in filters) {
+            console.log(key, product[key], filters[key]);
+            isValid = isValid && product[key] == filters[key];
         }
         return isValid;
     });
+    res.status(200).json(filteredProducts);
+};
+
+export const filterPrice = async (req, res) => {
+    const min = req.query.min;
+    const max = req.query.max;
+    const products = await Products.find();
+    const filteredProducts = products.filter((product) => {
+        let isValid = true;
+        for (let i = 0; i < products.length; i++) {
+            isValid = isValid && product.price > min && product.price < max;
+        }
+        return isValid;
+    });
+    res.status(200).json(filteredProducts);
 };
 
 export const search = async (req, res) => {

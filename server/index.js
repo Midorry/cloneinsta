@@ -13,7 +13,10 @@ import authRouter from "./routes/auth.js";
 import categoriesRouter from "./routes/categories.js";
 import productsRouter from "./routes/products.js";
 import cartRouter from "./routes/cart.js";
+import newsRouter from "./routes/news.js";
+import orderRouter from "./routes/order.js";
 import { addProduct } from "./controller/ProductsController.js";
+import { addNews } from "./controller/NewsController.js";
 // import userRoutes from "./routes/users.js";
 // import postRoutes from "./routes/posts.js";
 // import { register } from "./controllers/auth.js";
@@ -50,6 +53,7 @@ const upload = multer({ storage: storage });
 /* ROUTES WITH FILES */
 app.post("/api/user/register", upload.single("picture"), register);
 app.post("/api/product/add", upload.single("image"), addProduct);
+app.post("/api/news/add", upload.single("image"), addNews);
 app.post("/upload", upload.single("image"), (req, res) => {
     console.log(req.file);
 });
@@ -61,6 +65,9 @@ app.use("/api/user", authRouter);
 app.use("/api/product", productsRouter);
 app.use("/api/category", categoriesRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/news", newsRouter);
+app.use("/api/order", orderRouter);
+
 // app.use("/users", userRoutes);
 // app.use("/posts", postRoutes);
 

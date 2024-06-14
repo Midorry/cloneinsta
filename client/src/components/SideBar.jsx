@@ -56,19 +56,48 @@ const SideBar = () => {
                                     <i className="fa fa-laptop me-2"></i>Add
                                     Product
                                 </NavLink>
-                                <NavLink
+                                {/* <NavLink
                                     to="/update-product"
                                     className="nav-link"
                                 >
                                     <i className="fa fa-laptop me-2"></i>Update
+                                </NavLink> */}
+                                <NavLink to="/category" className="nav-link">
+                                    <i className="fa fa-laptop me-2"></i>
+                                    Category
                                 </NavLink>
                             </div>
                         </div>
-                        <NavLink to="widget.html" className="nav-item nav-link">
-                            <i className="fa fa-th me-2"></i>Widgets
+                        <div className="dropdown">
+                            <button
+                                className="btn  dropdown-toggle text-left nav-link"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <i className="fa fa-th me-2"></i> User
+                            </button>
+                            <div
+                                className="dropdown-menu"
+                                aria-labelledby="dropdownMenuButton"
+                            >
+                                <NavLink to="/list-user" className="nav-link">
+                                    <i className="fa fa-laptop me-2"></i>List
+                                    User
+                                </NavLink>
+                                <NavLink to="/add-user" className="nav-link">
+                                    <i className="fa fa-laptop me-2"></i>Add
+                                    User
+                                </NavLink>
+                            </div>
+                        </div>
+                        <NavLink to="/add-news" className="nav-item nav-link">
+                            <i className="fa fa-th me-2"></i>Add News
                         </NavLink>
-                        <NavLink to="form.html" className="nav-item nav-link">
-                            <i className="fa fa-keyboard me-2"></i>Forms
+                        <NavLink to="/order" className="nav-item nav-link">
+                            <i className="fa fa-keyboard me-2"></i>Order
                         </NavLink>
                         <NavLink to="table.html" className="nav-item nav-link">
                             <i className="fa fa-table me-2"></i>Tables

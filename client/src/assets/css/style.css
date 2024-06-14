@@ -83,6 +83,95 @@
     transition: 0.5s;
 }
 
+.form__category,
+.order__item {
+    position: absolute;
+    content: "";
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 90vh;
+    z-index: 1;
+}
+
+.form__category_background,
+.order__item_background {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.2;
+}
+
+.form__category_wrap,
+.order__item_wrap {
+    position: absolute;
+    content: "";
+    left: 38%;
+    top: 30%;
+    height: max-content;
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form__category_wrap input,
+.order__item_wrap input {
+    border: 1px solid #007dcc;
+    border-radius: 4px;
+    margin: 0 10px;
+}
+
+.form__category_close,
+.order__item_close {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 2px;
+    right: 2px;
+    color: red;
+}
+
+.list__order h6 {
+    font-weight: bold;
+}
+
+.list__order span {
+    font-size: 14px;
+}
+
+.list__order-user {
+    margin-bottom: 12px;
+}
+
+.list__order__total {
+    margin-bottom: 12px;
+}
+
+.list__order-user span {
+    display: block;
+}
+
+.form__category_close i {
+    color: red;
+}
+
+.list__order ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 aside img {
     width: 200px;
     height: 200px;
@@ -91,9 +180,13 @@ aside img {
     width: -webkit-fill-available;
 }
 
+thead tr th {
+    font-weight: 700 !important;
+}
+
 .table-image {
     height: 100px;
-    width: 300px;
+    width: 420px;
     object-fit: cover;
 }
 
@@ -115,6 +208,35 @@ aside img {
 
 .table-desc::-webkit-scrollbar-thumb {
     background-color: #009cff;
+}
+
+.blog__desc {
+    /* margin: 10px 10px 8px; */
+    overflow: hidden;
+    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    color: var(--black-color);
+}
+.blog__title {
+    overflow: hidden;
+    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    color: var(--black-color);
+}
+
+.blog__details__widget {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blog__details__widget h5 {
+    text-align: center;
+    margin: 0 10px;
 }
 
 @media (min-width: 992px) {

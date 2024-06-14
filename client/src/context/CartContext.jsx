@@ -20,7 +20,6 @@ export const CartProvider = ({ children }) => {
     }, []);
 
     console.log(cart);
-    console.log(cart[0]?.productId);
 
     const getCart = async (userId) => {
         await axios
@@ -51,6 +50,44 @@ export const CartProvider = ({ children }) => {
                 setCart((prev) => ({ ...prev, products }));
                 setCartId(response.data._id);
                 setHaveCart(false);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
+    const createNewCart = async (userData) => {
+        await axios
+            .post(
+                "http://localhost:3002/api/cart/",
+                {
+                    userId: userData._id,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then(function (response) {
+                const userId = response.data.userId;
+                const products = response.data.products;
+                const cartId = response.data._id;
+                localStorage.setItem("haveCart", true);
+                localStorage.setItem(
+                    "user_cart",
+                    JSON.stringify({
+                        userId: userId,
+                        products: products,
+                        cartId: cartId,
+                    })
+                );
+                console.log(response);
+                setCart((prev) => ({ ...prev, products }));
+                setCartId(response.data._id);
+                setHaveCart(true);
             })
             .catch(function (error) {
                 console.log(error.response.data);
@@ -106,10 +143,6 @@ export const CartProvider = ({ children }) => {
                 console.log(error);
             });
     };
-
-    // useEffect(() => {
-    //     createCart();
-    // }, []);
 
     const addCart = async (userData, product, value) => {
         console.log(cart);
@@ -296,6 +329,7 @@ export const CartProvider = ({ children }) => {
         clearCart,
         setCart,
         setHaveCart,
+        createNewCart,
         cartId,
     };
 

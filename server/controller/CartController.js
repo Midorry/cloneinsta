@@ -59,11 +59,14 @@ export const deleteCart = async (req, res) => {
 
 //GET USER CART
 export const getUserCart = async (req, res) => {
-    try {
-        const cart = await Cart.findOne({ id: req.params.id });
-        res.status(200).json(cart);
-    } catch (err) {
-        res.status(500).json(err);
+    const id = req.params.id;
+    if (id) {
+        try {
+            const cart = await Cart.findById(id);
+            res.status(200).json(cart);
+        } catch (err) {
+            res.status(500).json(err);
+        }
     }
 };
 

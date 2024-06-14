@@ -761,11 +761,21 @@ ol {
     height: 431px;
     display: flex;
     align-items: center;
-    padding-left: 75px;
+}
+
+.hero__item img {
+    position: "absolute";
+    content: "";
+    right: 0;
+    height: 100%;
+    object-fit: cover;
 }
 
 .hero__text {
     z-index: 1;
+    position: absolute;
+    content: "";
+    top: 0;
 }
 
 .hero__text span {
@@ -778,7 +788,7 @@ ol {
 
 .hero__text h2 {
     font-size: 46px;
-    color: #252525;
+    color: #355278;
     line-height: 52px;
     font-weight: 700;
     margin: 10px 0;
@@ -863,6 +873,10 @@ ol {
     margin-right: 25px;
     position: relative;
     cursor: pointer;
+}
+
+.featured__controls ul li:hover {
+    color: #009cff;
 }
 
 .featured__controls ul li.active:after {
@@ -1081,6 +1095,21 @@ ol {
 }
 
 /*---------------------
+  Banners
+-----------------------*/
+
+.banner__pic {
+    height: 380px;
+    width: 100%;
+}
+
+.banner img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+/*---------------------
   Form BLog
 -----------------------*/
 
@@ -1104,19 +1133,32 @@ ol {
 .breadcrumb-section {
     display: flex;
     align-items: center;
+    /* padding: 45px 0 40px; */
+    /* background-image: url("../img/31399600.jpg");
+    width: 100vw;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 15px;
+    padding-left: 15px; */
+}
+
+.breadcrumb-section .container {
+    background-image: url("../img/31399600.jpg");
     padding: 45px 0 40px;
+    background-repeat: no-repeat;
+    background-size: 100%, 100%;
 }
 
 .breadcrumb__text h2 {
     font-size: 46px;
-    color: #ffffff;
+    color: #009cff;
     font-weight: 700;
 }
 
 .breadcrumb__option a {
     display: inline-block;
     font-size: 16px;
-    color: #ffffff;
+    color: #009cff;
     font-weight: 700;
     margin-right: 20px;
     position: relative;
@@ -1128,14 +1170,15 @@ ol {
     top: 13px;
     height: 1px;
     width: 10px;
-    background: #ffffff;
+    background: #009cff;
     content: "";
 }
 
 .breadcrumb__option span {
     display: inline-block;
     font-size: 16px;
-    color: #ffffff;
+    color: #009cff;
+    font-weight: 500;
 }
 
 /*---------------------
@@ -1158,6 +1201,8 @@ ol {
 
 .sidebar__item ul li {
     list-style: none;
+    padding: 10px 10px 10px 0;
+    /* border-bottom: 1px solid #009cff; */
 }
 
 .sidebar__item ul li a {
@@ -1185,25 +1230,20 @@ ol {
 
 .price-range-wrap .range-slider .price-input {
     position: relative;
-}
-
-.price-range-wrap .range-slider .price-input:after {
-    position: absolute;
-    left: 38px;
-    top: 13px;
-    height: 1px;
-    width: 5px;
-    background: #dd2222;
-    content: "";
+    margin-bottom: 10px;
 }
 
 .price-range-wrap .range-slider .price-input input {
-    font-size: 16px;
+    font-size: 14px;
     color: #dd2222;
-    font-weight: 700;
-    max-width: 20%;
-    border: none;
+    max-width: 40%;
+    border: 1px solid #009cff;
     display: inline-block;
+    padding-left: 4px;
+}
+
+.price-range-wrap .range-slider .price-input span {
+    margin: 0 10px;
 }
 
 .price-range-wrap .price-range {
@@ -2162,6 +2202,40 @@ ol {
 .checkout {
     padding-top: 80px;
     padding-bottom: 60px;
+    position: relative;
+}
+
+.checkout__inform-layout {
+    position: absolute;
+    content: "";
+    height: 120vh;
+    width: 100vw;
+    top: -32%;
+    left: -17px;
+    opacity: 0.2;
+    background-color: #000;
+    z-index: 2;
+}
+
+.checkout__inform-content {
+    position: absolute;
+    content: "";
+    height: 200px;
+    width: 500px;
+    top: 30%;
+    left: 40%;
+    background-color: white;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 4px;
+}
+
+.checkout__inform-content h3 {
+    color: red;
+    margin-bottom: 10px;
 }
 
 .checkout h6 {
@@ -2417,6 +2491,11 @@ ol {
     border-radius: 25px;
 }
 
+.blog__item__text .blog__btn:hover {
+    background-color: #009cff;
+    color: white;
+}
+
 .blog__item__text .blog__btn span {
     position: relative;
     top: 1px;
@@ -2526,6 +2605,8 @@ ol {
 .blog__sidebar__recent__item__pic {
     float: left;
     margin-right: 20px;
+    width: 70px;
+    height: 70px;
 }
 
 .blog__sidebar__recent__item__text {
@@ -3518,6 +3599,11 @@ ol {
     .featured__controls ul li {
         margin-bottom: 10px;
     }
+
+    .featured__controls ul li:hover {
+        color: #009cff;
+    }
+
     .product__details__text ul li b {
         width: 100px;
     }
