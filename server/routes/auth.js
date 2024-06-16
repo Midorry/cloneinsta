@@ -4,12 +4,14 @@ import {
     deleteUser,
     getUser,
     login,
+    loginAdmin,
     updateUser,
 } from "../controller/AuthController.js";
 
 const router = express.Router();
 
 router.post("/login", login);
+router.post("/admin", loginAdmin);
 
 router.get("/", allUser);
 

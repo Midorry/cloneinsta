@@ -1,4 +1,4 @@
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -73,6 +73,7 @@ const UpdateUser = () => {
         email: user.email,
         // password: user.password,
         address: user.address,
+        isAdmin: false,
         picture: user.picturePath,
     };
 
@@ -82,6 +83,7 @@ const UpdateUser = () => {
         email: yup.string().email("invalid email").required("required"),
         // password: yup.string().required("required"),
         address: yup.string().required("required"),
+        isAdmin: yup.bool().required("required"),
         picture: yup.string().required("required"),
     });
 
@@ -121,6 +123,7 @@ const UpdateUser = () => {
                             email: values.email,
                             // password,
                             address: values.address,
+                            isAdmin: values.isAdmin,
                             picturePath: file.name,
                         }
                     )
@@ -209,6 +212,20 @@ const UpdateUser = () => {
                     {errors.address ? (
                         <div className="text-red-500">{errors.address}</div>
                     ) : null}
+                    <label htmlFor="isAdmin">Admin</label>
+                    <Field
+                        as="select"
+                        name="isAdmin"
+                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                        aria-label=".form-select-sm example"
+                    >
+                        <option name="admin" value={false}>
+                            No
+                        </option>
+                        <option name="admin" value={true}>
+                            Yes
+                        </option>
+                    </Field>
 
                     <div>
                         <button

@@ -12,7 +12,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-function User() {
+function Users() {
     const [listUsers, setListUsers] = useState([]);
     const [isDelete, setIsDelete] = useState();
 
@@ -154,4 +154,4 @@ function User() {
     );
 }
 
-export default User;
+export default Users;

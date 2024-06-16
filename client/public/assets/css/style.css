@@ -98,7 +98,7 @@ a:hover,
 a:focus {
     text-decoration: none;
     outline: none;
-    color: #ffffff;
+    color: #0354aa;
 }
 
 ul,
@@ -439,6 +439,14 @@ ol {
 
 .header__logo {
     padding: 15px 0;
+    text-align: center;
+    height: 80px;
+}
+
+.header__logo img {
+    height: 60px;
+    object-fit: cover;
+    width: 160px;
 }
 
 .header__logo a {
@@ -447,6 +455,11 @@ ol {
 
 .header__menu {
     padding: 24px 0;
+}
+
+.header__menu ul {
+    display: flex;
+    justify-content: space-between;
 }
 
 .header__menu ul li {

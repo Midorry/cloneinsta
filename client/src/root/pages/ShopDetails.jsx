@@ -9,6 +9,8 @@ import { useCart } from "/src/context/CartContext";
 
 export const ShopDetails = () => {
     const [product, setProduct] = useState([]);
+    const [isAddCart, setIsAddCart] = useState(false);
+
     const [categoryValue, setCategoryValue] = useState([]);
     const [count, setCount] = useState();
 
@@ -71,6 +73,16 @@ export const ShopDetails = () => {
             });
     };
 
+    const updateProduct = async (quantity) => {
+        await axios
+            .put(`http://localhost:3002/api/product/update/${id.id}`, {
+                quantity: product.quantity - quantity,
+            })
+            .then((response) => {
+                console.log(response.data.quantity);
+            });
+    };
+
     const getProduct = async () => {
         await axios
             .get(`http://localhost:3002/api/product/${id.id}`, {
@@ -97,6 +109,8 @@ export const ShopDetails = () => {
             const button = $(".value");
             const value = button.val();
             console.log(haveCart);
+            updateProduct(value);
+            setIsAddCart(!isAddCart);
             haveCart
                 ? addCart(userData, product, value)
                 : createCart(userData, product, value);
@@ -107,7 +121,7 @@ export const ShopDetails = () => {
     useEffect(() => {
         getProduct();
         searchCategory(product?.categoryId);
-    }, [id]);
+    }, [id, isAddCart]);
 
     return (
         <div>

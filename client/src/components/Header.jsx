@@ -11,7 +11,6 @@ const Header = () => {
     const [categories, setCategories] = useState([]);
     const [inputs, setInputs] = useState("");
     const [view, setView] = useState(false);
-    // const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
     let total = 0;
 
     const navigate = useNavigate();
@@ -19,6 +18,8 @@ const Header = () => {
     const { isAuthenticated, userData } = useAuth();
     const { cart, cartId } = useCart();
     const { searchInput } = useSearch();
+
+    console.log(cartId);
 
     console.log(userData);
 
@@ -67,22 +68,24 @@ const Header = () => {
     };
 
     const getCart = async () => {
-        await axios
-            .get(`http://localhost:3002/api/cart/find/${cartId}`, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                accept: "application/json",
-            })
-            .then(function (response) {
-                console.log(response.data);
-                setCartItems(response.data.products);
-            })
-            .catch(function (error) {
-                console.log(error.response.data);
-                console.log(error.response);
-                console.log(error);
-            });
+        if (cartId) {
+            await axios
+                .get(`http://localhost:3002/api/cart/find/${cartId}`, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    accept: "application/json",
+                })
+                .then(function (response) {
+                    console.log(response.data);
+                    setCartItems(response.data.products);
+                })
+                .catch(function (error) {
+                    console.log(error.response.data);
+                    console.log(error.response);
+                    console.log(error);
+                });
+        }
         // forceUpdate();
     };
 
@@ -93,7 +96,7 @@ const Header = () => {
     useEffect(() => {
         getCart();
         getCategories();
-    }, []);
+    }, [cart]);
     return (
         <div>
             <header className="header">
@@ -106,9 +109,6 @@ const Header = () => {
                                         <li>
                                             <i className="fa fa-envelope"></i>{" "}
                                             hello@colorlib.com
-                                        </li>
-                                        <li>
-                                            Free Shipping for all Order of $99
                                         </li>
                                     </ul>
                                 </div>
@@ -152,9 +152,12 @@ const Header = () => {
                     <div className="row">
                         <div className="col-lg-3">
                             <div className="header__logo">
-                                <a href="./index.html">
-                                    <img src="img/logo.png" alt="" />
-                                </a>
+                                <NavLink to="/">
+                                    <img
+                                        src="/assets/img/51453753.jpg"
+                                        alt=""
+                                    />
+                                </NavLink>
                             </div>
                         </div>
                         <div className="col-lg-6">
@@ -167,37 +170,10 @@ const Header = () => {
                                         <NavLink to="/shop">Shop</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/">Pages</NavLink>
-                                        <ul className="header__menu__dropdown">
-                                            <li>
-                                                <NavLink to="./shop-details">
-                                                    Shop Details
-                                                </NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to="/shopping-cart">
-                                                    Shoping Cart
-                                                </NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to="/checkout">
-                                                    Check Out
-                                                </NavLink>
-                                            </li>
-                                            <li>
-                                                <NavLink to="/blog-details.html">
-                                                    Blog Details
-                                                </NavLink>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
                                         <NavLink to="/news">Blog</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="./contact.html">
-                                            Contact
-                                        </NavLink>
+                                        <NavLink to="/contact">Contact</NavLink>
                                     </li>
                                 </ul>
                             </nav>

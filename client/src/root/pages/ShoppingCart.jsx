@@ -7,13 +7,51 @@ import { NavLink } from "react-router-dom";
 
 export const ShoppingCart = () => {
     const [cartItems, setCartItems] = useState();
+    // const [product, setProduct] = useState();
     const [categories, setCategories] = useState([]);
     const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    let currentQuantity = 0;
+
+    const { products, cartId } = JSON.parse(localStorage.getItem("user_cart"));
     let total = 0;
 
     const notify = () => toast("Delete Product Success!");
 
-    const { cart, cartId, setCart, setHaveCart } = useCart();
+    const { cart, setCart, setHaveCart } = useCart();
+
+    const getProduct = async (id, quantity) => {
+        await axios
+            .get(`http://localhost:3002/api/product/${id}`, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response);
+                currentQuantity = response.data.quantity;
+                updateProduct(id, currentQuantity, quantity);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
+
+    const updateProduct = async (id, curQuantity, quantity) => {
+        // getProduct(id);
+        console.log(quantity);
+        await axios
+            .put(`http://localhost:3002/api/product/update/${id}`, {
+                quantity: curQuantity + quantity,
+            })
+            .then((response) => {
+                console.log(response.data.quantity);
+            });
+    };
+
     const removeCart = async (cartProductId) => {
         let listProduct = [...cart.products];
 
@@ -34,15 +72,7 @@ export const ShoppingCart = () => {
                 `http://localhost:3002/api/cart/${cartId}`,
                 {
                     userId: cart.userId,
-                    products: [
-                        ...listProduct,
-                        // {
-                        //     productId: product._id,
-                        //     promotion: product.promotion,
-                        //     price: product.price,
-                        //     quantity: value,
-                        // },
-                    ],
+                    products: [...listProduct],
                 },
                 {
                     headers: {
@@ -94,16 +124,17 @@ export const ShoppingCart = () => {
     };
 
     const getCart = async () => {
+        console.log(cartId);
         await axios
-            .get("http://localhost:3002/api/cart/", {
+            .get(`http://localhost:3002/api/cart/find/${cartId}`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
                 accept: "application/json",
             })
             .then(function (response) {
-                console.log(response.data[0]);
-                setCartItems(response.data[0].products);
+                console.log(response.data);
+                setCartItems(response.data.products);
             })
             .catch(function (error) {
                 console.log(error.response.data);
@@ -215,6 +246,10 @@ export const ShoppingCart = () => {
                                                 <td className="shoping__cart__item__close">
                                                     <button
                                                         onClick={() => {
+                                                            getProduct(
+                                                                product.productId,
+                                                                product.quantity
+                                                            );
                                                             removeCart(
                                                                 product._id
                                                             );

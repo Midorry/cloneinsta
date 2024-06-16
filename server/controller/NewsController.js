@@ -42,7 +42,7 @@ export const getNewsLatest = async (req, res, next) => {
     try {
         const isNews = req.query.new;
         if (isNews) {
-            const news = await News.find().sort({ createAt: -1 });
+            const news = await News.find().sort({ createAt: -1 }).limit(3);
             res.status(201).json(news);
         } else {
             const news = await News.find();

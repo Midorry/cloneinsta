@@ -7,12 +7,12 @@ const News = () => {
     const [news, setNews] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [newsLatest, setNewsLatest] = useState();
-    const [cardsPerPage] = useState(9);
+    const [cardsPerPage] = useState(4);
 
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
     const currentNews = news?.slice(indexOfFirstCard, indexOfLastCard);
-    console.log((news?.length / 2).toFixed());
+    console.log((news?.length / 4).toFixed());
 
     // Change page
     // const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -24,7 +24,7 @@ const News = () => {
 
     const getNewsLatest = async () => {
         await axios
-            .get(`http://localhost:3002/api/news?new=true`, {
+            .get(`http://localhost:3002/api/news/recent?new=true`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -175,20 +175,12 @@ const News = () => {
                                 <div className="col-lg-12">
                                     <Pagination
                                         count={(
-                                            news?.length / 2 +
+                                            news?.length / 4 +
                                             0.4
                                         ).toFixed()}
                                         page={currentPage}
                                         onChange={handleChange}
                                     />
-                                    {/* <div className="product__pagination blog__pagination">
-                                        <a href="#">1</a>
-                                        <a href="#">2</a>
-                                        <a href="#">3</a>
-                                        <a href="#">
-                                            <i className="fa fa-long-arrow-right"></i>
-                                        </a>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>

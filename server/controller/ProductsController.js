@@ -120,20 +120,10 @@ export const getProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
     try {
-        const id = req.params.id;
-        const { categoryId, name, quantity, desc, price, image, promotion } =
-            req.body;
-
         const updatedProduct = await Products.findByIdAndUpdate(
             req.params.id,
             {
-                categoryId,
-                name,
-                quantity,
-                desc,
-                price,
-                image,
-                promotion,
+                $set: req.body,
             },
             { new: true }
         );

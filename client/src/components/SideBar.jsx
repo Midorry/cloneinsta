@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const SideBar = () => {
+    const { adminData } = useAuth();
+
     return (
         <div>
             <div className="sidebar1 pe-4 pb-3">
@@ -12,16 +15,17 @@ const SideBar = () => {
                     </a>
                     <div className="d-flex align-items-center ms-4 mb-4">
                         <div className="position-relative">
-                            {/* <img
-                                className="rounded-circle"
-                                // src="img/user.jpg"
+                            <img
+                                className="rounded-circle w-10 h-10 object-cover"
+                                src={`http://localhost:3002/assets/${adminData?.picturePath}`}
                                 alt=""
-                                style="width: 40px; height: 40px;"
-                            /> */}
+                            />
                             <div className="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                         </div>
                         <div className="ms-3">
-                            <h6 className="mb-0">Jhon Doe</h6>
+                            <h6 className="mb-0">
+                                {adminData?.firstName} {adminData?.lastName}
+                            </h6>
                             <span>Admin</span>
                         </div>
                     </div>
@@ -49,21 +53,15 @@ const SideBar = () => {
                                     to="/list-product"
                                     className="nav-link"
                                 >
-                                    <i className="fa fa-laptop me-2"></i>List
-                                    Product
+                                    <i className="fa fa-list me-2"></i>
+                                    List Product
                                 </NavLink>
                                 <NavLink to="/add-product" className="nav-link">
-                                    <i className="fa fa-laptop me-2"></i>Add
-                                    Product
+                                    <i className="fa fa-plus me-2"></i>
+                                    Add Product
                                 </NavLink>
-                                {/* <NavLink
-                                    to="/update-product"
-                                    className="nav-link"
-                                >
-                                    <i className="fa fa-laptop me-2"></i>Update
-                                </NavLink> */}
                                 <NavLink to="/category" className="nav-link">
-                                    <i className="fa fa-laptop me-2"></i>
+                                    <i className="fa fa-table me-2"></i>
                                     Category
                                 </NavLink>
                             </div>
@@ -77,36 +75,27 @@ const SideBar = () => {
                                 aria-haspopup="true"
                                 aria-expanded="false"
                             >
-                                <i className="fa fa-th me-2"></i> User
+                                <i className="fa fa-user me-2"></i> User
                             </button>
                             <div
                                 className="dropdown-menu"
                                 aria-labelledby="dropdownMenuButton"
                             >
                                 <NavLink to="/list-user" className="nav-link">
-                                    <i className="fa fa-laptop me-2"></i>List
+                                    <i className="fa fa-users me-2"></i>List
                                     User
                                 </NavLink>
                                 <NavLink to="/add-user" className="nav-link">
-                                    <i className="fa fa-laptop me-2"></i>Add
+                                    <i className="fa fa-user-plus me-2"></i>Add
                                     User
                                 </NavLink>
                             </div>
                         </div>
                         <NavLink to="/add-news" className="nav-item nav-link">
-                            <i className="fa fa-th me-2"></i>Add News
+                            <i className="fa fa-newspaper me-2"></i>Add News
                         </NavLink>
                         <NavLink to="/order" className="nav-item nav-link">
-                            <i className="fa fa-keyboard me-2"></i>Order
-                        </NavLink>
-                        <NavLink to="table.html" className="nav-item nav-link">
-                            <i className="fa fa-table me-2"></i>Tables
-                        </NavLink>
-                        <NavLink to="chart.html" className="nav-item nav-link">
-                            <i className="fa fa-chart-bar me-2"></i>Charts
-                        </NavLink>
-                        <NavLink to="/" className="nav-link">
-                            <i className="far fa-file-alt me-2"></i>Pages
+                            <i className="fa fa-cart-arrow-down me-2"></i>Order
                         </NavLink>
                     </div>
                 </nav>

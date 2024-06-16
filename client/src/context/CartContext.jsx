@@ -96,7 +96,27 @@ export const CartProvider = ({ children }) => {
             });
     };
 
+    // const updateProduct = async (id, quantity) => {
+    //     await axios
+    //         .put(`http://localhost:3002/api/product/update/${id}`, {
+    //             quantity: quantity,
+    //         })
+    //         .then((response) => {
+    //             console.log(response.data.quantity);
+    //         });
+    // };
+
     const createCart = async (userData, product, value) => {
+        // let newQuantity;
+        for (let i = 0; i < cart?.products?.length; i++) {
+            console.log(product._id);
+            if (product._id == cart.products[i].productId) {
+                console.log(cart.products[i].quantity);
+                cart.products[i].quantity += 1;
+                // newQuantity = product.quantity - cart.products[i].quantity;
+                // console.log(newQuantity);
+            }
+        }
         await axios
             .post(
                 "http://localhost:3002/api/cart/",
@@ -133,6 +153,7 @@ export const CartProvider = ({ children }) => {
                     })
                 );
                 console.log(response);
+                // updateProduct(product._id, newQuantity);
                 setCart((prev) => ({ ...prev, products }));
                 setCartId(response.data._id);
                 setHaveCart(true);
@@ -145,18 +166,24 @@ export const CartProvider = ({ children }) => {
     };
 
     const addCart = async (userData, product, value) => {
-        console.log(cart);
+        // console.log(cart);
+        // let newQuantity = product.quantity;
+        // console.log(product.quantity);
+        // newQuantity = newQuantity - 1;
+        // console.log(newQuantity);
+        const listProduct = [...cart.products];
         let sameProduct = false;
-        for (let i = 0; i < cart?.products?.length; i++) {
+        for (let i = 0; i < listProduct?.length; i++) {
             console.log(product._id);
-            if (product._id == cart.products[i].productId) {
-                console.log(cart.products[i].quantity);
-                cart.products[i].quantity += 1;
+            if (product._id == listProduct[i].productId) {
+                console.log(listProduct[i].quantity);
+                listProduct[i].quantity += 1;
                 sameProduct = true;
+                // newQuantity = product.quantity - listProduct[i].quantity;
+                // console.log(newQuantity);
                 console.log(sameProduct);
             }
         }
-        const listProduct = [...cart.products];
 
         console.log(listProduct);
         console.log([...cart.products]);
@@ -167,15 +194,7 @@ export const CartProvider = ({ children }) => {
                     `http://localhost:3002/api/cart/${cartId}`,
                     {
                         userId: userData._id,
-                        products: [
-                            ...listProduct,
-                            // {
-                            //     productId: product._id,
-                            //     promotion: product.promotion,
-                            //     price: product.price,
-                            //     quantity: value,
-                            // },
-                        ],
+                        products: [...listProduct],
                     },
                     {
                         headers: {
@@ -196,6 +215,8 @@ export const CartProvider = ({ children }) => {
                     );
                     sameProduct = false;
                     console.log(response);
+                    console.log(product._id, product.quantity);
+                    // updateProduct(product._id, newQuantity);
                     setCart((prev) => ({ ...prev, products }));
                     setHaveCart(true);
                 })

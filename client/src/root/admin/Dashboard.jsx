@@ -1,25 +1,73 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-} from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import "../../../../server/public/assets";
+import { Line } from "react-chartjs-2";
+// eslint-disable-next-line no-unused-vars
+import { Chart as ChartJS } from "chart.js/auto";
 
 const Dashboard = () => {
-    const [listProducts, setListProducts] = useState([]);
-    // const [rows, rowChange] = useState([]);
-    const [page, setPageChange] = useState(0);
-    const [rowPerPage, rowPerPageChange] = useState(5);
+    const [listOrders, setListOrders] = useState([]);
+    let totalF = 0;
+    listOrders.map((order) => {
+        console.log(new Date(order.invoiceDate).getUTCMonth() + 1);
+        if (new Date(order.invoiceDate).getUTCMonth() + 1 === 6) {
+            totalF = totalF + order.total;
+        }
+    });
+    console.log(totalF);
+    const data = [
+        {
+            month: 1,
+            revenue: 0,
+        },
+        {
+            month: 2,
+            revenue: 0,
+        },
+        {
+            month: 3,
+            revenue: 0,
+        },
+        {
+            month: 4,
+            revenue: 0,
+        },
+        {
+            month: 5,
+            revenue: 0,
+        },
+        {
+            month: 6,
+            revenue: totalF,
+        },
+        {
+            month: 7,
+            revenue: 0,
+        },
+        {
+            month: 8,
+            revenue: 0,
+        },
+        {
+            month: 9,
+            revenue: 0,
+        },
+        {
+            month: 10,
+            revenue: 0,
+        },
+        {
+            month: 11,
+            revenue: 0,
+        },
+        {
+            month: 12,
+            revenue: 0,
+        },
+    ];
 
-    const getListProduct = async () => {
+    const getListOrder = async () => {
         await axios
-            .get("http://localhost:3002/api/product", {
+            .get(`http://localhost:3002/api/order`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -27,7 +75,7 @@ const Dashboard = () => {
             })
             .then(function (response) {
                 console.log(response);
-                setListProducts(response.data);
+                setListOrders(response.data);
             })
             .catch(function (error) {
                 console.log(error.response.data);
@@ -36,87 +84,48 @@ const Dashboard = () => {
             });
     };
 
-    const handleChangePage = (event, newpage) => {
-        setPageChange(newpage);
-    };
-    const handleRowsPerPage = (event) => {
-        rowPerPageChange(+event.target.value);
-        setPageChange(0);
-    };
+    // for (let i = 0; i < listOrders.length; i++) {
+    //     getCart(listOrders[i].cartId);
+    // }
+    // listOrders.map((order) => {
+    //     // getCart(order.cartId);
+    // });
+
+    // setTotal(totalF);
 
     useEffect(() => {
-        getListProduct();
+        getListOrder();
     }, []);
     return (
         <div className="container-fluid pt-4 px-4">
-            <div className="bg-light text-center rounded p-4">
-                <div className="table-responsive">
-                    <TableContainer>
-                        <Table className="table text-start align-middle table-bordered table-hover mb-0">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell scope="col">
-                                        Product Name
-                                    </TableCell>
-                                    <TableCell scope="col">Category</TableCell>
-                                    <TableCell scope="col">Quantity</TableCell>
-                                    <TableCell scope="col">
-                                        Description
-                                    </TableCell>
-                                    <TableCell scope="col">Price</TableCell>
-                                    <TableCell scope="col">Image</TableCell>
-                                    <TableCell scope="col">Promotion</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {listProducts &&
-                                    listProducts
-                                        .slice(
-                                            page * rowPerPage,
-                                            page * rowPerPage + rowPerPage
-                                        )
-                                        ?.map((product, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell>
-                                                    {product.name}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {product.categoryId}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {product.quantity}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <div className="table-desc">
-                                                        {product.desc}
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {product.price}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <img
-                                                        className="table-image"
-                                                        src={`http://localhost:3002/assets/${product.image}`}
-                                                    ></img>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {product.promotion}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        rowsPerPage={rowPerPage}
-                        page={page}
-                        count={listProducts.length}
-                        component="div"
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleRowsPerPage}
-                    ></TablePagination>
+            <div className="row g-4">
+                <div className="col-sm-12 col-xl-6">
+                    <div className="bg-light rounded h-100 p-4">
+                        <h6 className="mb-4">Single Line Chart</h6>
+                        <Line
+                            options={{
+                                responsive: true,
+                                plugins: {
+                                    // legend: {
+                                    //   position: 'top' as const,
+                                    // },
+                                    title: {
+                                        display: true,
+                                        text: "Chart.js Line Chart",
+                                    },
+                                },
+                            }}
+                            data={{
+                                labels: data.map((m) => m.month),
+                                datasets: [
+                                    {
+                                        label: "Revenue",
+                                        data: data.map((m) => m.revenue),
+                                    },
+                                ],
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

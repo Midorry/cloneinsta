@@ -8,7 +8,11 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
     const [userData, setUserData] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [tokenAdmin, setTokenAdmin] = useState(null);
+    const [adminData, setAdminData] = useState(null);
+    const [isAuthenticatedAdmin, setIsAuthenticatedAdmin] = useState(false);
     const storedData = JSON.parse(localStorage.getItem("user_data"));
+    const storedDataAdmin = JSON.parse(localStorage.getItem("admin_data"));
 
     useEffect(() => {
         if (storedData) {
@@ -16,6 +20,12 @@ export const AuthProvider = ({ children }) => {
             setToken(userToken);
             setUserData(user);
             setIsAuthenticated(true);
+        }
+        if (storedDataAdmin) {
+            const { userToken, user } = storedDataAdmin;
+            setTokenAdmin(userToken);
+            setAdminData(user);
+            setIsAuthenticatedAdmin(true);
         }
     }, []);
 
@@ -30,6 +40,17 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
     };
 
+    const loginAdmin = (newToken, newData) => {
+        localStorage.setItem(
+            "admin_data",
+            JSON.stringify({ userToken: newToken, user: newData })
+        );
+
+        setToken(newToken);
+        setUserData(newData);
+        setIsAuthenticatedAdmin(true);
+    };
+
     const logout = () => {
         localStorage.removeItem("user_data");
         setToken(null);
@@ -37,11 +58,23 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
     };
 
+    const logoutAdmin = () => {
+        localStorage.removeItem("admin_data");
+        setToken(null);
+        setUserData(null);
+        setIsAuthenticatedAdmin(false);
+    };
+
     const value = {
         token,
         isAuthenticated,
+        tokenAdmin,
+        adminData,
+        isAuthenticatedAdmin,
         login,
+        loginAdmin,
         logout,
+        logoutAdmin,
         userData,
     };
 

@@ -5,13 +5,12 @@ import AuthLayout from "./auth/AuthLayout";
 import Home from "./root/pages/Home";
 import { ShopDetails } from "./root/pages/ShopDetails";
 import { RootLayout } from "./components/RootLayout";
-import $ from "jquery";
 
 import "jquery-ui/dist/jquery-ui";
 import { ShoppingCart } from "./root/pages/ShoppingCart";
 import { Shop } from "./root/pages/Shop";
 import AdminLayout from "./components/AdminLayout";
-import User from "./root/admin/User";
+import Users from "./root/admin/Users";
 import Dashboard from "./root/admin/Dashboard";
 import ListProduct from "./root/admin/ListProduct";
 import AddProduct from "./root/admin/AddProduct";
@@ -22,21 +21,18 @@ import AddUser from "./root/admin/AddUser";
 import AddNews from "./root/admin/AddNews";
 import News from "./root/pages/News";
 import NewsDetail from "./root/pages/NewsDetail";
-import Checkout from "./root/pages/CheckOut";
 import Order from "./root/admin/Order";
 import ScrollToTop from "./components/ScrollToTop";
+import Checkout from "./root/pages/Checkout";
+import SignInAdmin from "./auth/SignInAdmin";
+import Contact from "./root/pages/Contact";
+import User from "./root/pages/User";
 
 const App = () => {
-    $(window).on("load", function () {
-        $(".loader").fadeOut();
-        $("#preloder").delay(100).fadeOut("slow");
-    });
     return (
         <main>
-            <div id="preloder">
-                <div className="loader"></div>
-            </div>
             <Routes>
+                <Route path="/login-admin" index element={<SignInAdmin />} />
                 {/* public routes */}
                 <Route element={<AuthLayout />}>
                     <Route path="/" element={<SignInForm />} />
@@ -52,6 +48,8 @@ const App = () => {
                     <Route path="/news" element={<News />} />
                     <Route path="/news-detail/:id" element={<NewsDetail />} />
                     <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/user" element={<User />} />
                 </Route>
 
                 <Route element={<AdminLayout />}>
@@ -64,7 +62,7 @@ const App = () => {
                         element={<UpdateProduct />}
                     />
                     <Route path="/add-product" element={<AddProduct />} />
-                    <Route path="/list-user" element={<User />} />
+                    <Route path="/list-user" element={<Users />} />
                     <Route path="/update-user/:id" element={<UpdateUser />} />
                     <Route path="/add-user" element={<AddUser />} />
                     <Route path="/add-news" element={<AddNews />} />

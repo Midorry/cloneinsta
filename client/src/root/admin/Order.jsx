@@ -23,6 +23,27 @@ const Order = () => {
     // const { cart } = useCart();
     console.log(cart);
 
+    const handleStatus = (status) => {
+        if (status == "success")
+            return (
+                <div className=" cursor-default text-center bg-green-200 w-24 border-2 border-solid border-green-500 text-green-500 rounded">
+                    Thành Công
+                </div>
+            );
+        else if (status == "cancel")
+            return (
+                <div className=" cursor-default text-center bg-red-200 w-24 border-2 border-solid border-red-600 text-red-600 rounded">
+                    Đã Hủy
+                </div>
+            );
+        else
+            return (
+                <div className=" cursor-default text-center bg-orange-200 w-24 border-2 border-solid border-orange-600 text-orange-600 rounded">
+                    Đang xử lý
+                </div>
+            );
+    };
+
     const getCart = async (id) => {
         await axios
             .get(`http://localhost:3002/api/cart/find/${id}`)
@@ -60,9 +81,9 @@ const Order = () => {
         setPageChange(0);
     };
 
-    const handleOnClick = async (id) => {
+    const handleOnClick = async (id, status) => {
         await axios.put(`http://localhost:3002/api/order/update/${id}`, {
-            isInvoice: false,
+            status: status,
         });
     };
 
@@ -117,6 +138,7 @@ const Order = () => {
                         <TableHead>
                             <TableRow className="text-dark">
                                 <TableCell scope="col">OrderId</TableCell>
+                                {/* <TableCell scope="col">userId</TableCell> */}
                                 <TableCell scope="col">CartId</TableCell>
                                 <TableCell scope="col">Payments</TableCell>
                                 <TableCell scope="col">Address</TableCell>
@@ -136,6 +158,9 @@ const Order = () => {
                                     ?.map((order, index) => (
                                         <TableRow key={index}>
                                             <TableCell>{order._id}</TableCell>
+                                            {/* <TableCell>
+                                                {order.userId}
+                                            </TableCell> */}
                                             <TableCell>
                                                 {order.cartId}
                                             </TableCell>
@@ -158,15 +183,7 @@ const Order = () => {
                                                 đ
                                             </TableCell>
                                             <TableCell>
-                                                {order.isInvoice ? (
-                                                    <div className=" cursor-default text-center bg-green-200 w-24 border-2 border-solid border-green-500 text-green-500 rounded">
-                                                        Thành Công
-                                                    </div>
-                                                ) : (
-                                                    <div className=" cursor-default text-center bg-red-200 w-24 border-2 border-solid border-red-600 text-red-600 rounded">
-                                                        Đã Hủy
-                                                    </div>
-                                                )}
+                                                {handleStatus(order.status)}
                                             </TableCell>
                                             <TableCell>
                                                 <button
@@ -231,7 +248,7 @@ const Order = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {cart.products?.map(
+                                            {cart?.products?.map(
                                                 (product, index) => (
                                                     <TableRow key={index}>
                                                         <TableCell>
@@ -276,10 +293,22 @@ const Order = () => {
                                 <span>{order.payments}</span>
                             </div>
                             <button
-                                onClick={() => handleOnClick(order._id)}
-                                className="btn btn-sm btn-primary mt-3"
+                                disabled={order.status == "cancel" && true}
+                                onClick={() =>
+                                    handleOnClick(order._id, "cancel")
+                                }
+                                className="btn btn-sm btn-primary mt-3 mr-3"
                             >
                                 Hủy Đơn
+                            </button>
+                            <button
+                                disabled={order.status !== "success" && true}
+                                onClick={() =>
+                                    handleOnClick(order._id, "success")
+                                }
+                                className="btn btn-sm btn-primary mt-3"
+                            >
+                                Nhận Đơn
                             </button>
                         </div>
                         <button

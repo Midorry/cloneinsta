@@ -4,6 +4,9 @@ var date = new Date();
 
 const OrderSchema = new mongoose.Schema(
     {
+        userId: {
+            type: String,
+        },
         cartId: {
             type: String,
             // required: true,
@@ -18,9 +21,9 @@ const OrderSchema = new mongoose.Schema(
             type: Date,
             default: date,
         },
-        isInvoice: {
-            type: Boolean,
-            default: true,
+        status: {
+            type: String,
+            default: "pending",
         },
         invoiceDate: {
             type: Date,

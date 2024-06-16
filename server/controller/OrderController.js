@@ -5,21 +5,23 @@ import crypto from "crypto";
 export const newOrder = async (req, res, next) => {
     try {
         const {
+            userId,
             cartId,
             payments,
             address,
             dateOrder,
-            isInvoice,
+            status,
             invoiceDate,
             total,
         } = req.body;
 
         const newOder = new Order({
+            userId,
             cartId,
             payments,
             address,
             dateOrder,
-            isInvoice,
+            status,
             invoiceDate,
             total,
         });
@@ -44,6 +46,24 @@ export const getOrder = async (req, res) => {
     try {
         const orders = await Order.findById(id);
         res.status(200).json(orders);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
+export const getOrderUser = async (req, res) => {
+    const userId = req.params.id;
+    console.log(userId);
+    try {
+        if (userId) {
+            const orders = await Order.find({
+                userId: {
+                    $regex: userId,
+                    $options: "i",
+                },
+            });
+            res.status(200).json(orders);
+        }
     } catch (err) {
         res.status(404).json({ message: err.message });
     }

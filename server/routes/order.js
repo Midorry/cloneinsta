@@ -2,6 +2,7 @@ import express from "express";
 import {
     getAllOrders,
     getOrder,
+    getOrderUser,
     momoPayment,
     newOrder,
     updateOrder,
@@ -10,8 +11,9 @@ import {
 const router = express.Router();
 
 router.post("/", newOrder);
-router.post("/payment", momoPayment);
 router.get("/", getAllOrders);
+router.post("/payment", momoPayment);
+router.get("/user/:id", getOrderUser);
 router.get("/:id", getOrder);
 router.put("/update/:id", updateOrder);
 

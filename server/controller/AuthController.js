@@ -54,6 +54,28 @@ export const login = async (req, res) => {
     }
 };
 
+export const loginAdmin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(400).json({ msg: "User does not exits" });
+        }
+        const isMath = await bcrypt.compare(password, user.password);
+        if (!isMath) {
+            return res.status(400).json({ msg: "Invalid credentials" });
+        }
+        if (!user.isAdmin) {
+            return res.status(400).json({ msg: "You are not Admin" });
+        }
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        delete user.password;
+        res.status(200).json({ token, user });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 export const allUser = async (req, res) => {
     try {
         const carts = await User.find();

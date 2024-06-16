@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Field, Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
@@ -17,6 +17,13 @@ const Checkout = () => {
     cart.products?.map((product) => {
         total = total + product.quantity * product.price;
     });
+
+    console.log(cart);
+    console.log(userData._id, userData);
+
+    useEffect(() => {
+        // updateProduct();
+    }, []);
 
     console.log(cart);
 
@@ -67,8 +74,10 @@ const Checkout = () => {
                                         values.email,
                                         values.address,
                                         cartId,
+                                        userData._id,
                                         total
                                     );
+                                    formData.append("userId", userData._id);
                                     formData.append("cartId", cartId);
                                     formData.append(
                                         "payments",
@@ -82,6 +91,7 @@ const Checkout = () => {
                                             "http://localhost:3002/api/order",
                                             // formData,
                                             {
+                                                userId: userData._id,
                                                 cartId: cartId,
                                                 payments: values.payments,
                                                 address: values.address,
@@ -92,6 +102,7 @@ const Checkout = () => {
                                         .then(function (response) {
                                             console.log(response);
                                             setIsSuccess(true);
+
                                             clearCart();
                                         })
                                         .catch(function (error) {
