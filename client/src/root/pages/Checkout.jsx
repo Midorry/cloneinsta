@@ -245,7 +245,7 @@ const Checkout = () => {
                                                     id="payments"
                                                     value="Thanh toán bằng VNPay"
                                                 />
-                                                Thanh toán bằng VNPay
+                                                Thanh toán bằng Momo
                                             </label>
                                         </div>
                                         {errors.payments ? (
@@ -315,7 +315,7 @@ const Checkout = () => {
                             <h3>Đặt hàng thành công</h3>
                             <NavLink
                                 onClick={() => createNewCart(userData)}
-                                to="/"
+                                to="/home"
                             >
                                 Tiếp tục mua sắm
                             </NavLink>

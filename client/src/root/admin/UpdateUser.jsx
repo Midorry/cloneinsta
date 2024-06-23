@@ -78,13 +78,16 @@ const UpdateUser = () => {
     };
 
     const validationRegister = yup.object({
-        firstName: yup.string().required("required"),
-        lastName: yup.string().required("required"),
-        email: yup.string().email("invalid email").required("required"),
-        // password: yup.string().required("required"),
-        address: yup.string().required("required"),
-        isAdmin: yup.bool().required("required"),
-        picture: yup.string().required("required"),
+        firstName: yup.string().required("Vui lòng điền trường này"),
+        lastName: yup.string().required("Vui lòng điền trường này"),
+        email: yup
+            .string()
+            .email("Email không hợp lệ!")
+            .required("Vui lòng điền trường này"),
+        // password: yup.string().required("Vui lòng điền trường này"),
+        address: yup.string().required("Vui lòng điền trường này"),
+        isAdmin: yup.bool().required("Vui lòng điền trường này"),
+        picture: yup.string().required("Vui lòng điền trường này"),
     });
 
     const handleUpload = async () => {
@@ -143,7 +146,8 @@ const UpdateUser = () => {
         >
             {({ handleSubmit, handleBlur, values, handleChange, errors }) => (
                 <form onSubmit={handleSubmit} className="w-1/2 m-auto">
-                    <label htmlFor="firstName">First Name</label>
+                    <h3 className="my-3 text-center">CẬP NHẬT NGƯỜI DÙNG</h3>
+                    <label htmlFor="firstName">Họ</label>
                     <input
                         id="firstName"
                         name="firstName"
@@ -157,7 +161,7 @@ const UpdateUser = () => {
                         <div className="text-red-500">{errors.firstName}</div>
                     ) : null}
 
-                    <label htmlFor="lastName">Last Name</label>
+                    <label htmlFor="lastName">Tên</label>
                     <input
                         id="lastName"
                         name="lastName"
@@ -170,7 +174,7 @@ const UpdateUser = () => {
                     {errors.lastName ? (
                         <div className="text-red-500">{errors.lastName}</div>
                     ) : null}
-                    <label htmlFor="image">New Image</label>
+                    <label htmlFor="image">New Avatar</label>
                     <input
                         name="image"
                         type="file"
@@ -178,14 +182,14 @@ const UpdateUser = () => {
                             setFile(e.target.files[0]);
                         }}
                     />
-                    <label htmlFor="oldImage">Old Image</label>
+                    <label htmlFor="oldImage">Old Avatar</label>
                     <img
                         src={`http://localhost:3002/assets/${user.picturePath}`}
                         alt=""
                     />
                     <aside>{thumbs}</aside>
 
-                    <label htmlFor="email">Email Address</label>
+                    <label htmlFor="email">Email</label>
                     <input
                         id="email"
                         name="email"
@@ -199,7 +203,7 @@ const UpdateUser = () => {
                         <div className="text-red-500">{errors.email}</div>
                     ) : null}
 
-                    <label htmlFor="address">Address</label>
+                    <label htmlFor="address">Địa chỉ</label>
                     <input
                         id="address"
                         name="address"
@@ -233,9 +237,9 @@ const UpdateUser = () => {
                                 handleUpload();
                             }}
                             type="submit"
-                            className="w-full bg-blue-400 h-10 rounded-md"
+                            className="w-full bg-blue-400 text-white my-2 h-10 rounded-md"
                         >
-                            Submit
+                            Lưu
                         </button>
                     </div>
                 </form>

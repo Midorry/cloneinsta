@@ -6,6 +6,7 @@ const SearchContext = createContext();
 // eslint-disable-next-line react/prop-types
 export const SearchProvider = ({ children }) => {
     const [valueSearch, setValueSearch] = useState([]);
+
     const searchInput = async (inputs) => {
         await axios
             .get(`http://localhost:3002/api/product/search?name=${inputs}`, {
@@ -90,6 +91,17 @@ export const SearchProvider = ({ children }) => {
     };
 
     const sortDate = async () => {
+        // console.log(valueSearch);
+        // sortValueSearch = valueSearch.sort(function (a, b) {
+        //     // Convert the date strings to Date objects
+        //     let dateA = new Date(a.createdAt);
+        //     let dateB = new Date(b.createdAt);
+
+        //     // Subtract the dates to get a value that is either negative, positive, or zero
+        //     return dateB - dateA;
+        // });
+        // setValueSearch(sortValueSearch);
+        // console.log(sortValueSearch);
         await axios
             .get(`http://localhost:3002/api/product/search?new=true`, {
                 headers: {

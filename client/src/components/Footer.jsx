@@ -11,7 +11,7 @@ export const Footer = () => {
                                 </a>
                             </div>
                             <ul>
-                                <li>Address: 60-49 Road 11378 New York</li>
+                                <li>Địa chỉ: Hoài Đức, Hà Nội, Việt Nam</li>
                                 <li>Phone: +65 11.188.888</li>
                                 <li>Email: hello@colorlib.com</li>
                             </ul>
@@ -69,15 +69,6 @@ export const Footer = () => {
                                 Get E-mail updates about our latest shop and
                                 special offers.
                             </p>
-                            <form action="#">
-                                <input
-                                    type="text"
-                                    placeholder="Enter your mail"
-                                ></input>
-                                <button type="submit" className="site-btn">
-                                    Subscribe
-                                </button>
-                            </form>
                             <div className="footer__widget__social">
                                 <a href="#">
                                     <i className="fa fa-facebook"></i>

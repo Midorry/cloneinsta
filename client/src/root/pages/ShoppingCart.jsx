@@ -16,7 +16,7 @@ export const ShoppingCart = () => {
     const { products, cartId } = JSON.parse(localStorage.getItem("user_cart"));
     let total = 0;
 
-    const notify = () => toast("Delete Product Success!");
+    const notify = () => toast("Xóa sản phẩm thành công!");
 
     const { cart, setCart, setHaveCart } = useCart();
 
@@ -174,11 +174,11 @@ export const ShoppingCart = () => {
                                     <thead>
                                         <tr>
                                             <th className="shoping__product">
-                                                Products
+                                                Sản phẩm
                                             </th>
-                                            <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>Total</th>
+                                            <th>Giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Tổng</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -205,35 +205,6 @@ export const ShoppingCart = () => {
                                                         {product.quantity}
                                                     </div>
                                                 </td>
-                                                {/* <td className="shoping__cart__quantity">
-                                                    <div className="quantity">
-                                                        <div className="pro-qty">
-                                                            <span
-                                                                className="dec qtybtn1"
-                                                                onClick={() => {
-                                                                    product.quantity -= 1;
-                                                                }}
-                                                            >
-                                                                -
-                                                            </span>
-                                                            <input
-                                                                className="value1"
-                                                                type="input"
-                                                                value={
-                                                                    product.quantity
-                                                                }
-                                                            />
-                                                            <span
-                                                                className="inc qtybtn1"
-                                                                onClick={() => {
-                                                                    product.quantity += 1;
-                                                                }}
-                                                            >
-                                                                +
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td> */}
                                                 <td className="shoping__cart__total">
                                                     {new Intl.NumberFormat(
                                                         "de-DE"
@@ -272,16 +243,16 @@ export const ShoppingCart = () => {
                                     to="/shop"
                                     className="primary-btn cart-btn"
                                 >
-                                    CONTINUE SHOPPING
+                                    TIẾP TỤC MUA SẮM
                                 </NavLink>
                             </div>
                         </div>
                         <div className="col-lg-6">
                             <div className="shoping__checkout">
-                                <h5>Cart Total</h5>
+                                <h5>Tổng giỏ hàng</h5>
                                 <ul>
                                     <li>
-                                        Total{" "}
+                                        Tổng{" "}
                                         <span>
                                             {new Intl.NumberFormat(
                                                 "de-DE"
@@ -291,7 +262,7 @@ export const ShoppingCart = () => {
                                     </li>
                                 </ul>
                                 <NavLink to="/checkout" className="primary-btn">
-                                    PROCEED TO CHECKOUT
+                                    TIẾN HÀNH ĐẶT HÀNG
                                 </NavLink>
                             </div>
                         </div>

@@ -13,6 +13,7 @@ const Dashboard = () => {
             totalF = totalF + order.total;
         }
     });
+    console.log(listOrders);
     console.log(totalF);
     const data = [
         {

@@ -7,17 +7,16 @@ import { useCart } from "../context/CartContext";
 import { useSearch } from "../context/SearchContext";
 import ProfileMenu from "./ProfileMenu";
 const Header = () => {
-    const [cartItems, setCartItems] = useState();
+    // const [cartItems, setCartItems] = useState();
     const [categories, setCategories] = useState([]);
     const [inputs, setInputs] = useState("");
-    const [view, setView] = useState(false);
     let total = 0;
 
     const navigate = useNavigate();
 
     const { isAuthenticated, userData } = useAuth();
     const { cart, cartId } = useCart();
-    const { searchInput } = useSearch();
+    const { searchInput, searchCategory } = useSearch();
 
     console.log(cartId);
 
@@ -47,6 +46,13 @@ const Header = () => {
         }
     };
 
+    const handleCategory = (value) => {
+        searchCategory(value);
+        if (location.pathname !== "/shop") {
+            navigate("/shop");
+        }
+    };
+
     const getCategories = async () => {
         await axios
             .get("http://localhost:3002/api/category", {
@@ -67,34 +73,34 @@ const Header = () => {
             });
     };
 
-    const getCart = async () => {
-        if (cartId) {
-            await axios
-                .get(`http://localhost:3002/api/cart/find/${cartId}`, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                    accept: "application/json",
-                })
-                .then(function (response) {
-                    console.log(response.data);
-                    setCartItems(response.data.products);
-                })
-                .catch(function (error) {
-                    console.log(error.response.data);
-                    console.log(error.response);
-                    console.log(error);
-                });
-        }
-        // forceUpdate();
-    };
+    // const getCart = async () => {
+    //     if (cartId) {
+    //         await axios
+    //             .get(`http://localhost:3002/api/cart/find/${cartId}`, {
+    //                 headers: {
+    //                     "Content-Type": "multipart/form-data",
+    //                 },
+    //                 accept: "application/json",
+    //             })
+    //             .then(function (response) {
+    //                 console.log(response.data);
+    //                 setCartItems(response.data.products);
+    //             })
+    //             .catch(function (error) {
+    //                 console.log(error.response.data);
+    //                 console.log(error.response);
+    //                 console.log(error);
+    //             });
+    //     }
+    //     // forceUpdate();
+    // };
 
-    cartItems?.map((product) => {
+    cart?.products?.map((product) => {
         total = total + product.quantity * product.price;
     });
 
     useEffect(() => {
-        getCart();
+        // getCart();
         getCategories();
     }, [cart]);
     return (
@@ -129,10 +135,7 @@ const Header = () => {
                                             <i className="fa fa-pinterest-p"></i>
                                         </a>
                                     </div>
-                                    <div
-                                        onClick={() => setView(!view)}
-                                        className="header__top__right__auth"
-                                    >
+                                    <div className="header__top__right__auth">
                                         {isAuthenticated ? (
                                             <img
                                                 src={`http://localhost:3002/assets/${userData?.picturePath}`}
@@ -141,8 +144,8 @@ const Header = () => {
                                         ) : (
                                             <i className="fa fa-user"></i>
                                         )}
+                                        <ProfileMenu></ProfileMenu>
                                     </div>
-                                    {view ? <ProfileMenu></ProfileMenu> : <></>}
                                 </div>
                             </div>
                         </div>
@@ -170,10 +173,10 @@ const Header = () => {
                                         <NavLink to="/shop">Shop</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/news">Blog</NavLink>
+                                        <NavLink to="/news">Tin tức</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/contact">Contact</NavLink>
+                                        <NavLink to="/contact">Liên hệ</NavLink>
                                     </li>
                                 </ul>
                             </nav>
@@ -190,7 +193,9 @@ const Header = () => {
                                             }
                                         >
                                             <i className="fa fa-shopping-bag"></i>{" "}
-                                            <span>{cart.products?.length}</span>
+                                            <span>
+                                                {cart?.products?.length}
+                                            </span>
                                         </NavLink>
                                     </li>
                                 </ul>
@@ -227,7 +232,15 @@ const Header = () => {
                                 <ul>
                                     {categories?.map((category, index) => (
                                         <li key={index}>
-                                            <a href="#">{category.name}</a>
+                                            <button
+                                                onClick={() => {
+                                                    handleCategory(
+                                                        category.name
+                                                    );
+                                                }}
+                                            >
+                                                {category.name}
+                                            </button>
                                         </li>
                                     ))}
                                 </ul>
@@ -248,7 +261,7 @@ const Header = () => {
                                         onClick={() => handleSearch(inputs)}
                                         className="site-btn"
                                     >
-                                        SEARCH
+                                        TÌM KIẾM
                                     </button>
                                 </div>
                                 <div className="hero__search__phone">
@@ -257,7 +270,7 @@ const Header = () => {
                                     </div>
                                     <div className="hero__search__phone__text">
                                         <h5>+65 11.188.888</h5>
-                                        <span>support 24/7 time</span>
+                                        <span>Hỗ trợ 24/7</span>
                                     </div>
                                 </div>
                             </div>

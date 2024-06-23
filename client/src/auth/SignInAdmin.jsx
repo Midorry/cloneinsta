@@ -6,14 +6,17 @@ import { useAuth } from "../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 
 const SignInAdmin = () => {
-    // const dispatch = useDispatch();
     const { loginAdmin } = useAuth();
-    // const [success, setSuccess] = useState(false);
-    // useEffect(() => {
-    //     if (success) navigate("/admin");
-    // }, [success]);
     const navigate = useNavigate();
     const initialLogin = { email: "", password: "" };
+
+    const { isAuthenticatedAdmin } = useAuth();
+    console.log(isAuthenticatedAdmin);
+    if (isAuthenticatedAdmin) {
+        navigate("/admin");
+    } else {
+        navigate("/login-admin");
+    }
 
     const validationLogin = yup.object({
         email: yup.string().email("invalid email").required("required"),
@@ -59,17 +62,6 @@ const SignInAdmin = () => {
                                     console.log(error.response);
                                     console.log(error);
                                 });
-                            // const accessToken = response?.data?.token;
-                            // const loggedIn = await response.json();
-                            // if (loggedIn) {
-                            //     dispatch(
-                            //         setLogin({
-                            //             user: loggedIn.user,
-                            //             token: loggedIn.token,
-                            //         })
-                            //     );
-                            //     navigate("/home");
-                            // }
                         }}
                     >
                         {({

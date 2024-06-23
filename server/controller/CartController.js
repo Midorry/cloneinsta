@@ -23,7 +23,7 @@ export const getCart = async (req, res) => {
                     $regex: userId,
                     $options: "i",
                 },
-            });
+            }).sort({ createdAt: -1 });
             res.status(200).json(products);
         }
     } catch (err) {

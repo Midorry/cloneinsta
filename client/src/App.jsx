@@ -26,7 +26,11 @@ import ScrollToTop from "./components/ScrollToTop";
 import Checkout from "./root/pages/Checkout";
 import SignInAdmin from "./auth/SignInAdmin";
 import Contact from "./root/pages/Contact";
-import User from "./root/pages/User";
+import UserOrder from "./root/pages/UserOrder";
+import ListNews from "./root/admin/ListNews";
+import UpdateNews from "./root/admin/UpdateNews";
+import UserLayout from "./components/UserLayout";
+import UserDetail from "./root/pages/UserDetail";
 
 const App = () => {
     return (
@@ -49,7 +53,10 @@ const App = () => {
                     <Route path="/news-detail/:id" element={<NewsDetail />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/contact" element={<Contact />} />
-                    <Route path="/user" element={<User />} />
+                    <Route element={<UserLayout />}>
+                        <Route path="/user-order" element={<UserOrder />} />
+                        <Route path="/user-detail" element={<UserDetail />} />
+                    </Route>
                 </Route>
 
                 <Route element={<AdminLayout />}>
@@ -66,6 +73,8 @@ const App = () => {
                     <Route path="/update-user/:id" element={<UpdateUser />} />
                     <Route path="/add-user" element={<AddUser />} />
                     <Route path="/add-news" element={<AddNews />} />
+                    <Route path="/list-news" element={<ListNews />} />
+                    <Route path="/update-news/:id" element={<UpdateNews />} />
                     <Route path="/order" element={<Order />} />
                 </Route>
             </Routes>

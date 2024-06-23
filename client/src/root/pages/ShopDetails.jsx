@@ -14,18 +14,10 @@ export const ShopDetails = () => {
     const [categoryValue, setCategoryValue] = useState([]);
     const [count, setCount] = useState();
 
-    const notify = () => {
-        if (isAuthenticated) {
-            toast("Add Product Success!");
-        } else {
-            toast("Bạn cần đăng nhập!");
-        }
-    };
-
     const { userData, isAuthenticated } = useAuth();
     // console.log(userData);
 
-    const { createCart, haveCart, addCart } = useCart();
+    const { addCart, haveCart, createCart } = useCart();
 
     const id = useParams();
 
@@ -108,13 +100,19 @@ export const ShopDetails = () => {
             setCount(count + 1);
             const button = $(".value");
             const value = button.val();
-            console.log(haveCart);
-            updateProduct(value);
-            setIsAddCart(!isAddCart);
-            haveCart
-                ? addCart(userData, product, value)
-                : createCart(userData, product, value);
-            notify();
+            if (value > product.quantity) {
+                toast("Kho không đủ số lượng sản phầm");
+            } else {
+                console.log(haveCart);
+                updateProduct(value);
+                setIsAddCart(!isAddCart);
+                haveCart
+                    ? addCart(userData, product, value)
+                    : createCart(userData, product, value);
+                toast("Thêm sản phẩm thành công!");
+            }
+        } else {
+            toast("Bạn cần đăng nhập để thêm sản phẩm");
         }
     };
 
@@ -154,10 +152,31 @@ export const ShopDetails = () => {
                             <div className="product__details__text">
                                 <h3>{product.name}</h3>
                                 <div className="product__details__price">
-                                    {new Intl.NumberFormat("de-DE").format(
-                                        product.price
+                                    {product.promotion > 0 ? (
+                                        <>
+                                            {new Intl.NumberFormat(
+                                                "de-DE"
+                                            ).format(
+                                                product.price -
+                                                    (product.price / 100) *
+                                                        product.promotion
+                                            )}
+                                            đ{" "}
+                                            <span className="line-through text-xl">
+                                                {new Intl.NumberFormat(
+                                                    "de-DE"
+                                                ).format(product.price)}
+                                                đ
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {new Intl.NumberFormat(
+                                                "de-DE"
+                                            ).format(product.price)}
+                                            đ
+                                        </>
                                     )}
-                                    đ
                                 </div>
                                 <p>{product.desc}</p>
                                 <div className="product__details__quantity">
@@ -187,26 +206,33 @@ export const ShopDetails = () => {
                                     onClick={handleAddToCart}
                                     className="primary-btn"
                                 >
-                                    ADD TO CARD
+                                    Thêm Vào Giỏ Hàng
                                 </button>
                                 <ul>
                                     <li>
-                                        <b>Availability</b>{" "}
+                                        <b>Trạng thái</b>{" "}
                                         {product.quantity > 0 ? (
-                                            <span>In Stock</span>
+                                            <span>Còn Hàng</span>
                                         ) : (
-                                            <span>Out Stock</span>
+                                            <span>Hết hàng</span>
                                         )}
                                     </li>
+                                    {product.promotion > 0 ? (
+                                        <li>
+                                            <b>Khuyến mãi</b>
+                                            <span className="text-red-500 font-bold">
+                                                {product.promotion}%
+                                            </span>
+                                        </li>
+                                    ) : (
+                                        <></>
+                                    )}
                                     <li>
-                                        <b>Shipping</b>{" "}
-                                        <span>
-                                            01 day shipping.{" "}
-                                            <samp>Free pickup today</samp>
-                                        </span>
+                                        <b>Vận chuyển</b>{" "}
+                                        <span>Vận chuyển trong 1 ngày.</span>
                                     </li>
                                     <li>
-                                        <b>Share on</b>
+                                        <b>Chia sẻ</b>
                                         <div className="share">
                                             <a href="#">
                                                 <i className="fa fa-facebook"></i>
@@ -234,7 +260,7 @@ export const ShopDetails = () => {
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="section-title related__product__title">
-                                <h2>Related Product</h2>
+                                <h2>Sản phẩm liên quan</h2>
                             </div>
                         </div>
                     </div>
@@ -257,9 +283,11 @@ export const ShopDetails = () => {
                                                 </div>
                                                 <ul className="product__item__pic__hover">
                                                     <li>
-                                                        <a href="#">
+                                                        <NavLink
+                                                            to={`/shop-details/${product._id}`}
+                                                        >
                                                             <i className="fa fa-shopping-cart"></i>
-                                                        </a>
+                                                        </NavLink>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -308,9 +336,11 @@ export const ShopDetails = () => {
                                                 />
                                                 <ul className="product__item__pic__hover">
                                                     <li>
-                                                        <a href="#">
+                                                        <NavLink
+                                                            to={`/shop-details/${product._id}`}
+                                                        >
                                                             <i className="fa fa-shopping-cart"></i>
-                                                        </a>
+                                                        </NavLink>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -326,6 +356,7 @@ export const ShopDetails = () => {
                                                     {new Intl.NumberFormat(
                                                         "de-DE"
                                                     ).format(product.price)}
+                                                    đ
                                                 </h5>
                                             </div>
                                         </div>

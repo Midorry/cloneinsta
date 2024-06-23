@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import Dropzone from "react-dropzone";
-import { Editor } from "@tinymce/tinymce-react";
 
 const AddNews = () => {
     const notify = () => toast("Create News Success!");
@@ -30,13 +29,6 @@ const AddNews = () => {
         );
     });
 
-    const editorRef = useRef(null);
-    const log = () => {
-        if (editorRef.current) {
-            console.log(editorRef.current.getContent({ format: "text" }));
-        }
-    };
-
     useEffect(
         () => () => {
             // Make sure to revoke the data uris to avoid memory leaks
@@ -56,9 +48,9 @@ const AddNews = () => {
     };
 
     const validationNews = yup.object({
-        title: yup.string().required("Required"),
-        // desc: yup.string().required("Required"),
-        image: yup.string().required("Required"),
+        title: yup.string().required("Vui lòng điền trường này"),
+        desc: yup.string().required("Vui lòng điền trường này"),
+        image: yup.string().required("Vui lòng điền trường này"),
     });
 
     const handleOnSubmit = async (values) => {
@@ -68,10 +60,7 @@ const AddNews = () => {
         //     formData.append(value, values[value]);
         // }
         formData.append("title", values.title);
-        formData.append(
-            "desc",
-            editorRef.current.getContent({ format: "text" })
-        );
+        formData.append("desc", values.desc);
         formData.append("image", values.image.name);
         await axios
             .post("http://localhost:3002/api/news/add", formData, {
@@ -107,8 +96,8 @@ const AddNews = () => {
             }) => (
                 <div className="m-4 pb-4">
                     <form onSubmit={handleSubmit} className="w-1/2 m-auto">
-                        <h3 className="mb-3">ADD NEWS</h3>
-                        <label htmlFor="name">Title</label>
+                        <h3 className="my-3 text-center">THÊM TIN TỨC</h3>
+                        <label htmlFor="name">Tiêu đề</label>
                         <input
                             id="title"
                             name="title"
@@ -122,53 +111,16 @@ const AddNews = () => {
                             <div className="text-red-500">{errors.title}</div>
                         ) : null}
 
-                        <label htmlFor="quantity">Description</label>
-                        <Editor
+                        <label htmlFor="quantity">Nội dung</label>
+                        <textarea
                             id="desc"
                             name="desc"
-                            value={editorRef.current}
-                            apiKey="t2xwu53hggtwh2tq8xokws03q20xwoy9gnrkyp7ahqjzl3dj"
-                            onInit={(_evt, editor) =>
-                                (editorRef.current = editor)
-                            }
-                            initialValue="This is the initial content of the editor."
-                            init={{
-                                selector: "textarea",
-                                forced_root_block: "",
-                                height: 500,
-                                menubar: false,
-                                plugins: [
-                                    "codesample",
-                                    "advlist",
-                                    "autolink",
-                                    "lists",
-                                    "link",
-                                    "image",
-                                    "charmap",
-                                    "preview",
-                                    "anchor",
-                                    "searchreplace",
-                                    "visualblocks",
-                                    "code",
-                                    "fullscreen",
-                                    "insertdatetime",
-                                    "media",
-                                    "table",
-                                    "code",
-                                    "help",
-                                    "wordcount",
-                                ],
-                                toolbar:
-                                    "undo redo | blocks | " +
-                                    "bold italic forecolor | alignleft aligncenter " +
-                                    "alignright alignjustify | bullist numlist outdent indent | " +
-                                    "removeformat | help" +
-                                    "codesample code",
-                                content_style:
-                                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                            }}
+                            type="text"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.desc}
+                            className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-52 mb-3 outline-none p-2"
                         />
-                        <button onClick={log}>Log editor content</button>
                         {errors.desc ? (
                             <div className="text-red-500">{errors.desc}</div>
                         ) : null}
@@ -193,7 +145,7 @@ const AddNews = () => {
                                     })}
                                     onClick={(e) => e.stopPropagation}
                                 >
-                                    <label htmlFor="image">Image</label>
+                                    <label htmlFor="image">Ảnh</label>
                                     <input {...getInputProps()} />
                                     {/* {errors.picture ? (
                                     <div className="text-red-500">{errors.picture}</div>
@@ -223,13 +175,13 @@ const AddNews = () => {
                         <div>
                             <button
                                 type="submit"
-                                className="w-1/2 pr-2 bg-blue-400 h-10 rounded-md"
+                                className="w-1/2 pr-2 bg-blue-400 text-white h-10 rounded-md"
                             >
-                                Create
+                                Tạo
                             </button>
                             <button
                                 onClick={resetForm}
-                                className="w-1/2 bg-blue-400 h-10 rounded-md"
+                                className="w-1/2 bg-blue-400 text-white h-10 rounded-md"
                             >
                                 Reset Form
                             </button>

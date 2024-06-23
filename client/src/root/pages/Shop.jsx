@@ -89,17 +89,6 @@ export const Shop = () => {
     };
 
     const sortDateQuantity = async () => {
-        // setValueSearch(
-        //     valueSearch.sort(function (a, b) {
-        //         // Convert the date strings to Date objects
-        //         let dateA = new Date(a.date);
-        //         let dateB = new Date(b.date);
-
-        //         // Subtract the dates to get a value that is either negative, positive, or zero
-        //         return dateA - dateB;
-        //     })
-        // );
-
         await axios
             .get(
                 `http://localhost:3002/api/product/search?new=true&quantity=true`,
@@ -128,7 +117,6 @@ export const Shop = () => {
         indexOfFirstCard,
         indexOfLastCard
     );
-    console.log((valueSearch.length / 9).toFixed());
 
     // Change page
     // const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -142,7 +130,7 @@ export const Shop = () => {
         getCategory();
         getListProducts();
         sortDateQuantity();
-    }, []);
+    }, [valueSearch]);
 
     return (
         <>
@@ -181,7 +169,7 @@ export const Shop = () => {
                                     </ul>
                                 </div>
                                 <div className="sidebar__item">
-                                    <h4>Price</h4>
+                                    <h4>Giá</h4>
                                     <div className="price-range-wrap">
                                         <div className="range-slider">
                                             <div className="price-input">
@@ -268,9 +256,9 @@ export const Shop = () => {
                                             <div className="latest-prdouct__slider__item">
                                                 {productLatest?.map(
                                                     (product, index) => (
-                                                        <a
+                                                        <NavLink
+                                                            to={`/shop-details/${product._id}`}
                                                             key={index}
-                                                            href="#"
                                                             className="latest-product__item"
                                                         >
                                                             <div className="latest-product__item__pic">
@@ -294,16 +282,16 @@ export const Shop = () => {
                                                                     đ
                                                                 </span>
                                                             </div>
-                                                        </a>
+                                                        </NavLink>
                                                     )
                                                 )}
                                             </div>
                                             <div className="latest-prdouct__slider__item">
                                                 {productLatest?.map(
                                                     (product, index) => (
-                                                        <a
+                                                        <NavLink
+                                                            to={`/shop-details/${product._id}`}
                                                             key={index}
-                                                            href="#"
                                                             className="latest-product__item"
                                                         >
                                                             <div className="latest-product__item__pic">
@@ -327,7 +315,7 @@ export const Shop = () => {
                                                                     đ
                                                                 </span>
                                                             </div>
-                                                        </a>
+                                                        </NavLink>
                                                     )
                                                 )}
                                             </div>
@@ -339,7 +327,7 @@ export const Shop = () => {
                         <div className="col-lg-9 col-md-7">
                             <div className="product__discount">
                                 <div className="section-title product__discount__title">
-                                    <h2>Sale Off</h2>
+                                    <h2>Khuyến Mãi</h2>
                                 </div>
                                 <div className="row">
                                     <Slider
@@ -368,9 +356,11 @@ export const Shop = () => {
                                                                 </div>
                                                                 <ul className="product__item__pic__hover">
                                                                     <li>
-                                                                        <a href="#">
+                                                                        <NavLink
+                                                                            to={`/shop-details/${product._id}`}
+                                                                        >
                                                                             <i className="fa fa-shopping-cart"></i>
-                                                                        </a>
+                                                                        </NavLink>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -549,9 +539,11 @@ export const Shop = () => {
                                                         />
                                                         <ul className="product__item__pic__hover">
                                                             <li>
-                                                                <a href="#">
+                                                                <NavLink
+                                                                    to={`/shop-details/${product._id}`}
+                                                                >
                                                                     <i className="fa fa-shopping-cart"></i>
-                                                                </a>
+                                                                </NavLink>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -569,6 +561,7 @@ export const Shop = () => {
                                                             ).format(
                                                                 product.price
                                                             )}
+                                                            đ
                                                         </h5>
                                                     </div>
                                                 </div>

@@ -91,6 +91,16 @@ const Category = () => {
 
     return (
         <div className="container-fluid pt-4 px-4 relative">
+            <div className="flex justify-end">
+                <button
+                    onClick={() => {
+                        setView(!view);
+                    }}
+                    className="btn btn-sm btn-primary mb-4"
+                >
+                    Thêm mới danh mục
+                </button>
+            </div>
             <div className="bg-light text-center rounded p-4">
                 <TableContainer className="table-responsive">
                     <Table className="table text-start align-middle table-bordered table-hover mb-0">
@@ -168,14 +178,6 @@ const Category = () => {
                     onRowsPerPageChange={handleRowsPerPage}
                 ></TablePagination>
             </div>
-            <button
-                onClick={() => {
-                    setView(!view);
-                }}
-                className="btn btn-sm btn-primary"
-            >
-                Add New Category
-            </button>
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -193,7 +195,7 @@ const Category = () => {
                 <div className="form__category">
                     <div className="form__category_background"></div>
                     <div className="form__category_wrap">
-                        <span>Name</span>
+                        <span>Tên</span>
                         <input
                             onChange={(e) => setValue(e.target.value)}
                             type="text"
@@ -202,7 +204,7 @@ const Category = () => {
                             onClick={handleOnClick}
                             className="btn btn-sm btn-primary"
                         >
-                            Add
+                            Thêm
                         </button>
                         <button
                             className="form__category_close"
@@ -219,7 +221,7 @@ const Category = () => {
                 <div className="form__category">
                     <div className="form__category_background"></div>
                     <div className="form__category_wrap">
-                        <span>Name</span>
+                        <span>Tên</span>
                         <input
                             onChange={(e) => setValue(e.target.value)}
                             type="text"
@@ -229,7 +231,7 @@ const Category = () => {
                             onClick={() => handleUpdate(categoryId)}
                             className="btn btn-sm btn-primary"
                         >
-                            Update
+                            Cập nhật
                         </button>
                         <button
                             className="form__category_close"

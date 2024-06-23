@@ -9,14 +9,14 @@ const AuthLayout = () => {
             {isAuthenticated ? (
                 <Navigate to="/home" />
             ) : (
-                <div className="flex">
-                    <div className="w-1/2">
+                <div className="lg:flex min-h-screen">
+                    <div className="xl:w-1/2 lg:w-full md:w-full">
                         <Outlet />
                     </div>
                     <img
                         src="../../assets/side_bg.avif"
                         alt="logo"
-                        className="hidden xl:block h-screen w-1/2 bg-no-repeat object-cover"
+                        className="hidden xl:block lg:hidden md:hidden h-auto w-1/2 bg-no-repeat object-cover"
                     />
                 </div>
             )}

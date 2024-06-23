@@ -9,19 +9,40 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "/src/context/AuthContext";
 
-const Order = () => {
+const UserOrder = () => {
     const [listOrders, setListOrders] = useState([]);
-    const [user, setUser] = useState([]);
-    const [cart, setCart] = useState([]);
     const [order, setOrder] = useState([]);
+    const [cart, setCart] = useState([]);
     const [view, setView] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
+    const [isLoading, setIsLoading] = useState("");
     const [page, setPageChange] = useState(0);
     const [rowPerPage, rowPerPageChange] = useState(5);
 
-    // const { cart } = useCart();
-    console.log(cart);
+    useEffect(() => {
+        getListOrder();
+        setIsLoading(window.location.href);
+    }, [isLoading]);
+
+    const { userData } = useAuth();
+
+    console.log(userData);
+
+    const handleChangePage = (event, newpage) => {
+        setPageChange(newpage);
+    };
+    const handleRowsPerPage = (event) => {
+        rowPerPageChange(+event.target.value);
+        setPageChange(0);
+    };
+
+    const handleOnClick = async (id) => {
+        await axios.put(`http://localhost:3002/api/order/update/${id}`, {
+            status: "cancel",
+        });
+    };
 
     const handleStatus = (status) => {
         if (status == "success")
@@ -44,65 +65,32 @@ const Order = () => {
             );
     };
 
+    const handleStatusChange = (status) => {
+        console.log(status);
+        if (status == "success") {
+            return <div className="text-red-500 font-bold">HOÀN THÀNH</div>;
+        } else if (status == "pending") {
+            return (
+                <button
+                    onClick={() => handleOnClick(order._id)}
+                    className="btn btn-sm btn-primary mt-3 mr-3"
+                >
+                    HỦY ĐƠN
+                </button>
+            );
+        } else if (status == "cancel") {
+            return <div className="text-red-500 font-bold">ĐÃ HỦY</div>;
+        } else {
+            return <div className="text-red-500 font-bold">ĐANG GIAO HÀNG</div>;
+        }
+    };
+
     const getCart = async (id) => {
         await axios
             .get(`http://localhost:3002/api/cart/find/${id}`)
             .then(function (response) {
                 console.log(response);
                 setCart(response.data);
-                getUser(response.data.userId);
-            })
-            .catch(function (error) {
-                console.log(error.response.data);
-                console.log(error.response);
-                console.log(error);
-            });
-    };
-
-    const getUser = async (id) => {
-        await axios
-            .get(`http://localhost:3002/api/user/${id}`)
-            .then(function (response) {
-                console.log(response);
-                setUser(response.data);
-            })
-            .catch(function (error) {
-                console.log(error.response.data);
-                console.log(error.response);
-                console.log(error);
-            });
-    };
-
-    const handleChangePage = (event, newpage) => {
-        setPageChange(newpage);
-    };
-    const handleRowsPerPage = (event) => {
-        rowPerPageChange(+event.target.value);
-        setPageChange(0);
-    };
-
-    const handleOnClick = async (id, status) => {
-        await axios
-            .put(`http://localhost:3002/api/order/update/${id}`, {
-                status: status,
-                invoiceDate: new Date(),
-            })
-            .then((response) => {
-                console.log(response.data);
-            });
-    };
-
-    const getListOrder = async () => {
-        await axios
-            .get(`http://localhost:3002/api/order`, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                accept: "application/json",
-            })
-            .then(function (response) {
-                console.log(response);
-                setListOrders(response.data);
             })
             .catch(function (error) {
                 console.log(error.response.data);
@@ -131,26 +119,40 @@ const Order = () => {
             });
     };
 
-    useEffect(() => {
-        getListOrder();
-    }, [isDelete]);
+    const getListOrder = async () => {
+        await axios
+            .get(`http://localhost:3002/api/order/user/${userData._id}`, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                accept: "application/json",
+            })
+            .then(function (response) {
+                console.log(response);
+                setListOrders(response.data);
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
 
     return (
-        <div className="container-fluid pt-4 px-4 relative">
+        <>
             <div className="bg-light text-center rounded p-4">
                 <TableContainer className="table-responsive">
                     <Table className="table text-start align-middle table-bordered table-hover mb-0">
                         <TableHead>
                             <TableRow className="text-dark">
-                                <TableCell scope="col">OrderId</TableCell>
-                                {/* <TableCell scope="col">userId</TableCell> */}
-                                <TableCell scope="col">CartId</TableCell>
-                                <TableCell scope="col">Payments</TableCell>
-                                <TableCell scope="col">Address</TableCell>
-                                <TableCell scope="col">DateOrder</TableCell>
-                                <TableCell scope="col">Total Price</TableCell>
-                                <TableCell scope="col">Status</TableCell>
-                                <TableCell scope="col">Action</TableCell>
+                                <TableCell scope="col">
+                                    Phương thức thanh toán
+                                </TableCell>
+                                <TableCell scope="col">Địa chỉ</TableCell>
+                                <TableCell scope="col">Ngày đặt hàng</TableCell>
+                                <TableCell scope="col">Tổng tiền</TableCell>
+                                <TableCell scope="col">Trạng thái</TableCell>
+                                <TableCell scope="col">Xử lý</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -162,13 +164,6 @@ const Order = () => {
                                     )
                                     ?.map((order, index) => (
                                         <TableRow key={index}>
-                                            <TableCell>{order._id}</TableCell>
-                                            {/* <TableCell>
-                                                {order.userId}
-                                            </TableCell> */}
-                                            <TableCell>
-                                                {order.cartId}
-                                            </TableCell>
                                             <TableCell>
                                                 {order.payments}
                                             </TableCell>
@@ -196,9 +191,9 @@ const Order = () => {
                                                         setView(!view);
                                                         getOrder(order._id);
                                                     }}
-                                                    className="btn btn-sm btn-primary"
+                                                    className="btn btn-sm btn-primary w-20"
                                                 >
-                                                    Detail
+                                                    Chi Tiết
                                                 </button>
                                             </TableCell>
                                         </TableRow>
@@ -210,45 +205,34 @@ const Order = () => {
                     rowsPerPageOptions={[5, 10, 25]}
                     rowsPerPage={rowPerPage}
                     page={page}
-                    count={listOrders.length}
+                    count={listOrders?.length}
                     component="div"
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleRowsPerPage}
                 ></TablePagination>
             </div>
             {view ? (
-                <div className="order__item">
+                <div className="order__item-user">
                     <div className="order__item_background"></div>
-                    <div className="order__item_wrap">
+                    <div className="order__item_wrap-user">
                         <div className="w-full">
                             <div className="list__order">
-                                <div className="list__order-user">
-                                    <h6>Thông Tin Khách Hàng</h6>
-                                    <span>
-                                        Họ và Tên: {user.firstName}{" "}
-                                        {user.lastName}
-                                    </span>
-                                    <span>
-                                        Số điện thoại: {user.phoneNumber}
-                                    </span>
-                                    <span>Địa chỉ: {user.address}</span>
-                                </div>
                                 <h6>Chi Tiết Đơn Hàng</h6>
                                 <TableContainer className="table-responsive mb-3">
                                     <Table className="table text-start align-middle table-bordered table-hover mb-0">
                                         <TableHead>
                                             <TableRow className="text-dark">
                                                 <TableCell scope="col">
-                                                    Image
+                                                    Ảnh
                                                 </TableCell>
                                                 <TableCell scope="col">
-                                                    Product Name
+                                                    Tến sản phẩm
                                                 </TableCell>
                                                 <TableCell scope="col">
-                                                    Quantity
+                                                    Số lượng
                                                 </TableCell>
                                                 <TableCell scope="col">
-                                                    Price
+                                                    Giá
                                                 </TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -297,24 +281,7 @@ const Order = () => {
                                 <h6>Phương Thức Thanh Toán </h6>
                                 <span>{order.payments}</span>
                             </div>
-                            <button
-                                disabled={order.status == "cancel" && true}
-                                onClick={() =>
-                                    handleOnClick(order._id, "cancel")
-                                }
-                                className="btn btn-sm btn-primary mt-3 mr-3"
-                            >
-                                Hủy Đơn
-                            </button>
-                            <button
-                                disabled={order.status == "success" && true}
-                                onClick={() =>
-                                    handleOnClick(order._id, "success")
-                                }
-                                className="btn btn-sm btn-primary mt-3"
-                            >
-                                Nhận Đơn
-                            </button>
+                            {handleStatusChange(order.status)}
                         </div>
                         <button
                             className="order__item_close"
@@ -330,8 +297,8 @@ const Order = () => {
             ) : (
                 <></>
             )}
-        </div>
+        </>
     );
 };
 
-export default Order;
+export default UserOrder;

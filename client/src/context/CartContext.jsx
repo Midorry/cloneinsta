@@ -28,6 +28,7 @@ export const CartProvider = ({ children }) => {
                 const getUserId = response.data[0].userId;
                 const products = response.data[0].products;
                 const cartId = response.data[0]._id;
+                console.log(response);
                 console.log(userId);
                 console.log(getUserId);
                 if (getUserId === userId) {
@@ -46,7 +47,6 @@ export const CartProvider = ({ children }) => {
                         cartId: cartId,
                     })
                 );
-                console.log(response);
                 setCart((prev) => ({ ...prev, products }));
                 setCartId(response.data._id);
                 setHaveCart(false);
@@ -96,27 +96,7 @@ export const CartProvider = ({ children }) => {
             });
     };
 
-    // const updateProduct = async (id, quantity) => {
-    //     await axios
-    //         .put(`http://localhost:3002/api/product/update/${id}`, {
-    //             quantity: quantity,
-    //         })
-    //         .then((response) => {
-    //             console.log(response.data.quantity);
-    //         });
-    // };
-
     const createCart = async (userData, product, value) => {
-        // let newQuantity;
-        for (let i = 0; i < cart?.products?.length; i++) {
-            console.log(product._id);
-            if (product._id == cart.products[i].productId) {
-                console.log(cart.products[i].quantity);
-                cart.products[i].quantity += 1;
-                // newQuantity = product.quantity - cart.products[i].quantity;
-                // console.log(newQuantity);
-            }
-        }
         await axios
             .post(
                 "http://localhost:3002/api/cart/",
@@ -153,7 +133,6 @@ export const CartProvider = ({ children }) => {
                     })
                 );
                 console.log(response);
-                // updateProduct(product._id, newQuantity);
                 setCart((prev) => ({ ...prev, products }));
                 setCartId(response.data._id);
                 setHaveCart(true);
@@ -166,11 +145,6 @@ export const CartProvider = ({ children }) => {
     };
 
     const addCart = async (userData, product, value) => {
-        // console.log(cart);
-        // let newQuantity = product.quantity;
-        // console.log(product.quantity);
-        // newQuantity = newQuantity - 1;
-        // console.log(newQuantity);
         const listProduct = [...cart.products];
         let sameProduct = false;
         for (let i = 0; i < listProduct?.length; i++) {
@@ -179,8 +153,6 @@ export const CartProvider = ({ children }) => {
                 console.log(listProduct[i].quantity);
                 listProduct[i].quantity += 1;
                 sameProduct = true;
-                // newQuantity = product.quantity - listProduct[i].quantity;
-                // console.log(newQuantity);
                 console.log(sameProduct);
             }
         }
@@ -216,7 +188,6 @@ export const CartProvider = ({ children }) => {
                     sameProduct = false;
                     console.log(response);
                     console.log(product._id, product.quantity);
-                    // updateProduct(product._id, newQuantity);
                     setCart((prev) => ({ ...prev, products }));
                     setHaveCart(true);
                 })
@@ -336,6 +307,7 @@ export const CartProvider = ({ children }) => {
     const clearCart = () => {
         setCart([]);
         setCartId("");
+        setHaveCart(false);
         localStorage.removeItem("user_cart");
         localStorage.removeItem("haveCart");
     };

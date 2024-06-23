@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import LazyLoad from "react-lazyload";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
+import { useSearch } from "/src/context/SearchContext";
 
 const Home = () => {
     const [listProducts, setListProducts] = useState([]);
@@ -11,11 +12,22 @@ const Home = () => {
     const [news, setNews] = useState();
     const [selectedFilters, setSelectedFilters] = useState("Cá");
 
+    const { searchCategory } = useSearch();
+
+    const navigate = useNavigate();
+
     const Loading = () => (
         <div className="post loading">
             <h5>Loading...</h5>
         </div>
     );
+
+    const handleCategory = (value) => {
+        searchCategory(value);
+        if (location.pathname !== "/shop") {
+            navigate("/shop");
+        }
+    };
 
     const settings = {
         // dots: true,
@@ -38,7 +50,6 @@ const Home = () => {
             })
             .then(function (response) {
                 console.log(response.data);
-                console.log(response.data[0].createdAt);
                 setNews(response.data);
             })
             .catch(function (error) {
@@ -81,7 +92,7 @@ const Home = () => {
                 console.log(response);
                 const data = response.data;
                 // setListProductsFilter(response.data);
-                searchCategory(selectedFilters);
+                filterCategory(selectedFilters);
                 setListProducts(data);
             })
             .catch(function (error) {
@@ -91,7 +102,7 @@ const Home = () => {
             });
     };
 
-    const searchCategory = async (value) => {
+    const filterCategory = async (value) => {
         await axios
             .get(`http://localhost:3002/api/product/search?category=${value}`, {
                 headers: {
@@ -112,7 +123,8 @@ const Home = () => {
 
     const handleFilterButtonClick = (selectedCategory) => {
         setSelectedFilters(selectedCategory);
-        searchCategory(selectedCategory);
+        filterCategory(selectedCategory);
+        // searchCategory(selectedCategory);
         // if (selectedFilters.includes(selectedCategory)) {
         //   let filters = selectedFilters.filter((el) => el !== selectedCategory);
         //   setSelectedFilters(filters);
@@ -144,7 +156,15 @@ const Home = () => {
                                             src={`http://localhost:3002/assets/${product.image}`}
                                         ></img>
                                         <h5>
-                                            <a href="#">{product.categoryId}</a>
+                                            <button
+                                                onClick={() => {
+                                                    handleCategory(
+                                                        product.categoryId
+                                                    );
+                                                }}
+                                            >
+                                                {product.categoryId}
+                                            </button>
                                         </h5>
                                     </div>
                                 </div>
@@ -204,9 +224,11 @@ const Home = () => {
                                                 </div>
                                                 <ul className="featured__item__pic__hover">
                                                     <li>
-                                                        <a href="#">
+                                                        <NavLink
+                                                            to={`/shop-details/${product._id}`}
+                                                        >
                                                             <i className="fa fa-shopping-cart"></i>
-                                                        </a>
+                                                        </NavLink>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -234,46 +256,6 @@ const Home = () => {
                                         </div>
                                     </LazyLoad>
                                 );
-                            }
-                            {
-                                /* else {
-                                return (
-                                    <div
-                                        key={index}
-                                        className={`col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat ${product.categoryId}`}
-                                    >
-                                        <div className="featured__item">
-                                            <div className="featured__item__pic set-bg">
-                                                <img
-                                                    src={`http://localhost:3002/assets/${product.image}`}
-                                                />
-                                                <ul className="featured__item__pic__hover">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="fa fa-shopping-cart"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="featured__item__text">
-                                                <h6>
-                                                    <NavLink
-                                                        to={`/shop-details/${product._id}`}
-                                                    >
-                                                        {product.name}
-                                                    </NavLink>
-                                                </h6>
-                                                <h5>
-                                                    {new Intl.NumberFormat(
-                                                        "de-DE"
-                                                    ).format(product.price)}
-                                                    đ
-                                                </h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            } */
                             }
                         })}
                     </div>

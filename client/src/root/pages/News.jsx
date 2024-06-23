@@ -74,7 +74,7 @@ const News = () => {
                     <div className="row">
                         <div className="col-lg-12 text-center">
                             <div className="breadcrumb__text">
-                                <h2>News</h2>
+                                <h2>Tin Tức</h2>
                             </div>
                         </div>
                     </div>
@@ -85,19 +85,8 @@ const News = () => {
                     <div className="row">
                         <div className="col-lg-4 col-md-5">
                             <div className="blog__sidebar">
-                                <div className="blog__sidebar__search">
-                                    <form action="#">
-                                        <input
-                                            type="text"
-                                            placeholder="Search..."
-                                        />
-                                        <button type="submit">
-                                            <span className="icon_search"></span>
-                                        </button>
-                                    </form>
-                                </div>
                                 <div className="blog__sidebar__item">
-                                    <h4>Recent News</h4>
+                                    <h4>Tin tức gần đây</h4>
                                     <div className="blog__sidebar__recent">
                                         {newsLatest?.map((recent, index) => (
                                             <a
@@ -164,7 +153,7 @@ const News = () => {
                                                     to={`/news-detail/${n._id}`}
                                                     className="blog__btn"
                                                 >
-                                                    READ MORE{" "}
+                                                    Đọc Thêm{" "}
                                                     <span className="arrow_right"></span>
                                                 </NavLink>
                                             </div>

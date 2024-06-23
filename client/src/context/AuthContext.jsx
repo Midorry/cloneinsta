@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("user_data");
+
         setToken(null);
         setUserData(null);
         setIsAuthenticated(false);
@@ -60,8 +61,8 @@ export const AuthProvider = ({ children }) => {
 
     const logoutAdmin = () => {
         localStorage.removeItem("admin_data");
-        setToken(null);
-        setUserData(null);
+        setTokenAdmin(null);
+        setAdminData(null);
         setIsAuthenticatedAdmin(false);
     };
 

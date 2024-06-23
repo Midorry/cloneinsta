@@ -33,19 +33,19 @@ export const getAllProducts = async (req, res) => {
 
 // Logic Filter Products
 
-export const filterProduct = async (req, res) => {
-    const filters = req.query;
-    const products = await Products.find();
-    const filteredProducts = products.filter((product) => {
-        let isValid = true;
-        for (let key in filters) {
-            console.log(key, product[key], filters[key]);
-            isValid = isValid && product[key] == filters[key];
-        }
-        return isValid;
-    });
-    res.status(200).json(filteredProducts);
-};
+// export const filterProduct = async (req, res) => {
+//     const filters = req.query;
+//     const products = await Products.find();
+//     const filteredProducts = products.filter((product) => {
+//         let isValid = true;
+//         for (let key in filters) {
+//             console.log(key, product[key], filters[key]);
+//             isValid = isValid && product[key] == filters[key];
+//         }
+//         return isValid;
+//     });
+//     res.status(200).json(filteredProducts);
+// };
 
 export const filterPrice = async (req, res) => {
     const min = req.query.min;
@@ -136,12 +136,6 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     const product = await Products.findById(req.params.id);
-    // try {
-    //     await Products.findByIdAndDelete(req.params.id);
-    //     res.status(200).json("Product has been deleted...");
-    // } catch (err) {
-    //     res.status(500).json({ message: err.message });
-    // }
     if (product) {
         await product.deleteOne();
         res.json({ message: "Product removed" });

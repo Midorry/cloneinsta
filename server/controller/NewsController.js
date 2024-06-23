@@ -16,6 +16,34 @@ export const addNews = async (req, res, next) => {
     }
 };
 
+export const updateNews = async (req, res) => {
+    try {
+        const updatedNews = await News.findByIdAndUpdate(
+            req.params.id,
+            {
+                $set: req.body,
+            },
+            { new: true }
+        );
+
+        res.status(200).json(updatedNews);
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
+export const deleteNews = async (req, res) => {
+    try {
+        const news = await News.findById(req.params.id);
+        if (news) {
+            await news.deleteOne();
+            res.json({ message: "News removed" });
+        }
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};
+
 export const getNews = async (req, res, next) => {
     try {
         const id = req.params.id;

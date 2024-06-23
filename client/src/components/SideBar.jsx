@@ -8,11 +8,11 @@ const SideBar = () => {
         <div>
             <div className="sidebar1 pe-4 pb-3">
                 <nav className="navbar bg-light navbar-light">
-                    <a href="index.html" className="navbar-brand mx-4 mb-3">
+                    <NavLink to="/admin" className="navbar-brand mx-4 mb-3">
                         <h3 className="text-primary">
                             <i className="fa fa-hashtag me-2"></i>DASHMIN
                         </h3>
-                    </a>
+                    </NavLink>
                     <div className="d-flex align-items-center ms-4 mb-4">
                         <div className="position-relative">
                             <img
@@ -91,9 +91,37 @@ const SideBar = () => {
                                 </NavLink>
                             </div>
                         </div>
-                        <NavLink to="/add-news" className="nav-item nav-link">
-                            <i className="fa fa-newspaper me-2"></i>Add News
-                        </NavLink>
+                        <div className="dropdown">
+                            <button
+                                className="btn  dropdown-toggle text-left nav-link"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <i className="fa fa-newspaper me-2"></i> News
+                            </button>
+                            <div
+                                className="dropdown-menu"
+                                aria-labelledby="dropdownMenuButton"
+                            >
+                                <NavLink
+                                    to="/list-news"
+                                    className="nav-item nav-link"
+                                >
+                                    <i className="fa fa-newspaper me-2"></i>List
+                                    News
+                                </NavLink>
+                                <NavLink
+                                    to="/add-news"
+                                    className="nav-item nav-link"
+                                >
+                                    <i className="fa fa-newspaper me-2"></i>Add
+                                    News
+                                </NavLink>
+                            </div>
+                        </div>
                         <NavLink to="/order" className="nav-item nav-link">
                             <i className="fa fa-cart-arrow-down me-2"></i>Order
                         </NavLink>

@@ -33,7 +33,7 @@
 html,
 body {
     height: 100%;
-    font-family: "Heebo", sans-serif;
+    font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     font-smoothing: antialiased;
 }
@@ -47,7 +47,7 @@ h6 {
     margin: 0;
     color: #111111;
     font-weight: 400;
-    font-family: "Heebo", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 h1 {
@@ -405,18 +405,45 @@ ol {
 .header__top__right__menu {
     position: absolute;
     content: "";
-    width: 100px;
+    width: max-content;
     /* height: 100px; */
-    background: #f1eded;
-    right: 0;
-    top: 40px;
+    display: none;
+    background: white;
+    right: -15px;
+    top: 43px;
     z-index: 1;
     border-radius: 4px;
 }
 
+.header__top__right__menu::before {
+    content: "";
+    display: block;
+    position: absolute;
+    border-width: 17px 25px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+    top: -27px;
+    right: 5px;
+    z-index: 0;
+}
+
 .header__top__right__menu li {
-    border-bottom: 1px solid #009cff;
-    margin: 5px;
+    text-align: start;
+    font-size: 14px;
+    margin: 10px;
+}
+
+.header__top__right__menu li a {
+    color: #000;
+}
+
+.header__top__right__menu li a:hover,
+.header__top__right__menu li:hover {
+    color: #009cff;
+}
+
+.header__top__right__auth:hover .header__top__right__menu {
+    display: block;
 }
 
 .header__top__right__auth a {
@@ -625,6 +652,10 @@ ol {
     background: #ffffff;
 }
 
+.hero.hero-normal .hero__categories ul li {
+    padding-bottom: 10px;
+}
+
 .hero.hero-normal .hero__search {
     margin-bottom: 0;
 }
@@ -669,7 +700,7 @@ ol {
     list-style: none;
 }
 
-.hero__categories ul li a {
+.hero__categories ul li button {
     font-size: 16px;
     color: #1c1c1c;
     line-height: 39px;
@@ -826,10 +857,12 @@ ol {
     width: 100%;
     padding: 0 20px;
     bottom: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
-.categories__item h5 a {
+.categories__item h5 button {
+    width: 80%;
     font-size: 18px;
     color: #1c1c1c;
     font-weight: 700;

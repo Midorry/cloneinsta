@@ -105,9 +105,13 @@ const AddUser = () => {
                     values,
                     handleChange,
                     errors,
+                    resetForm,
                 }) => (
                     <form onSubmit={handleSubmit} className="w-1/2 m-auto">
-                        <label htmlFor="firstName">First Name</label>
+                        <h3 className="my-3 text-center">
+                            THÊM MỚI NGƯỜI DÙNG
+                        </h3>
+                        <label htmlFor="firstName">Họ</label>
                         <input
                             id="firstName"
                             name="firstName"
@@ -123,7 +127,7 @@ const AddUser = () => {
                             </div>
                         ) : null}
 
-                        <label htmlFor="lastName">Last Name</label>
+                        <label htmlFor="lastName">Tên</label>
                         <input
                             id="lastName"
                             name="lastName"
@@ -190,7 +194,7 @@ const AddUser = () => {
                         </Dropzone>
                         <aside>{thumbs}</aside>
 
-                        <label htmlFor="email">Email Address</label>
+                        <label htmlFor="email">Email</label>
                         <input
                             id="email"
                             name="email"
@@ -220,7 +224,7 @@ const AddUser = () => {
                             </div>
                         ) : null}
 
-                        <label htmlFor="address">Address</label>
+                        <label htmlFor="address">Địa chỉ</label>
                         <input
                             id="address"
                             name="address"
@@ -252,9 +256,15 @@ const AddUser = () => {
                         <div>
                             <button
                                 type="submit"
-                                className="w-full bg-blue-400 h-10 rounded-md"
+                                className="w-1/2 bg-blue-400 pr-2 text-white h-10 rounded-md"
                             >
-                                Submit
+                                Thêm
+                            </button>
+                            <button
+                                onClick={resetForm}
+                                className="w-1/2 bg-blue-400 text-white h-10 rounded-md"
+                            >
+                                Reset Form
                             </button>
                         </div>
                     </form>

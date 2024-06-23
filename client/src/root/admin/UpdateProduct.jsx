@@ -106,13 +106,13 @@ const UpdateProduct = () => {
     };
 
     const validationProduct = yup.object({
-        categoryId: yup.string().required("Required"),
-        name: yup.string().required("Required"),
-        quantity: yup.number().required("Required"),
-        desc: yup.string().required("Required"),
-        price: yup.number().required("Required"),
-        image: yup.string().required("Required"),
-        promotion: yup.number().required("Required"),
+        categoryId: yup.string().required("Vui lòng điền trường này"),
+        name: yup.string().required("Vui lòng điền trường này"),
+        quantity: yup.number().required("Vui lòng điền trường này"),
+        desc: yup.string().required("Vui lòng điền trường này"),
+        price: yup.number().required("Vui lòng điền trường này"),
+        image: yup.string().required("Vui lòng điền trường này"),
+        promotion: yup.number().required("Vui lòng điền trường này"),
     });
 
     const handleUpload = async () => {
@@ -181,8 +181,8 @@ const UpdateProduct = () => {
             }) => (
                 <div className="m-4 pb-4">
                     <form onSubmit={handleSubmit} className="w-1/2 m-auto">
-                        <h3 className="mb-3">UPDATE PRODUCT</h3>
-                        <label htmlFor="name">Product Name</label>
+                        <h3 className="my-3 text-center">CẬP NHẬT SẢN PHẨM</h3>
+                        <label htmlFor="name">Tên sản phẩm</label>
                         <input
                             id="name"
                             name="name"
@@ -196,7 +196,7 @@ const UpdateProduct = () => {
                             <div className="text-red-500">{errors.name}</div>
                         ) : null}
 
-                        <label htmlFor="quantity">Quantity</label>
+                        <label htmlFor="quantity">Số lượng</label>
                         <input
                             id="quantity"
                             name="quantity"
@@ -276,7 +276,7 @@ const UpdateProduct = () => {
                         />
                         <aside>{thumbs}</aside>
 
-                        <label htmlFor="categoryId">Category</label>
+                        <label htmlFor="categoryId">Danh mục</label>
                         <Field
                             as="select"
                             name="categoryId"
@@ -291,7 +291,7 @@ const UpdateProduct = () => {
                             ))}
                         </Field>
 
-                        <label htmlFor="desc">Description</label>
+                        <label htmlFor="desc">Mô tả</label>
                         <textarea
                             id="desc"
                             name="desc"
@@ -304,7 +304,7 @@ const UpdateProduct = () => {
                             <div className="text-red-500">{errors.desc}</div>
                         ) : null}
 
-                        <label htmlFor="price">Price</label>
+                        <label htmlFor="price">Giá</label>
                         <input
                             id="price"
                             name="price"
@@ -318,7 +318,7 @@ const UpdateProduct = () => {
                             <div className="text-red-500">{errors.price}</div>
                         ) : null}
 
-                        <label htmlFor="promotion">Promotion</label>
+                        <label htmlFor="promotion">Khuyến mãi</label>
                         <input
                             id="promotion"
                             name="promotion"
@@ -338,13 +338,13 @@ const UpdateProduct = () => {
                             <button
                                 onClick={handleUpload}
                                 type="submit"
-                                className="w-1/2 pr-2 bg-blue-400 h-10 rounded-md"
+                                className="w-1/2 pr-2 bg-blue-400 text-white h-10 rounded-md"
                             >
-                                Update
+                                Cập nhật
                             </button>
                             <button
                                 onClick={resetForm}
-                                className="w-1/2 bg-blue-400 h-10 rounded-md"
+                                className="w-1/2 bg-blue-400 text-white h-10 rounded-md"
                             >
                                 Reset Form
                             </button>

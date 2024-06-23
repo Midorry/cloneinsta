@@ -2,7 +2,6 @@ import express from "express";
 import {
     deleteProduct,
     filterPrice,
-    filterProduct,
     getAllProducts,
     getProduct,
     search,
@@ -13,7 +12,7 @@ const router = express.Router();
 
 router.get("/", getAllProducts);
 router.get("/search", search);
-router.get("/filter", filterProduct);
+// router.get("/filter", filterProduct);
 router.get("/price", filterPrice);
 router.get("/:id", getProduct);
 
