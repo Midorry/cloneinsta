@@ -257,9 +257,9 @@ const Checkout = () => {
                                         <div>
                                             <button
                                                 type="submit"
-                                                className="w-full bg-blue-400 h-10 rounded-md"
+                                                className="w-full bg-blue-400 text-white h-10 rounded-md"
                                             >
-                                                Submit
+                                                Đặt Hàng
                                             </button>
                                         </div>
                                     </form>

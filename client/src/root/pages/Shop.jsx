@@ -250,7 +250,7 @@ export const Shop = () => {
                                     <div className="latest-product__text">
                                         <h4>Sản Phẩm Mới</h4>
                                         <Slider
-                                            className="latest-product__slider owl-carousel"
+                                            className="latest-product__slider"
                                             {...settingsTwoRow}
                                         >
                                             <div className="latest-prdouct__slider__item">
@@ -331,7 +331,7 @@ export const Shop = () => {
                                 </div>
                                 <div className="row">
                                     <Slider
-                                        className="product__discount__slider owl-carousel"
+                                        className="product__discount__slider"
                                         {...settings}
                                     >
                                         {products?.map((product, index) => {
@@ -486,9 +486,11 @@ export const Shop = () => {
                                                         </div>
                                                         <ul className="product__item__pic__hover">
                                                             <li>
-                                                                <a href="#">
+                                                                <NavLink
+                                                                    to={`/shop-details/${product._id}`}
+                                                                >
                                                                     <i className="fa fa-shopping-cart"></i>
-                                                                </a>
+                                                                </NavLink>
                                                             </li>
                                                         </ul>
                                                     </div>

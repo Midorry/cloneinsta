@@ -145,14 +145,12 @@ const Home = () => {
             <section className="categories">
                 <div className="container">
                     <div className="row">
-                        <Slider
-                            className="categories__slider owl-carousel owl-theme"
-                            {...settings}
-                        >
+                        <Slider className="categories__slider" {...settings}>
                             {listProducts?.map((product, index) => (
                                 <div key={index} className="col-lg-3">
-                                    <div className="categories__item set-bg item">
+                                    <div className="categories__item">
                                         <img
+                                            className="categories__item"
                                             src={`http://localhost:3002/assets/${product.image}`}
                                         ></img>
                                         <h5>

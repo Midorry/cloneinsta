@@ -182,7 +182,7 @@ const NewsDetail = () => {
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="section-title related-blog-title">
-                                <h2>Post You May Like</h2>
+                                <h2>Bài viết bạn có thể thích</h2>
                             </div>
                         </div>
                     </div>

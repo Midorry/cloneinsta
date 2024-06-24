@@ -36,7 +36,7 @@ const SideBar = () => {
                         </NavLink>
                         <div className="dropdown">
                             <button
-                                className="btn  dropdown-toggle text-left nav-link"
+                                className="btn  dropdown-toggle !text-left nav-link"
                                 type="button"
                                 id="dropdownMenuButton"
                                 data-toggle="dropdown"
@@ -68,7 +68,7 @@ const SideBar = () => {
                         </div>
                         <div className="dropdown">
                             <button
-                                className="btn  dropdown-toggle text-left nav-link"
+                                className="btn  dropdown-toggle !text-left nav-link"
                                 type="button"
                                 id="dropdownMenuButton"
                                 data-toggle="dropdown"
@@ -93,7 +93,7 @@ const SideBar = () => {
                         </div>
                         <div className="dropdown">
                             <button
-                                className="btn  dropdown-toggle text-left nav-link"
+                                className="btn  dropdown-toggle !text-left nav-link"
                                 type="button"
                                 id="dropdownMenuButton"
                                 data-toggle="dropdown"

@@ -62,7 +62,7 @@ function Users() {
                                 <TableCell scope="col">Last Name</TableCell>
                                 <TableCell scope="col">Email</TableCell>
                                 <TableCell scope="col">Address</TableCell>
-                                <TableCell scope="col">Image</TableCell>
+                                <TableCell scope="col">Avatar</TableCell>
                                 <TableCell scope="col">Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -92,35 +92,37 @@ function Users() {
                                                 ></img>
                                             </TableCell>
                                             <TableCell>
-                                                <NavLink
-                                                    to={`/update-user/${user._id}`}
-                                                    className="btn btn-sm btn-primary w-16 mx-2"
-                                                >
-                                                    Update
-                                                </NavLink>
-                                                <button
-                                                    className="btn btn-sm btn-primary w-16"
-                                                    onClick={async () =>
-                                                        await axios
-                                                            .delete(
-                                                                `http://localhost:3002/api/user/delete/${user._id}`
-                                                            )
-                                                            .then(function (
-                                                                response
-                                                            ) {
-                                                                setIsDelete(
-                                                                    !isDelete
-                                                                );
-                                                                notifyDelete();
-                                                                console.log(
+                                                <div className="flex items-center">
+                                                    <NavLink
+                                                        to={`/update-user/${user._id}`}
+                                                        className="btn btn-sm btn-primary w-16"
+                                                    >
+                                                        Update
+                                                    </NavLink>
+                                                    <button
+                                                        className="btn btn-sm btn-primary w-16"
+                                                        onClick={async () =>
+                                                            await axios
+                                                                .delete(
+                                                                    `http://localhost:3002/api/user/delete/${user._id}`
+                                                                )
+                                                                .then(function (
                                                                     response
-                                                                );
-                                                                // window.location.reload();
-                                                            })
-                                                    }
-                                                >
-                                                    Delete
-                                                </button>
+                                                                ) {
+                                                                    setIsDelete(
+                                                                        !isDelete
+                                                                    );
+                                                                    notifyDelete();
+                                                                    console.log(
+                                                                        response
+                                                                    );
+                                                                    // window.location.reload();
+                                                                })
+                                                        }
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </TableCell>
                                         </TableRow>
                                     ))}
