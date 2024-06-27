@@ -22,13 +22,13 @@ const UserLayout = () => {
                             <div className="navbar-nav w-100">
                                 <NavLink
                                     to="/user-detail"
-                                    className="nav-link ml-0 text-black"
+                                    className="nav-link ml-2 text-black"
                                 >
                                     Thông tin cá nhân
                                 </NavLink>
                                 <NavLink
                                     to="/user-order"
-                                    className="nav-link nav-item ml-0 text-black"
+                                    className="nav-link ml-2 text-black"
                                 >
                                     Đơn hàng
                                 </NavLink>

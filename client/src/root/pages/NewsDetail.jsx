@@ -166,12 +166,14 @@ const NewsDetail = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <h3>{news?.title}</h3>
-                                <img
-                                    src={`http://localhost:3002/assets/${news?.image}`}
-                                    alt=""
-                                />
-                                <p>{news?.desc}</p>
+                                <div className="flex items-center justify-center flex-col">
+                                    <h3>{news?.title}</h3>
+                                    <img
+                                        src={`http://localhost:3002/assets/${news?.image}`}
+                                        alt=""
+                                    />
+                                    <p>{news?.desc}</p>
+                                </div>
                             </div>
                         </div>
                     </div>

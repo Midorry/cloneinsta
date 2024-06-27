@@ -63,7 +63,7 @@ const UserDetail = () => {
     );
 
     useEffect(() => {
-        if (isSuccess) navigate("/list-user");
+        if (isSuccess) navigate("/user-detail");
     }, [isSuccess]);
 
     console.log(user);
@@ -137,7 +137,7 @@ const UserDetail = () => {
                         })
                         .catch(function (error) {
                             onSubmitProps.setErrors({
-                                email: "Email already exists",
+                                email: "Email đã tồn tại",
                             });
                             console.log(error.response.data);
                             console.log(error.response);

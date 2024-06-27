@@ -37,12 +37,15 @@ const Checkout = () => {
     };
 
     const validationRegister = yup.object({
-        firstName: yup.string().required("required"),
-        lastName: yup.string().required("required"),
-        payments: yup.string().required("required"),
-        address: yup.string().required("required"),
-        email: yup.string().email("invalid email").required("required"),
-        phoneNumber: yup.string().required("required"),
+        firstName: yup.string().required("Vui lòng điền trường này"),
+        lastName: yup.string().required("Vui lòng điền trường này"),
+        payments: yup.string().required("Vui lòng chọn phương thức thanh toán"),
+        address: yup.string().required("Vui lòng điền trường này"),
+        email: yup
+            .string()
+            .email("Email không hợp lệ!")
+            .required("Vui lòng điền trường này"),
+        phoneNumber: yup.string().required("Vui lòng điền trường này"),
     });
 
     return (

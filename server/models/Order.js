@@ -6,16 +6,19 @@ const OrderSchema = new mongoose.Schema(
     {
         userId: {
             type: String,
+            required: true,
         },
         cartId: {
             type: String,
-            // required: true,
+            required: true,
         },
         payments: {
             type: String,
+            required: true,
         },
         address: {
             type: String,
+            required: true,
         },
         dateOrder: {
             type: Date,
@@ -31,6 +34,7 @@ const OrderSchema = new mongoose.Schema(
         },
         total: {
             type: Number,
+            default: 0,
         },
     },
     { timestamps: true }

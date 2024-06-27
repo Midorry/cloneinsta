@@ -8,7 +8,7 @@ const ProductsSchema = new mongoose.Schema(
         },
         name: {
             type: String,
-            required: true,
+            default: "",
         },
         quantity: {
             type: Number,
@@ -16,6 +16,7 @@ const ProductsSchema = new mongoose.Schema(
         },
         desc: {
             type: String,
+            default: "",
         },
         price: {
             type: Number,

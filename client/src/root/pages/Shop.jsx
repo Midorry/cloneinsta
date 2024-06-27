@@ -9,6 +9,7 @@ export const Shop = () => {
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [productLatest, setProductLatest] = useState([]);
+    const [isSortPrice, setIsSortPrice] = useState(false);
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
     const [currentPage, setCurrentPage] = useState(1);
@@ -233,12 +234,15 @@ export const Shop = () => {
                                                 />
                                             </div>
                                             <button
-                                                onClick={() =>
+                                                onClick={() => {
                                                     filterPrice(
                                                         minPrice,
                                                         maxPrice
-                                                    )
-                                                }
+                                                    );
+                                                    setIsSortPrice(
+                                                        !isSortPrice
+                                                    );
+                                                }}
                                                 className="btn btn-sm btn-primary"
                                             >
                                                 Áp Dụng

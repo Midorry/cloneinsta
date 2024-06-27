@@ -43,6 +43,7 @@ export const SearchProvider = ({ children }) => {
                     setValueSearch(valueSearch);
                 } else {
                     console.log(response.data);
+                    setValueSearch(response.data);
                 }
             })
             .catch(function (error) {

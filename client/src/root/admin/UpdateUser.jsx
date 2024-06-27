@@ -74,6 +74,7 @@ const UpdateUser = () => {
         // password: user.password,
         address: user.address,
         isAdmin: false,
+        phoneNumber: user.phoneNumber,
         picture: user.picturePath,
     };
 
@@ -87,6 +88,7 @@ const UpdateUser = () => {
         // password: yup.string().required("Vui lòng điền trường này"),
         address: yup.string().required("Vui lòng điền trường này"),
         isAdmin: yup.bool().required("Vui lòng điền trường này"),
+        phoneNumber: yup.string().required("Vui lòng điền trường này"),
         picture: yup.string().required("Vui lòng điền trường này"),
     });
 
@@ -127,6 +129,7 @@ const UpdateUser = () => {
                             // password,
                             address: values.address,
                             isAdmin: values.isAdmin,
+                            phoneNumber: values.phoneNumber,
                             picturePath: file.name,
                         }
                     )
@@ -136,7 +139,7 @@ const UpdateUser = () => {
                     })
                     .catch(function (error) {
                         onSubmitProps.setErrors({
-                            email: "Email already exists",
+                            email: "Email đã tồn tại",
                         });
                         console.log(error.response.data);
                         console.log(error.response);
@@ -230,6 +233,19 @@ const UpdateUser = () => {
                             Yes
                         </option>
                     </Field>
+                    <label htmlFor="address">Số điện thoại</label>
+                    <input
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        type="text"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.phoneNumber}
+                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                    />
+                    {errors.phoneNumber ? (
+                        <div className="text-red-500">{errors.phoneNumber}</div>
+                    ) : null}
 
                     <div>
                         <button

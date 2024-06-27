@@ -147,9 +147,6 @@ const AddNews = () => {
                                 >
                                     <label htmlFor="image">Ảnh</label>
                                     <input {...getInputProps()} />
-                                    {/* {errors.picture ? (
-                                    <div className="text-red-500">{errors.picture}</div>
-                                ) : null} */}
                                     <p>
                                         Drag drop some files here, or click to
                                         select files

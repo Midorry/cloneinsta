@@ -62,6 +62,8 @@ function Users() {
                                 <TableCell scope="col">Last Name</TableCell>
                                 <TableCell scope="col">Email</TableCell>
                                 <TableCell scope="col">Address</TableCell>
+                                <TableCell scope="col">Role</TableCell>
+                                <TableCell scope="col">Phone Number</TableCell>
                                 <TableCell scope="col">Avatar</TableCell>
                                 <TableCell scope="col">Action</TableCell>
                             </TableRow>
@@ -86,13 +88,21 @@ function Users() {
                                                 {user.address}
                                             </TableCell>
                                             <TableCell>
+                                                {user.isAdmin
+                                                    ? "Admin"
+                                                    : "Customer"}
+                                            </TableCell>
+                                            <TableCell>
+                                                {user.phoneNumber}
+                                            </TableCell>
+                                            <TableCell>
                                                 <img
                                                     className="table-image"
                                                     src={`http://localhost:3002/assets/${user.picturePath}`}
                                                 ></img>
                                             </TableCell>
                                             <TableCell>
-                                                <div className="flex items-center">
+                                                <div className="text-center">
                                                     <NavLink
                                                         to={`/update-user/${user._id}`}
                                                         className="btn btn-sm btn-primary w-16"

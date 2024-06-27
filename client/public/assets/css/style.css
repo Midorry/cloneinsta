@@ -421,11 +421,12 @@ ol {
     position: absolute;
     content: "";
     width: max-content;
+    min-width: 127px;
     /* height: 100px; */
     display: none;
     background: white;
-    right: -15px;
-    top: 43px;
+    right: -23px;
+    top: 35px;
     z-index: 1;
     border-radius: 4px;
 }
@@ -436,7 +437,7 @@ ol {
     position: absolute;
     border-width: 17px 25px;
     border-style: solid;
-    border-color: transparent transparent white transparent;
+    border-color: transparent transparent transparent transparent;
     top: -27px;
     right: 5px;
     z-index: 0;

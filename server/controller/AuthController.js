@@ -10,6 +10,7 @@ export const register = async (req, res) => {
             email,
             password,
             address,
+            phoneNumber,
             picturePath,
             isAdmin,
         } = req.body;
@@ -23,6 +24,7 @@ export const register = async (req, res) => {
             email,
             password: passwordHash,
             address,
+            phoneNumber,
             picturePath,
             isAdmin,
         });

@@ -12,10 +12,12 @@ const ProfileMenu = () => {
                 {isAuthenticated && (
                     <>
                         <li>
-                            <NavLink to="/user">Tài khoản của tôi</NavLink>
+                            <NavLink to="/user-detail">
+                                Tài khoản của tôi
+                            </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/user">Đơn mua</NavLink>
+                            <NavLink to="/user-order">Đơn mua</NavLink>
                         </li>
                     </>
                 )}

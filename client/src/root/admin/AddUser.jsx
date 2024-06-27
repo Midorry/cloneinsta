@@ -49,6 +49,7 @@ const AddUser = () => {
         password: "",
         address: "",
         isAdmin: false,
+        phoneNumber: "",
         picture: "",
     };
 
@@ -59,6 +60,7 @@ const AddUser = () => {
         password: yup.string().required("required"),
         address: yup.string().required("required"),
         isAdmin: yup.bool().required("required"),
+        phoneNumber: yup.string().required("Vui lòng điền trường này"),
         picture: yup.string().required("required"),
     });
     return (
@@ -71,6 +73,7 @@ const AddUser = () => {
                     for (let value in values) {
                         formData.append(value, values[value]);
                     }
+                    console.log(values);
                     formData.append("picturePath", values.picture.name);
                     await axios
                         .post(
@@ -90,7 +93,7 @@ const AddUser = () => {
                         })
                         .catch(function (error) {
                             onSubmitProps.setErrors({
-                                email: "Email already exists",
+                                email: "Email đã tồn tại",
                             });
                             console.log(error.response.data);
                             console.log(error.response);
@@ -252,6 +255,22 @@ const AddUser = () => {
                                 Yes
                             </option>
                         </Field>
+
+                        <label htmlFor="address">Số điện thoại</label>
+                        <input
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            type="text"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.phoneNumber}
+                            className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                        />
+                        {errors.phoneNumber ? (
+                            <div className="text-red-500">
+                                {errors.phoneNumber}
+                            </div>
+                        ) : null}
 
                         <div>
                             <button
