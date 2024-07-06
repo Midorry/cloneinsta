@@ -2,18 +2,12 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
-const UpdateNews = () => {
-    const [isSuccess, setIsSuccess] = useState(false);
+const UpdateNews = (props) => {
     const [news, setNews] = useState([]);
-    const navigate = useNavigate();
     const [files, setFiles] = useState([]);
     const [file, setFile] = useState();
-
-    const id = useParams();
-    console.log(id);
-
     const removeFile = (file) => () => {
         const newFiles = [...files];
         newFiles.splice(newFiles.indexOf(file), 1);
@@ -31,9 +25,11 @@ const UpdateNews = () => {
         );
     });
 
-    const getUser = async () => {
+    console.log(props.id);
+
+    const getNews = async () => {
         await axios
-            .get(`http://localhost:3002/api/news/${id.id}`, {
+            .get(`http://localhost:3002/api/news/${props.id}`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -50,7 +46,7 @@ const UpdateNews = () => {
             });
     };
     useEffect(() => {
-        getUser();
+        getNews();
     }, []);
 
     useEffect(
@@ -60,10 +56,6 @@ const UpdateNews = () => {
         },
         [files]
     );
-
-    useEffect(() => {
-        if (isSuccess) navigate("/list-news");
-    }, [isSuccess]);
 
     console.log(news);
 
@@ -80,7 +72,6 @@ const UpdateNews = () => {
     });
 
     const handleUpload = async () => {
-        console.log(news.image);
         if (file == undefined) {
             setFile(news.image);
             const data = new FormData();
@@ -92,7 +83,6 @@ const UpdateNews = () => {
                 .catch((err) => console.log(err));
         } else {
             const data = new FormData();
-            console.log(file);
             data.append("image", file);
             await axios
                 .post("http://localhost:3002/upload", data)
@@ -126,7 +116,7 @@ const UpdateNews = () => {
                     )
                     .then(function (response) {
                         console.log(response);
-                        setIsSuccess(true);
+                        toast("Update News Success");
                     })
                     .catch(function (error) {
                         console.log(error.response.data);
@@ -136,62 +126,101 @@ const UpdateNews = () => {
             }}
         >
             {({ handleSubmit, handleBlur, values, handleChange, errors }) => (
-                <form onSubmit={handleSubmit} className="w-1/2 m-auto">
-                    <h3 className="my-3 text-center">CẬP NHẬT TIN TỨC</h3>
-                    <label htmlFor="firstName">Tiêu đề</label>
-                    <input
-                        id="title"
-                        name="title"
-                        type="text"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.title}
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
-                    />
-                    {errors.title ? (
-                        <div className="text-red-500">{errors.title}</div>
-                    ) : null}
-
-                    <label htmlFor="lastName">Nội dung</label>
-                    <textarea
-                        id="desc"
-                        name="desc"
-                        type="text"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.desc}
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-52 mb-3 outline-none p-2"
-                    />
-                    {errors.desc ? (
-                        <div className="text-red-500">{errors.desc}</div>
-                    ) : null}
-                    <label htmlFor="image">New Image</label>
-                    <input
-                        name="image"
-                        type="file"
-                        onChange={(e) => {
-                            setFile(e.target.files[0]);
-                        }}
-                    />
-                    <label htmlFor="oldImage">Old Image</label>
-                    <img
-                        src={`http://localhost:3002/assets/${news.image}`}
-                        alt=""
-                    />
-                    <aside>{thumbs}</aside>
-
-                    <div>
+                <>
+                    <div className="absolute top-0 left-0 w-full bg-black h-screen opacity-20"></div>
+                    <div className="m-4 p-4 absolute -top-5 left-[10%] bg-white w-max rounded">
                         <button
                             onClick={() => {
-                                handleUpload();
+                                props.setIsUpdate(!props.isUpdate);
                             }}
-                            type="submit"
-                            className="w-full bg-blue-400 text-white h-10 my-3 rounded-md"
+                            className="btn btn-sm btn-primary !bg-white !leading-none !border-red-500 !text-red-500 absolute right-0 top-0"
                         >
-                            Cập nhật
+                            x
                         </button>
+                        <form onSubmit={handleSubmit} className="w-full m-auto">
+                            <h3 className="my-3 text-center">
+                                CẬP NHẬT TIN TỨC
+                            </h3>
+                            <label htmlFor="firstName">Tiêu đề</label>
+                            <input
+                                id="title"
+                                name="title"
+                                type="text"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.title}
+                                className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
+                            />
+                            {errors.title ? (
+                                <div className="text-red-500">
+                                    {errors.title}
+                                </div>
+                            ) : null}
+
+                            <label htmlFor="lastName">Nội dung</label>
+                            <textarea
+                                id="desc"
+                                name="desc"
+                                type="text"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.desc}
+                                className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-52 mb-3 outline-none p-2"
+                            />
+                            {errors.desc ? (
+                                <div className="text-red-500">
+                                    {errors.desc}
+                                </div>
+                            ) : null}
+                            <div className="flex justify-between">
+                                <div className="pr-2">
+                                    <label htmlFor="image">New Image</label>
+                                    <input
+                                        name="image"
+                                        type="file"
+                                        onChange={(e) => {
+                                            setFile(e.target.files[0]);
+                                        }}
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="oldImage">Old Image</label>
+                                    <img
+                                        className="w-full h-[200px] object-cover"
+                                        src={`http://localhost:3002/assets/${news.image}`}
+                                        alt=""
+                                    />
+                                </div>
+                            </div>
+                            <aside>{thumbs}</aside>
+
+                            <div>
+                                <button
+                                    onClick={() => {
+                                        handleUpload();
+                                    }}
+                                    type="submit"
+                                    className="w-full bg-blue-400 text-white h-10 my-3 rounded-md"
+                                >
+                                    Cập nhật
+                                </button>
+                            </div>
+                        </form>
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="light"
+                            transition:Bounce
+                        ></ToastContainer>
                     </div>
-                </form>
+                </>
             )}
         </Formik>
     );

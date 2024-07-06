@@ -31,6 +31,7 @@ import ListNews from "./root/admin/ListNews";
 import UpdateNews from "./root/admin/UpdateNews";
 import UserLayout from "./components/UserLayout";
 import UserDetail from "./root/pages/UserDetail";
+import PaymentSuccess from "./components/PaymentSuccess";
 
 const App = () => {
     return (
@@ -57,6 +58,10 @@ const App = () => {
                         <Route path="/user-order" element={<UserOrder />} />
                         <Route path="/user-detail" element={<UserDetail />} />
                     </Route>
+                    <Route
+                        path="/payment_success"
+                        element={<PaymentSuccess />}
+                    />
                 </Route>
 
                 <Route element={<AdminLayout />}>

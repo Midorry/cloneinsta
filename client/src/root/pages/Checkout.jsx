@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Field, Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
@@ -10,20 +10,56 @@ const Checkout = () => {
     const [isSuccess, setIsSuccess] = useState(false);
 
     const { userData } = useAuth();
-    const { cart, cartId, clearCart, createNewCart } = useCart();
+    const { cart, currentCartId, clearCart, createNewCart } = useCart();
+
+    let cartId = currentCartId.current;
+    console.log(currentCartId);
+    console.log(cartId);
+    // if (JSON.parse(localStorage.getItem("user_cart"))) {
+    //     cartId = JSON.parse(localStorage.getItem("user_cart")).cartId;
+    // }
 
     let total = 0;
 
     cart.products?.map((product) => {
-        total = total + product.quantity * product.price;
+        total =
+            total +
+            product.quantity *
+                (product.price - (product.price / 100) * product.promotion);
     });
 
     console.log(cart);
     console.log(userData._id, userData);
 
-    useEffect(() => {
-        // updateProduct();
-    }, []);
+    const zaloPayment = async (id, total) => {
+        await axios
+            .post(
+                "http://localhost:3002/payment",
+                // formData,
+                {
+                    orderId: id,
+                    amount: total,
+                },
+                {
+                    withCredentials: false,
+                    headers: {
+                        // "Access-Control-Allow-Origin": "*",
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                }
+            )
+            .then(function (response) {
+                console.log(response);
+                window.location.replace(response.data.order_url);
+                // setIsSuccess(true);
+                clearCart();
+            })
+            .catch(function (error) {
+                console.log(error.response.data);
+                console.log(error.response);
+                console.log(error);
+            });
+    };
 
     console.log(cart);
 
@@ -104,9 +140,18 @@ const Checkout = () => {
                                         )
                                         .then(function (response) {
                                             console.log(response);
-                                            setIsSuccess(true);
-
-                                            clearCart();
+                                            if (
+                                                response.data.payments ===
+                                                "Thanh toán bằng ZaloPay"
+                                            ) {
+                                                zaloPayment(
+                                                    response.data._id,
+                                                    response.data.total
+                                                );
+                                            } else {
+                                                setIsSuccess(true);
+                                                clearCart();
+                                            }
                                         })
                                         .catch(function (error) {
                                             console.log(error.response.data);
@@ -246,9 +291,9 @@ const Checkout = () => {
                                                     type="radio"
                                                     name="payments"
                                                     id="payments"
-                                                    value="Thanh toán bằng VNPay"
+                                                    value="Thanh toán bằng ZaloPay"
                                                 />
-                                                Thanh toán bằng Momo
+                                                Thanh toán bằng ZaloPay
                                             </label>
                                         </div>
                                         {errors.payments ? (
@@ -289,7 +334,10 @@ const Checkout = () => {
                                                             "de-DE"
                                                         ).format(
                                                             product.quantity *
-                                                                product.price
+                                                                (product.price -
+                                                                    (product.price /
+                                                                        100) *
+                                                                        product.promotion)
                                                         )}
                                                         đ
                                                     </span>

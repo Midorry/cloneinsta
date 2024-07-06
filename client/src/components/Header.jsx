@@ -96,7 +96,10 @@ const Header = () => {
     // };
 
     cart?.products?.map((product) => {
-        total = total + product.quantity * product.price;
+        total =
+            total +
+            product.quantity *
+                (product.price - (product.price / 100) * product.promotion);
     });
 
     useEffect(() => {

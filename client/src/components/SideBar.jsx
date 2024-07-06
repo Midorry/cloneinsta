@@ -56,72 +56,18 @@ const SideBar = () => {
                                     <i className="fa fa-list me-2"></i>
                                     List Product
                                 </NavLink>
-                                <NavLink to="/add-product" className="nav-link">
-                                    <i className="fa fa-plus me-2"></i>
-                                    Add Product
-                                </NavLink>
                                 <NavLink to="/category" className="nav-link">
                                     <i className="fa fa-table me-2"></i>
                                     Category
                                 </NavLink>
                             </div>
                         </div>
-                        <div className="dropdown">
-                            <button
-                                className="btn  dropdown-toggle !text-left nav-link"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                <i className="fa fa-user me-2"></i> User
-                            </button>
-                            <div
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                            >
-                                <NavLink to="/list-user" className="nav-link">
-                                    <i className="fa fa-users me-2"></i>List
-                                    User
-                                </NavLink>
-                                <NavLink to="/add-user" className="nav-link">
-                                    <i className="fa fa-user-plus me-2"></i>Add
-                                    User
-                                </NavLink>
-                            </div>
-                        </div>
-                        <div className="dropdown">
-                            <button
-                                className="btn  dropdown-toggle !text-left nav-link"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                <i className="fa fa-newspaper me-2"></i> News
-                            </button>
-                            <div
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                            >
-                                <NavLink
-                                    to="/list-news"
-                                    className="nav-item nav-link"
-                                >
-                                    <i className="fa fa-newspaper me-2"></i>List
-                                    News
-                                </NavLink>
-                                <NavLink
-                                    to="/add-news"
-                                    className="nav-item nav-link"
-                                >
-                                    <i className="fa fa-newspaper me-2"></i>Add
-                                    News
-                                </NavLink>
-                            </div>
-                        </div>
+                        <NavLink to="/list-user" className="nav-link">
+                            <i className="fa fa-users me-2"></i>List User
+                        </NavLink>
+                        <NavLink to="/list-news" className="nav-item nav-link">
+                            <i className="fa fa-newspaper me-2"></i>List News
+                        </NavLink>
                         <NavLink to="/order" className="nav-item nav-link">
                             <i className="fa fa-cart-arrow-down me-2"></i>Order
                         </NavLink>

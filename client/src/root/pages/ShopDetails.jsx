@@ -100,15 +100,28 @@ export const ShopDetails = () => {
             setCount(count + 1);
             const button = $(".value");
             const value = button.val();
+            let cartId;
+            if (JSON.parse(localStorage.getItem("user_cart"))) {
+                cartId = JSON.parse(localStorage.getItem("user_cart")).cartId;
+            }
             if (value > product.quantity) {
                 toast("Kho không đủ số lượng sản phầm");
             } else {
+                console.log(window.localStorage.getItem("haveCart"));
                 console.log(haveCart);
                 updateProduct(value);
                 setIsAddCart(!isAddCart);
-                haveCart
-                    ? addCart(userData, product, value)
-                    : createCart(userData, product, value);
+                if (window.localStorage.getItem("haveCart") === "true") {
+                    addCart(userData, product, value, cartId);
+                    console.log(window.localStorage.getItem("haveCart"));
+                    console.log(haveCart);
+                } else {
+                    createCart(userData, product, value);
+                    console.log(haveCart);
+                }
+                // window.localStorage.getItem("haveCart")
+                //     ? addCart(userData, product, value)
+                //     : createCart(userData, product, value);
                 toast("Thêm sản phẩm thành công!");
             }
         } else {

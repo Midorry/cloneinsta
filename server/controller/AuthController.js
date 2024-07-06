@@ -124,3 +124,26 @@ export const updateUser = async (req, res) => {
         res.status(500).json(err);
     }
 };
+
+export const filterUser = async (req, res) => {
+    const isAdmin = req.query.isAdmin;
+    const email = req.query.email;
+    try {
+        if (isAdmin) {
+            const users = await User.find({
+                isAdmin: isAdmin,
+            });
+            res.status(200).json(users);
+        } else if (email) {
+            const user = await User.find({
+                email: {
+                    $regex: email,
+                    $options: "i",
+                },
+            });
+            res.status(200).json(user);
+        }
+    } catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+};

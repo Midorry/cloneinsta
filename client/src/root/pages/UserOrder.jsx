@@ -17,14 +17,12 @@ const UserOrder = () => {
     const [cart, setCart] = useState([]);
     const [view, setView] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
-    const [isLoading, setIsLoading] = useState("");
     const [page, setPageChange] = useState(0);
     const [rowPerPage, rowPerPageChange] = useState(5);
 
     useEffect(() => {
         getListOrder();
-        setIsLoading(window.location.href);
-    }, [isLoading]);
+    }, [view]);
 
     const { userData } = useAuth();
 
@@ -47,19 +45,42 @@ const UserOrder = () => {
     const handleStatus = (status) => {
         if (status == "success")
             return (
-                <div className=" cursor-default text-center bg-green-200 w-24 border-2 border-solid border-green-500 text-green-500 rounded">
+                <div className=" cursor-default text-center bg-green-200 w-28 border-2 border-solid border-green-500 text-green-500 rounded">
                     Thành Công
                 </div>
             );
         else if (status == "cancel")
             return (
-                <div className=" cursor-default text-center bg-red-200 w-24 border-2 border-solid border-red-600 text-red-600 rounded">
+                <div className=" cursor-default text-center bg-red-200 w-28 border-2 border-solid border-red-600 text-red-600 rounded">
                     Đã Hủy
                 </div>
             );
+        else if (status == "delivering")
+            return (
+                <div className=" cursor-default text-center bg-yellow-100 w-28 border-2 border-solid border-yellow-500 text-yellow-500 rounded">
+                    Đang Giao Hàng
+                </div>
+            );
+        else if (status == "paid")
+            return (
+                <div className=" cursor-default text-center bg-red-200 w-28 border-2 border-solid border-red-600 text-red-600 rounded">
+                    Đã Thanh Toán
+                </div>
+            );
+        else if (status == "delivering paid")
+            return (
+                <>
+                    <div className=" cursor-default text-center mb-1 bg-yellow-100 w-28 border-2 border-solid border-yellow-500 text-yellow-500 rounded">
+                        Đã Thanh Toán
+                    </div>
+                    <div className=" cursor-default text-center bg-yellow-100 w-28 border-2 border-solid border-yellow-500 text-yellow-500 rounded">
+                        Đang Giao Hàng
+                    </div>
+                </>
+            );
         else
             return (
-                <div className=" cursor-default text-center bg-orange-200 w-24 border-2 border-solid border-orange-600 text-orange-600 rounded">
+                <div className=" cursor-default text-center bg-orange-200 w-28 border-2 border-solid border-orange-600 text-orange-600 rounded">
                     Đang xử lý
                 </div>
             );
@@ -67,12 +88,21 @@ const UserOrder = () => {
 
     const handleStatusChange = (status) => {
         console.log(status);
+        console.log(order._id);
         if (status == "success") {
             return <div className="text-red-500 font-bold">HOÀN THÀNH</div>;
         } else if (status == "pending") {
             return (
                 <button
-                    onClick={() => handleOnClick(order._id)}
+                    onClick={() => {
+                        if (
+                            confirm(
+                                "Bạn có chắc chắn muốn hủy đơn hàng này?"
+                            ) == true
+                        ) {
+                            handleOnClick(order._id);
+                        }
+                    }}
                     className="btn btn-sm btn-primary mt-3 mr-3"
                 >
                     HỦY ĐƠN
@@ -173,7 +203,9 @@ const UserOrder = () => {
                                             <TableCell>
                                                 {new Date(
                                                     order.dateOrder
-                                                ).toUTCString()}
+                                                ).toLocaleString("en-US", {
+                                                    timeZoneName: "short",
+                                                })}
                                             </TableCell>
 
                                             <TableCell>

@@ -144,7 +144,10 @@ export const ShoppingCart = () => {
     };
 
     cartItems?.map((product) => {
-        total = total + product.quantity * product.price;
+        total =
+            total +
+            product.quantity *
+                (product.price - (product.price / 100) * product.promotion);
     });
 
     useEffect(() => {
@@ -174,12 +177,12 @@ export const ShoppingCart = () => {
                                     <thead>
                                         <tr>
                                             <th className="shoping__product">
-                                                Sản phẩm
+                                                Sản Phẩm
                                             </th>
                                             <th>Giá</th>
-                                            <th>Số lượng</th>
+                                            <th className="w-32">Khuyến Mãi</th>
+                                            <th>Số Lượng</th>
                                             <th>Tổng</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -200,6 +203,9 @@ export const ShoppingCart = () => {
                                                     ).format(product.price)}
                                                     đ
                                                 </td>
+                                                <td className=" font-bold">
+                                                    {product.promotion}%
+                                                </td>
                                                 <td className="shoping__cart__quantity">
                                                     <div className="quantity">
                                                         {product.quantity}
@@ -210,7 +216,10 @@ export const ShoppingCart = () => {
                                                         "de-DE"
                                                     ).format(
                                                         product.quantity *
-                                                            product.price
+                                                            (product.price -
+                                                                (product.price /
+                                                                    100) *
+                                                                    product.promotion)
                                                     )}
                                                     đ
                                                 </td>

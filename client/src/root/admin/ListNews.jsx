@@ -10,11 +10,15 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import AddNews from "./AddNews";
+import UpdateNews from "./UpdateNews";
 
 function ListNews() {
     const [listNews, setListNews] = useState([]);
     const [isDelete, setIsDelete] = useState();
+    const [isAdd, setIsAdd] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
+    const [newsId, setNewsId] = useState();
 
     const [page, setPageChange] = useState(0);
     const [rowPerPage, rowPerPageChange] = useState(5);
@@ -49,10 +53,20 @@ function ListNews() {
     };
     useEffect(() => {
         getListNews();
-    }, [isDelete]);
+    }, [isDelete, isAdd, isUpdate]);
 
     return (
-        <div className="container-fluid pt-4 px-4">
+        <div className="container-fluid pt-4 px-4 relative">
+            <div className="flex justify-end mb-4">
+                <button
+                    onClick={() => {
+                        setIsAdd(!isAdd);
+                    }}
+                    className="btn btn-sm btn-primary"
+                >
+                    Add News
+                </button>
+            </div>
             <div className="bg-light text-center rounded p-4">
                 <TableContainer className="table-responsive">
                     <Table className="table text-start align-middle table-bordered table-hover mb-0">
@@ -90,31 +104,40 @@ function ListNews() {
                                                 ></img>
                                             </TableCell>
                                             <TableCell>
-                                                <NavLink
-                                                    to={`/update-news/${news._id}`}
+                                                <button
+                                                    onClick={() => {
+                                                        setNewsId(news._id);
+                                                        setIsUpdate(!isUpdate);
+                                                    }}
                                                     className="btn btn-sm btn-primary w-16 my-2"
                                                 >
                                                     Update
-                                                </NavLink>
+                                                </button>
                                                 <button
                                                     className="btn btn-sm btn-primary w-16"
-                                                    onClick={async () =>
-                                                        await axios
-                                                            .delete(
-                                                                `http://localhost:3002/api/news/delete/${news._id}`
+                                                    onClick={async () => {
+                                                        if (
+                                                            confirm(
+                                                                "Bạn có chắc chắn muốn xóa bài viết này?"
                                                             )
-                                                            .then(function (
-                                                                response
-                                                            ) {
-                                                                setIsDelete(
-                                                                    !isDelete
-                                                                );
-                                                                notifyDelete();
-                                                                console.log(
+                                                        ) {
+                                                            await axios
+                                                                .delete(
+                                                                    `http://localhost:3002/api/news/delete/${news._id}`
+                                                                )
+                                                                .then(function (
                                                                     response
-                                                                );
-                                                            })
-                                                    }
+                                                                ) {
+                                                                    setIsDelete(
+                                                                        !isDelete
+                                                                    );
+                                                                    notifyDelete();
+                                                                    console.log(
+                                                                        response
+                                                                    );
+                                                                });
+                                                        }
+                                                    }}
                                                 >
                                                     Delete
                                                 </button>
@@ -134,6 +157,14 @@ function ListNews() {
                     onRowsPerPageChange={handleRowsPerPage}
                 ></TablePagination>
             </div>
+            {isAdd ? <AddNews setIsAdd={setIsAdd} isAdd={isAdd} /> : null}
+            {isUpdate ? (
+                <UpdateNews
+                    setIsUpdate={setIsUpdate}
+                    isUpdate={isUpdate}
+                    id={newsId}
+                />
+            ) : null}
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

@@ -86,7 +86,7 @@ const SignUpForm = () => {
             ),
         address: yup.string().required("Vui lòng điền trường này"),
         phoneNumber: yup.string().required("Vui lòng điền trường này"),
-        picture: yup.string().required("Vui lòng thêm ảnh đại diện"),
+        picture: yup.mixed().required("Vui lòng thêm ảnh đại diện"),
     });
     return (
         <>
@@ -232,13 +232,11 @@ const SignUpForm = () => {
                                 >
                                     <label htmlFor="picturePath">Avatar</label>
                                     <input {...getInputProps()} />
-                                    {/* {errors.picture ? (
-                                    <div className="text-red-500">{errors.picture}</div>
-                                ) : null} */}
-                                    <p>
-                                        Drag drop some files here, or click to
-                                        select files
-                                    </p>
+                                    {errors.picture ? (
+                                        <div className="text-red-500">
+                                            {errors.picture}
+                                        </div>
+                                    ) : null}
                                     {isImage ? (
                                         <></>
                                     ) : (

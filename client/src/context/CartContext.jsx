@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const CartContext = createContext();
 
@@ -7,19 +7,22 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
     const [haveCart, setHaveCart] = useState(false);
     const [cart, setCart] = useState([]);
-    const [cartId, setCartId] = useState("");
+    // const [cartId, setCartId] = useState("");
+    let currentCartId = useRef("");
     const storedData = JSON.parse(localStorage.getItem("user_cart"));
 
     useEffect(() => {
         if (storedData) {
             const { products, cartId } = storedData;
-            setCartId(cartId);
+            currentCartId.current = cartId;
+            console.log(currentCartId.current);
             setCart((prev) => ({ ...prev, products }));
         }
         setHaveCart(window.localStorage.getItem("haveCart"));
     }, []);
 
     console.log(cart);
+    console.log(currentCartId.current);
 
     const getCart = async (userId) => {
         await axios
@@ -34,7 +37,7 @@ export const CartProvider = ({ children }) => {
                 if (getUserId === userId) {
                     localStorage.setItem("haveCart", true);
                     setHaveCart(true);
-                    // console.log();
+                    console.log(haveCart);
                 } else {
                     localStorage.setItem("haveCart", false);
                     setHaveCart(false);
@@ -48,7 +51,7 @@ export const CartProvider = ({ children }) => {
                     })
                 );
                 setCart((prev) => ({ ...prev, products }));
-                setCartId(response.data._id);
+                currentCartId.current = cartId;
                 setHaveCart(false);
             })
             .catch(function (error) {
@@ -86,7 +89,7 @@ export const CartProvider = ({ children }) => {
                 );
                 console.log(response);
                 setCart((prev) => ({ ...prev, products }));
-                setCartId(response.data._id);
+                currentCartId.current = response.data._id;
                 setHaveCart(true);
             })
             .catch(function (error) {
@@ -134,7 +137,7 @@ export const CartProvider = ({ children }) => {
                 );
                 console.log(response);
                 setCart((prev) => ({ ...prev, products }));
-                setCartId(response.data._id);
+                currentCartId.current = response.data._id;
                 setHaveCart(true);
             })
             .catch(function (error) {
@@ -144,7 +147,7 @@ export const CartProvider = ({ children }) => {
             });
     };
 
-    const addCart = async (userData, product, value) => {
+    const addCart = async (userData, product, value, cartId) => {
         const listProduct = [...cart.products];
         let sameProduct = false;
         for (let i = 0; i < listProduct?.length; i++) {
@@ -263,7 +266,7 @@ export const CartProvider = ({ children }) => {
         });
         await axios
             .put(
-                `http://localhost:3002/api/cart/${cartId}`,
+                `http://localhost:3002/api/cart/${currentCartId.current}`,
                 {
                     userId: cart.userId,
                     products: [
@@ -290,7 +293,7 @@ export const CartProvider = ({ children }) => {
                     JSON.stringify({
                         userId: userId,
                         products: products,
-                        cartId: cartId,
+                        cartId: currentCartId.current,
                     })
                 );
                 console.log(response);
@@ -306,7 +309,7 @@ export const CartProvider = ({ children }) => {
 
     const clearCart = () => {
         setCart([]);
-        setCartId("");
+        currentCartId.current = "";
         setHaveCart(false);
         localStorage.removeItem("user_cart");
         localStorage.removeItem("haveCart");
@@ -323,7 +326,7 @@ export const CartProvider = ({ children }) => {
         setCart,
         setHaveCart,
         createNewCart,
-        cartId,
+        currentCartId,
     };
 
     return (

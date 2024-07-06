@@ -2,17 +2,12 @@ import { Field, Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
-const UpdateUser = () => {
-    const [isSuccess, setIsSuccess] = useState(false);
+const UpdateUser = (props) => {
     const [user, setUser] = useState([]);
-    const navigate = useNavigate();
     const [files, setFiles] = useState([]);
     const [file, setFile] = useState();
-
-    const id = useParams();
-    console.log(id);
 
     const removeFile = (file) => () => {
         const newFiles = [...files];
@@ -33,7 +28,7 @@ const UpdateUser = () => {
 
     const getUser = async () => {
         await axios
-            .get(`http://localhost:3002/api/user/${id.id}`, {
+            .get(`http://localhost:3002/api/user/${props.id}`, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -60,10 +55,6 @@ const UpdateUser = () => {
         },
         [files]
     );
-
-    useEffect(() => {
-        if (isSuccess) navigate("/list-user");
-    }, [isSuccess]);
 
     console.log(user);
 
@@ -94,6 +85,7 @@ const UpdateUser = () => {
 
     const handleUpload = async () => {
         if (file == undefined) {
+            console.log(user.picturePath);
             setFile(user.picturePath);
         }
         const data = new FormData();
@@ -135,7 +127,7 @@ const UpdateUser = () => {
                     )
                     .then(function (response) {
                         console.log(response);
-                        setIsSuccess(true);
+                        toast("Update User Success");
                     })
                     .catch(function (error) {
                         onSubmitProps.setErrors({
@@ -148,117 +140,182 @@ const UpdateUser = () => {
             }}
         >
             {({ handleSubmit, handleBlur, values, handleChange, errors }) => (
-                <form onSubmit={handleSubmit} className="w-1/2 m-auto">
-                    <h3 className="my-3 text-center">CẬP NHẬT NGƯỜI DÙNG</h3>
-                    <label htmlFor="firstName">Họ</label>
-                    <input
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.firstName}
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
-                    />
-                    {errors.firstName ? (
-                        <div className="text-red-500">{errors.firstName}</div>
-                    ) : null}
-
-                    <label htmlFor="lastName">Tên</label>
-                    <input
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.lastName}
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
-                    />
-                    {errors.lastName ? (
-                        <div className="text-red-500">{errors.lastName}</div>
-                    ) : null}
-                    <label htmlFor="image">New Avatar</label>
-                    <input
-                        name="image"
-                        type="file"
-                        onChange={(e) => {
-                            setFile(e.target.files[0]);
-                        }}
-                    />
-                    <label htmlFor="oldImage">Old Avatar</label>
-                    <img
-                        src={`http://localhost:3002/assets/${user.picturePath}`}
-                        alt=""
-                    />
-                    <aside>{thumbs}</aside>
-
-                    <label htmlFor="email">Email</label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.email}
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
-                    />
-                    {errors.email ? (
-                        <div className="text-red-500">{errors.email}</div>
-                    ) : null}
-
-                    <label htmlFor="address">Địa chỉ</label>
-                    <input
-                        id="address"
-                        name="address"
-                        type="address"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.address}
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
-                    />
-                    {errors.address ? (
-                        <div className="text-red-500">{errors.address}</div>
-                    ) : null}
-                    <label htmlFor="isAdmin">Admin</label>
-                    <Field
-                        as="select"
-                        name="isAdmin"
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
-                        aria-label=".form-select-sm example"
-                    >
-                        <option name="admin" value={false}>
-                            No
-                        </option>
-                        <option name="admin" value={true}>
-                            Yes
-                        </option>
-                    </Field>
-                    <label htmlFor="address">Số điện thoại</label>
-                    <input
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        type="text"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.phoneNumber}
-                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
-                    />
-                    {errors.phoneNumber ? (
-                        <div className="text-red-500">{errors.phoneNumber}</div>
-                    ) : null}
-
-                    <div>
+                <>
+                    <div className="absolute top-0 left-0 w-full bg-black h-screen opacity-20"></div>
+                    <div className="m-4 p-4 absolute -top-5 left-[10%] bg-white w-max rounded">
                         <button
                             onClick={() => {
-                                handleUpload();
+                                props.setIsUpdate(!props.isUpdate);
                             }}
-                            type="submit"
-                            className="w-full bg-blue-400 text-white my-2 h-10 rounded-md"
+                            className="btn btn-sm btn-primary !bg-white !leading-none !border-red-500 !text-red-500 absolute right-0 top-0"
                         >
-                            Lưu
+                            x
                         </button>
+                        <form onSubmit={handleSubmit} className="w-full m-auto">
+                            <h3 className="my-3 text-center">
+                                CẬP NHẬT NGƯỜI DÙNG
+                            </h3>
+                            <div className="flex justify-between">
+                                <div className="pr-2 w-1/2">
+                                    <label htmlFor="firstName">Họ</label>
+                                    <input
+                                        id="firstName"
+                                        name="firstName"
+                                        type="text"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.firstName}
+                                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
+                                    />
+                                    {errors.firstName ? (
+                                        <div className="text-red-500">
+                                            {errors.firstName}
+                                        </div>
+                                    ) : null}
+                                </div>
+
+                                <div className="w-1/2">
+                                    <label htmlFor="lastName">Tên</label>
+                                    <input
+                                        id="lastName"
+                                        name="lastName"
+                                        type="text"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.lastName}
+                                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
+                                    />
+                                    {errors.lastName ? (
+                                        <div className="text-red-500">
+                                            {errors.lastName}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                            <div className="flex justify-between">
+                                <div className="pr-2  w-1/2">
+                                    <label htmlFor="image">New Avatar</label>
+                                    <input
+                                        name="image"
+                                        type="file"
+                                        onChange={(e) => {
+                                            setFile(e.target.files[0]);
+                                        }}
+                                    />
+                                </div>
+                                <div className="w-1/2">
+                                    <label htmlFor="oldImage">Old Avatar</label>
+                                    <img
+                                        className="w-full h-[200px] object-cover"
+                                        src={`http://localhost:3002/assets/${user.picturePath}`}
+                                        alt=""
+                                    />
+                                    <aside>{thumbs}</aside>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-between">
+                                <div className="pr-2  w-1/2">
+                                    <label htmlFor="email">Email</label>
+                                    <input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.email}
+                                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-3 outline-none p-2"
+                                    />
+                                    {errors.email ? (
+                                        <div className="text-red-500">
+                                            {errors.email}
+                                        </div>
+                                    ) : null}
+                                </div>
+
+                                <div className="w-1/2">
+                                    <label htmlFor="address">Địa chỉ</label>
+                                    <input
+                                        id="address"
+                                        name="address"
+                                        type="address"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.address}
+                                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                                    />
+                                    {errors.address ? (
+                                        <div className="text-red-500">
+                                            {errors.address}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                            <div className="flex justify-between">
+                                <div className="pr-2  w-1/2">
+                                    <label htmlFor="isAdmin">Admin</label>
+                                    <Field
+                                        as="select"
+                                        name="isAdmin"
+                                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                                        aria-label=".form-select-sm example"
+                                    >
+                                        <option name="admin" value={false}>
+                                            No
+                                        </option>
+                                        <option name="admin" value={true}>
+                                            Yes
+                                        </option>
+                                    </Field>
+                                </div>
+                                <div className="w-1/2">
+                                    <label htmlFor="address">
+                                        Số điện thoại
+                                    </label>
+                                    <input
+                                        id="phoneNumber"
+                                        name="phoneNumber"
+                                        type="text"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.phoneNumber}
+                                        className="border-gray-400 border-solid block w-full bg-gray-300 rounded-md h-10 mb-4 outline-none p-2"
+                                    />
+                                    {errors.phoneNumber ? (
+                                        <div className="text-red-500">
+                                            {errors.phoneNumber}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+
+                            <div>
+                                <button
+                                    onClick={() => {
+                                        handleUpload();
+                                    }}
+                                    type="submit"
+                                    className="w-full bg-blue-400 text-white my-2 h-10 rounded-md"
+                                >
+                                    Lưu
+                                </button>
+                            </div>
+                        </form>
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="light"
+                            transition:Bounce
+                        ></ToastContainer>
                     </div>
-                </form>
+                </>
             )}
         </Formik>
     );
