@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useSearch } from "../context/SearchContext";
 import ProfileMenu from "./ProfileMenu";
+import { toast, ToastContainer } from "react-toastify";
 const Header = () => {
     // const [cartItems, setCartItems] = useState();
     const [categories, setCategories] = useState([]);
@@ -188,18 +189,25 @@ const Header = () => {
                             <div className="header__cart">
                                 <ul>
                                     <li>
-                                        <NavLink
-                                            to={
-                                                isAuthenticated
-                                                    ? "/shopping-cart"
-                                                    : "/"
-                                            }
+                                        <button
+                                            onClick={() => {
+                                                if (isAuthenticated == false) {
+                                                    console.log(
+                                                        isAuthenticated
+                                                    );
+                                                    toast(
+                                                        "Bạn cần đăng nhập để thực hiện chức năng này!"
+                                                    );
+                                                } else {
+                                                    navigate("/shopping-cart");
+                                                }
+                                            }}
                                         >
                                             <i className="fa fa-shopping-bag"></i>{" "}
                                             <span>
                                                 {cart?.products?.length}
                                             </span>
-                                        </NavLink>
+                                        </button>
                                     </li>
                                 </ul>
                                 <div className="header__cart__price">
@@ -325,6 +333,19 @@ const Header = () => {
                     </div>
                 </div>
             </section>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition:Bounce
+            ></ToastContainer>
         </div>
     );
 };

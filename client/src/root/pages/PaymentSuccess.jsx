@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 const PaymentSuccess = () => {
     const searchParams = new URLSearchParams(window.location.search);
-    const orderId = searchParams.get("apptransid").split("_")[1];
+    const orderId = searchParams?.get("apptransid")?.split("_")[1];
     console.log(orderId);
     const updateOrder = async () => {
         await axios
@@ -35,7 +35,7 @@ const PaymentSuccess = () => {
         updateOrder();
     }, []);
     return (
-        <div className="container flex items-center justify-center h-[400px]">
+        <div className="container flex items-center justify-center h-[410px]">
             <div className="w-max text-center bg-[#F3F6F9] rounded mb-8 p-4">
                 <h2 className="text-red-500 mb-2">THANH TOÁN THÀNH CÔNG</h2>
                 <h4 className="mb-2">

@@ -56,7 +56,7 @@ const SignInForm = () => {
                         })
                         .catch(function (error) {
                             onSubmitProps.setErrors({
-                                email: "Invalid email or password",
+                                email: "Email hoặc mật khẩu không chính xác",
                             });
                             console.log(error.response.data);
                             console.log(error.response);

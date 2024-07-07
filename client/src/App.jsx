@@ -31,7 +31,7 @@ import ListNews from "./root/admin/ListNews";
 import UpdateNews from "./root/admin/UpdateNews";
 import UserLayout from "./components/UserLayout";
 import UserDetail from "./root/pages/UserDetail";
-import PaymentSuccess from "./components/PaymentSuccess";
+import PaymentSuccess from "./root/pages/PaymentSuccess";
 
 const App = () => {
     return (

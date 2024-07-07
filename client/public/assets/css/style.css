@@ -598,16 +598,16 @@ ol {
     margin-right: 0;
 }
 
-.header__cart ul li a {
+.header__cart ul li button {
     position: relative;
 }
 
-.header__cart ul li a i {
+.header__cart ul li button i {
     font-size: 18px;
     color: #1c1c1c;
 }
 
-.header__cart ul li a span {
+.header__cart ul li button span {
     height: 13px;
     width: 13px;
     background: #009cff;

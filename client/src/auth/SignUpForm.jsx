@@ -106,6 +106,7 @@ const SignUpForm = () => {
                     formData.append("email", values.email);
                     formData.append("password", values.password);
                     formData.append("address", values.address);
+                    formData.append("phoneNumber", values.phoneNumber);
                     formData.append("picturePath", values.picture.name);
                     // const firstName = values.firstName;
                     // const lastName = values.lastName;
@@ -158,8 +159,8 @@ const SignUpForm = () => {
                         onSubmit={handleSubmit}
                         className="m-auto lg:w-1/2 xl:w-1/2 sm:px-20 md:w-full md:px-20 lg:px-0 xl:px-0"
                     >
-                        <div className="">
-                            <div className="inline-block w-1/2 pr-1">
+                        <div className="flex">
+                            <div className="w-1/2 pr-1 flex flex-col items-start">
                                 <label
                                     htmlFor="firstName"
                                     className="block w-1/2"
@@ -182,7 +183,7 @@ const SignUpForm = () => {
                                 ) : null}
                             </div>
 
-                            <div className="inline-block w-1/2">
+                            <div className="w-1/2 flex flex-col items-start">
                                 <label
                                     htmlFor="lastName"
                                     className="block w-1/2"
